@@ -1,0 +1,153 @@
+<form [formGroup]="routeForm" (ngSubmit)="onSubmit()">
+    <mat-card class="background">
+      <div class="row">
+        <div class="col">
+          <mat-card-header>
+            <mat-card-title>ADD ROUTE</mat-card-title>
+          </mat-card-header>
+        </div>
+        <div class="col">
+          <mat-card-header>
+            <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" (click)="homeClick()">
+              <mat-icon>home</mat-icon>
+            </button>
+            &nbsp;<button mat-mini-fab color="primary" type="button" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onClick="history.back()">
+              <span class="material-icons" style="color: white;">exit_to_app</span>
+            </button>
+          </mat-card-header>
+        </div>
+      </div>
+      <mat-card-content >
+  
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Route Name" formControlName="routeName">
+              <mat-error *ngIf="routeForm.controls['routeName'].hasError('required')">
+                Name <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col">
+          <mat-form-field class="full-width">
+              <mat-select placeholder="Vehicle" formControlName="vehicleId">
+                <mat-option *ngFor="let item of  vehicle$ | async" [value]="item.id">
+                    {{item.registrationNumber}}
+                </mat-option>
+                &nbsp;&nbsp; &nbsp;&nbsp;<span class="material-icons" style="font-size: 30px; color: rgb(0, 128, 55);" (click)="addVehicle()">playlist_add</span>
+              </mat-select>
+              <mat-error *ngIf="routeForm.controls['vehicleId'].hasError('required')">
+                field is <strong>required</strong>
+              </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-select placeholder="Vehicle Driver" formControlName="driverId">
+              <mat-option *ngFor="let item of driver" [value]="item.id">
+                {{item.name}}
+              </mat-option>
+              &nbsp;&nbsp; &nbsp;&nbsp;<span class="material-icons" style="font-size: 30px; color: rgb(0, 128, 55);" (click)="addUser()">playlist_add</span>
+            </mat-select>
+            <mat-error *ngIf="routeForm.controls['driverId'].hasError('required')">
+              field is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-select placeholder="Sales Man" formControlName="salesManId">
+              <mat-option *ngFor="let item of salesMan" [value]="item.id">
+                {{item.name}}
+              </mat-option>
+              &nbsp;&nbsp; &nbsp;&nbsp;<span class="material-icons" style="font-size: 30px; color: rgb(0, 128, 55);" (click)="addUser()">playlist_add</span>
+            </mat-select>
+            <mat-error *ngIf="routeForm.controls['salesManId'].hasError('required')">
+              field is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-select placeholder="Sales Executive" formControlName="salesExecutiveId">
+              <mat-option *ngFor="let item of salesExecutive" [value]="item.id">
+                {{item.name}}
+              </mat-option>
+              &nbsp;&nbsp; &nbsp;&nbsp;<span class="material-icons" style="font-size: 30px; color: rgb(0, 128, 55);" (click)="addUser()">playlist_add</span>
+            </mat-select>
+            <mat-error *ngIf="routeForm.controls['salesExecutiveId'].hasError('required')">
+              field is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+  
+        
+      </mat-card-content>
+  
+      <mat-card-actions>
+        <button *ngIf="isEdit == false" mat-raised-button  type="submit" [disabled]="!routeForm.valid">
+          <span class="material-icons" style="font-size: 25px;">save</span>
+        </button>&nbsp;&nbsp;
+        <button *ngIf="isEdit == true" mat-raised-button  type="button" [disabled]="!routeForm.valid" (click)="editFunction()">
+          <span class="material-icons" style="font-size: 30px;">edit_note</span>
+        </button>&nbsp;&nbsp;
+      </mat-card-actions>
+    </mat-card>
+</form>
+
+
+
+
+<br><mat-card>
+  <mat-card-header>
+    <mat-card-title style="color: green;">ROUTES</mat-card-title>
+  </mat-card-header>
+  <table mat-table *ngIf="routes" [dataSource]="routes" class="mat-elevation-z8">
+
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="routeName">
+      <th mat-header-cell *matHeaderCellDef>Route Name</th>
+      <td mat-cell *matCellDef="let element"> {{element.routeName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="vehicleId">
+      <th mat-header-cell *matHeaderCellDef>Vehicle</th>
+      <td mat-cell *matCellDef="let element"> {{element.vehicle.registrationNumber}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="vehicleDriverId">
+      <th mat-header-cell *matHeaderCellDef>Driver</th>
+      <td mat-cell *matCellDef="let element"> {{element.vehicleDriverId.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="salesManId">
+      <th mat-header-cell *matHeaderCellDef>Sales Man</th>
+      <td mat-cell *matCellDef="let element"> {{element.salesManId.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="manage">
+      <th mat-header-cell *matHeaderCellDef>Manage</th>
+      <td mat-cell [style.background-color]="element.slotStatus == true ? 'lightgreen' : null" *matCellDef="let element">
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+      <i  (click)="editRoute(element.id)"  class="fa fa-edit" style="font-size: 20px; color:green"></i>
+      &nbsp;&nbsp;
+      <i  (click)="deleteRoute(element.id)" class="fa fa-trash" style="font-size: 20px; color:red"></i>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</mat-card>

@@ -1,0 +1,122 @@
+
+<form [formGroup]="taxForm" (ngSubmit)="onSubmit()">
+    <mat-card class="background">
+      <div class="row">
+        <div class="col">
+          <mat-card-header>
+            <mat-card-title> TAX </mat-card-title>
+          </mat-card-header>
+        </div>
+        <div class="col">
+          <mat-card-header>
+            <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onclick="history.back()">
+              <mat-icon>home</mat-icon>
+            </button>
+          </mat-card-header>
+        </div>
+      </div>
+      <mat-card-content >
+  
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Tax Name" formControlName="taxName">
+              <mat-error *ngIf="taxForm.controls['taxName'].hasError('required')">
+                Name <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="IGST" formControlName="igst" type="number">{{calculateGst()}}
+              <mat-error *ngIf="taxForm.controls['igst'].hasError('required')">
+                IGST <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="taxForm.controls['igst'].value">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="CGST" formControlName="cgst">
+              <!-- <mat-error *ngIf="taxForm.controls['cgst'].hasError('required')">
+                Name <strong>required</strong>
+              </mat-error> -->
+            </mat-form-field>
+          </div>
+
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="SGST" formControlName="sgst">
+              <!-- <mat-error *ngIf="taxForm.controls['sgst'].hasError('required')">
+                Name <strong>required</strong>
+              </mat-error> -->
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+  
+      <mat-card-actions>
+        <button *ngIf="isEdit == false" mat-raised-button  type="submit" [disabled]="!taxForm.valid">
+          <span class="material-icons" style="font-size: 25px;">save</span>
+        </button>&nbsp;&nbsp;
+        <button *ngIf="isEdit == true" mat-raised-button  type="button" [disabled]="!taxForm.valid" (click)="editFunction()">
+          <span class="material-icons" style="font-size: 30px;">edit_note</span>
+        </button>&nbsp;&nbsp;
+      </mat-card-actions>
+    </mat-card>
+</form>
+  
+  
+  <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+  
+  <br><mat-card>
+    <mat-card-header>
+      <mat-card-title style="color: green;">TAX</mat-card-title>
+    </mat-card-header>
+  <table mat-table *ngIf="tax" [dataSource]="tax" class="mat-elevation-z8">
+  
+  
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+   </ng-container>
+  
+    <ng-container matColumnDef="taxName">
+       <th mat-header-cell *matHeaderCellDef>Tax Name</th>
+       <td mat-cell *matCellDef="let element"> {{element.taxName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="igst">
+      <th mat-header-cell *matHeaderCellDef>IGST</th>
+      <td mat-cell *matCellDef="let element"> {{element.igst}} </td>
+   </ng-container>
+
+   <ng-container matColumnDef="cgst">
+    <th mat-header-cell *matHeaderCellDef>CGST</th>
+    <td mat-cell *matCellDef="let element"> {{element.cgst}} </td>
+ </ng-container>
+
+ <ng-container matColumnDef="sgst">
+  <th mat-header-cell *matHeaderCellDef>SGST</th>
+  <td mat-cell *matCellDef="let element"> {{element.sgst}} </td>
+</ng-container>
+  
+    <ng-container matColumnDef="manage">
+      <th mat-header-cell *matHeaderCellDef>Manage</th>
+      <td mat-cell *matCellDef="let element">
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+      <i  (click)="editTax(element.id)"  class="fa fa-edit" style="font-size: 20px; color:green"></i>
+      &nbsp;&nbsp;
+      <i  (click)="deleteTax(element.id)" class="fa fa-trash" style="font-size: 20px; color:red"></i>
+      </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  
+  </mat-card>
+  

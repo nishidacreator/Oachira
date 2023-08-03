@@ -1,0 +1,72 @@
+<mat-card class="container">
+  <div class="row">
+    <div class="col">
+      <mat-card-header>
+        <mat-card-title> PICK LIST </mat-card-title>
+      </mat-card-header>
+    </div>
+    
+    <div class="col">
+      <mat-card-header>
+        <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="main-button" onclick="history.back()">
+          <mat-icon>exit_to_app</mat-icon>
+        </button>
+      </mat-card-header>
+    </div>
+  </div>
+
+
+  <br><mat-grid-list cols="4" rowHeight="4:1">
+    <mat-grid-tile>
+      <button mat-raised-button aria-label="Example icon button with a bookmark icon" (click)="viewTripList()">
+        Trips
+      </button>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <button mat-raised-button aria-label="Example icon button with a bookmark icon" (click)="viewRouteMap()">
+        Route Map
+      </button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <button mat-raised-button aria-label="Example icon button with a bookmark icon" (click)="viewRouteMap()">
+        Pick List Details
+      </button>
+    </mat-grid-tile>
+    <mat-grid-tile>4</mat-grid-tile>
+  </mat-grid-list><br>
+
+    <table mat-table *ngIf="collection" [dataSource]="collection" class="mat-elevation-z8">
+  
+  
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef class="table-border">ID</th>
+        <td mat-cell *matCellDef="let element" class="table-border"> {{element.id}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="customerId">
+        <th mat-header-cell *matHeaderCellDef class="table-border">Customer</th>
+        <td mat-cell *matCellDef="let element" class="table-border"> {{element.customer.customerName}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="routeId">
+        <th mat-header-cell *matHeaderCellDef class="table-border">Route</th>
+        <td mat-cell *matCellDef="let element" class="table-border"> {{element.route.routeName}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef class="table-border">Status</th>
+        <td mat-cell *matCellDef="let element" class="table-border"> {{element.status}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="manage">
+        <th mat-header-cell *matHeaderCellDef>Manage</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-raised-button style="background-color: green; margin-left: 8px;" class="main-button" (click)="viewPickListDetails(element.id)" type="button">View</button>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </mat-card>

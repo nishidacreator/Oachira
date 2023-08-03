@@ -1,0 +1,234 @@
+<form [formGroup]="purchaseEntryForm">
+    <mat-card class="background">
+      <div class="row">
+        <div class="col">
+          <mat-card-header>
+            <mat-card-title> PRODUCTS </mat-card-title>
+          </mat-card-header>
+        </div>
+        
+        <div class="col">
+          <mat-card-header>
+            <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onclick="history.back()">
+              <mat-icon>exit_to_app</mat-icon>
+            </button>
+          </mat-card-header>
+        </div>
+      </div>
+
+      <mat-card-content >
+  
+        <div class="row" *ngIf="pEntry">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput disabled value="{{pEntry.purchaseInvoice}}" placeholder="Purchase Invoice" style="color: black">
+            </mat-form-field>
+          </div>
+
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput disabled value="{{pEntry.eWayBillNo}}" placeholder="E-Way Bill no" style="color: black">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="pEntry">
+            <div class="col">
+              <mat-form-field class="full-width">
+                <input matInput disabled value="{{pEntry.vendor.vendorName}}" placeholder="Vendor" style="color: black">
+              </mat-form-field>
+            </div>
+  
+            <div class="col">
+              <mat-form-field class="full-width">
+                <input matInput disabled value="{{pEntry.purachseDate}}" placeholder="Purchase Date" style="color: black">
+              </mat-form-field>
+            </div>
+          </div>
+      </mat-card-content>
+ 
+  
+
+  <!-- <div>          -->
+    <form [formGroup]="purchaseDetailsForm" (ngSubmit)="onSubmit()">  
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title> PRODUCTS </mat-card-title>
+        </mat-card-header>
+  
+        <mat-card-content>
+          <div class="container"> 
+            <div class="row" *ngFor="let product of listDetails">
+              <div class="col">
+                <mat-form-field class="full-width">
+                  <input matInput disabled value="{{product.product.productName}}" placeholder="Product">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field class="full-width">
+                  <input matInput disabled value="{{product.mrp}}" placeholder="MRP">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field class="full-width">
+                  <input matInput disabled value="{{product.quantity}}" placeholder="Quantity">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field class="full-width">
+                  <input matInput disabled value="{{product.rate}}" placeholder="Unit Price">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field class="full-width">
+                  <input matInput disabled value="{{product.discount}}" placeholder="Discount">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field class="full-width">
+                  <input matInput disabled value="{{product.netAmount}}" placeholder="Net Amount">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field class="full-width">
+                  <input matInput disabled value="{{product.tax.taxName}}" placeholder="Tax">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field class="full-width">
+                  <input matInput disabled value="{{product.taxAmount}}" placeholder="Tax Amount">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field class="full-width">
+                  <input matInput disabled value="{{product.grossAmount}}" placeholder="Gross Amount">
+                </mat-form-field>
+              </div>
+            </div>   
+            <ul formArrayName="products">
+              <table class="purchase-table">             
+                <tbody>
+                <tr *ngFor="let quantity of products().controls; let i=index" [formGroupName]="i">
+                  <td>
+                    <mat-form-field>
+                      <mat-label>Select an option</mat-label>
+                      <mat-select formControlName="productId">
+                        <mat-form-field class="search-field">
+                          <div class="row">
+                            <!-- <mat-icon>search</mat-icon> -->
+                          <input matInput (input)="filterOptions($event)" placeholder="Search">
+                          <span *ngIf="product.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55); margin-top: 5px; margin-left: 5px;" (click)="addNewProduct()">playlist_add</span>
+                          </div>
+                        </mat-form-field>
+                        <mat-option *ngFor="let option of filteredOptions" [value]="option.id">
+                          {{ option.productName }}
+                        </mat-option>
+
+                        <mat-option *ngIf="product.length === 0" [value]="'add'">
+                          <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addNewProduct()">playlist_add</span>
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </td>
+                  
+                  <td>
+                    <mat-form-field>
+                      <input matInput placeholder="MRP"  formControlName="mrp">
+                    </mat-form-field>
+                  </td>
+
+                  <td>
+                    <mat-form-field>
+                      <input matInput placeholder="Quantity" formControlName="quantity">
+                    </mat-form-field>
+                  </td>
+
+                  <td>
+                    <mat-form-field>
+                      <input matInput placeholder="Unit Price"  formControlName="rate">
+                    </mat-form-field>
+                  </td>
+
+                  <td>
+                    <mat-form-field>
+                      <input matInput placeholder="Discount"  formControlName="discount">{{calculateAmount()}}
+                    </mat-form-field>
+                  </td>
+
+                  <!-- <td>
+                    <mat-form-field>
+                      <mat-select placeholder="Secondary Unit" formControlName="secondaryUnitId">
+                        <mat-option *ngFor="let item of unit$ | async" [value]="item.id">
+                          {{item.secondaryUnitName}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </td> -->
+                  
+                  <td>
+                    <mat-form-field>
+                      <input matInput placeholder="Net Amount"  formControlName="netAmount">
+                    </mat-form-field>
+                  </td>
+
+                  <td>
+                    <mat-form-field>
+                      <mat-select placeholder="Tax" formControlName="taxId" #id (selectionChange)="getTaxAmount(id.value)">
+                        <mat-option *ngFor="let item of tax$ | async" [value]="item.id">
+                          {{item.taxName}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </td>
+
+                  <td>
+                    <mat-form-field>
+                      <input matInput placeholder="Tax Amount"  formControlName="taxAmount">
+                    </mat-form-field>
+                  </td>
+
+                  <td>
+                    <mat-form-field>
+                      <input matInput placeholder="Gross Amount"  formControlName="grossAmount" [disabled]="true">
+                    </mat-form-field>
+                  </td>
+
+                  <td>
+                    <span class="material-icons" style="color: rgb(255, 0, 0); font-size: 25px; margin-top: 17px;" (click)="removeProduct(i)">cancel</span>
+                  </td>
+                </tr>
+              </tbody>
+              </table>
+            </ul>
+          </div>
+          <div>
+            <span class="material-icons" style="font-size: 40px; color: green;"(click)="addProduct()">add_box</span>
+          </div>
+
+       </mat-card-content>
+      </mat-card>          
+    </form>  
+
+    <div class="row>">
+      Total Amount <mat-form-field appearance="fill"  style="margin-left: 300px; width: 50%;">
+        <input matInput placeholder="Purchase Amount"  formControlName="purchaseAmount">{{purchaseAmount}}
+      </mat-form-field>
+    </div>
+
+    <mat-card-actions>
+      <button mat-raised-button class="btn btn-success" type="button" (click)="onSubmit()">
+        <span class="material-icons" style="font-size: 25px;">save</span>
+      </button>  
+     </mat-card-actions>
+  </mat-card><br>
+</form>    
+    <br/>  
+  <!-- </div>  -->

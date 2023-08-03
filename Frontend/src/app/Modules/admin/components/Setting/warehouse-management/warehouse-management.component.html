@@ -1,0 +1,211 @@
+
+<form [formGroup]="warehouseForm" (ngSubmit)="onSubmit()">
+  <mat-card class="background">
+
+    <div class="row">
+      <div class="col">
+        <mat-card-header>
+          <mat-card-title> WAREHOUSE </mat-card-title>
+        </mat-card-header>
+      </div>
+      <div class="col">
+        <mat-card-header>
+          <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onclick="history.back()">
+            <mat-icon>home</mat-icon>
+          </button>
+        </mat-card-header>
+      </div>
+    </div>
+
+    <mat-card-content >
+
+      <div class="row">
+
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Warehouse Name" formControlName="warehouseName">
+            <mat-error *ngIf="warehouseForm.controls['warehouseName'].hasError('required')">
+               Name <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Attention" formControlName="attention">
+            <mat-error *ngIf="warehouseForm.controls['attention'].hasError('required')">
+               <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Street 1" formControlName="street1">
+            <mat-error *ngIf="warehouseForm.controls['street1'].hasError('required')">
+             Street 1 <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Street 2" formControlName="street2">
+            <mat-error *ngIf="warehouseForm.controls['street2'].hasError('required')">
+            Street 2 <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+     </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width" >
+            <input matInput placeholder="city" formControlName="city">
+            <mat-error *ngIf="warehouseForm.controls['city'].hasError('required')">
+              City <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Country" formControlName="country">
+            <mat-error *ngIf="warehouseForm.controls['country'].hasError('required')">
+              Country <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field  class="full-width">
+            <input matInput placeholder="State" formControlName="state">
+            <mat-error *ngIf="warehouseForm.controls['state'].hasError('required')">
+              State <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Zipcode" formControlName="zipCode">
+            <mat-error *ngIf="warehouseForm.controls['zipCode'].hasError('required')">
+              Zipcode<strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Email" formControlName="email">
+            <mat-error *ngIf="warehouseForm.controls['email'].hasError('required')">
+              email <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Phone Number" formControlName="mobNumber">
+            <mat-error *ngIf="warehouseForm.controls['mobNumber'].hasError('required')">
+              Number <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button  mat-raised-button type="submit" [disabled]="!warehouseForm.valid">ADD</button>&nbsp;&nbsp;
+    </mat-card-actions>
+  </mat-card>
+</form>
+
+<!-- <html>
+  <head>
+    <title>Stylish Form</title>
+    <style>
+      /* Styling for form elements */
+      input[type=text], select, textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+      }
+
+      /* Styling for submit button */
+      input[type=submit] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      /* Styling for submit button on hover */
+      input[type=submit]:hover {
+        background-color: #45a049;
+      }
+
+      /* Styling for form container */
+      .container {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Stylish Form</h2>
+      <form [formGroup]="warehouseForm" (ngSubmit)="onSubmit()">
+        <label for="name">Name</label>
+        <div class="row">
+          <div class="col">
+            <label>Salutation</label>
+            <select id="subject" name="subject">
+              <option value="">Select an option..</option>
+              <option value="option1">Option 1</option>
+              <option value="option2">Option 2</option>
+              <option value="option3">Option 3</option>
+            </select>
+          </div>
+
+        <input type="text" id="name" name="name" formControlName="firstName" placeholder="First Name">
+
+        <label for="email">Email</label>
+        </div>
+        <input type="text" id="name" name="name" formControlName="lastName" placeholder="Last Name">
+
+        <label formControlName="salutation">Subject</label>
+        <select id="subject" name="subject">
+          <option value="">Select an option..</option>
+          <option value="option1">Option 1</option>
+          <option value="option2">Option 2</option>
+          <option value="option3">Option 3</option>
+        </select>
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Write something.." style="height:200px"></textarea>
+
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+  </body>
+</html> -->
+
+

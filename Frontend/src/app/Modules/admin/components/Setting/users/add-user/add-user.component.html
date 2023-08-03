@@ -1,0 +1,134 @@
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <mat-card class="background">
+  
+      <div class="row">
+        <div class="col">
+          <mat-card-header>
+            <mat-card-title> USERS </mat-card-title>
+          </mat-card-header>
+        </div>
+        <div class="col">
+          <mat-card-header>
+            <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" (click)="homeClick()">
+              <mat-icon>home</mat-icon>
+            </button>
+            &nbsp;<button mat-mini-fab color="primary" type="button" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onClick="history.back()">
+              <span class="material-icons" style="color: white;">exit_to_app</span>
+            </button>
+          </mat-card-header>
+        </div>
+      </div>
+  
+      <mat-card-content >
+  
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Name" formControlName="name">
+              <mat-error *ngIf="userForm.controls['name'].hasError('required')">
+                Name <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Phone Number" formControlName="phoneNumber" >
+              <mat-error *ngIf="userForm.controls['phoneNumber'].hasError('required')">
+               Email is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+  
+  
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput type="password" placeholder="Password" formControlName="password">
+              <mat-error *ngIf="userForm.controls['password'].hasError('required')">
+               Password is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+            <mat-select placeholder="User Role" formControlName="roleId">
+              <mat-option *ngFor="let item of  roles$ | async" [value]="item.id">
+                {{item.roleName | titlecase}}
+              </mat-option>
+              &nbsp;&nbsp; &nbsp;&nbsp;<span class="material-icons" style="font-size: 30px; color: rgb(0, 128, 55);" (click)="addRole()">playlist_add</span>
+            </mat-select>
+            <mat-error *ngIf="userForm.controls['roleId'].hasError('required')">
+             User Role is <strong>required</strong>
+            </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        
+      <div>
+        <mat-slide-toggle formControlName="status">Status</mat-slide-toggle>
+      </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button  mat-raised-button type="submit" *ngIf="isEdit == false" [disabled]="!userForm.valid">ADD</button>&nbsp;&nbsp;
+        <button  mat-raised-button (click)="editFunction()" *ngIf="isEdit == true" [disabled]="!userForm.valid">UPDATE</button>&nbsp;&nbsp;
+      </mat-card-actions>
+    </mat-card>  
+  </form>
+
+
+
+
+  <br><mat-card>
+    <mat-card-header>
+      <mat-card-title style="color: green;"> ROLES</mat-card-title>
+    </mat-card-header>
+    <table mat-table *ngIf="users" [dataSource]="users" class="mat-elevation-z8">
+  
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="phoneNumber">
+        <th mat-header-cell *matHeaderCellDef>Phone Number</th>
+        <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="roleId">
+        <th mat-header-cell *matHeaderCellDef>Role</th>
+        <td mat-cell *matCellDef="let element"> {{element.role.roleName}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="manage">
+        <th mat-header-cell *matHeaderCellDef>Manage</th>
+        <td mat-cell [style.background-color]="element.slotStatus == true ? 'lightgreen' : null" *matCellDef="let element">
+          <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <i  (click)="editUser(element.id)"  class="fa fa-edit" style="font-size: 20px; color:green"></i>
+        &nbsp;&nbsp;
+        <i  (click)="deleteUser(element.id)" class="fa fa-trash" style="font-size: 20px; color:red"></i>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </mat-card>
+  

@@ -1,0 +1,34 @@
+<section class="home_layout">
+    <div id="section_bg" class="background">
+      <mat-grid-list gutterSize="10px" cols="4" rowHeight="1:1">
+
+        <mat-grid-tile class="container">
+          <button class="btn btn-4" mat-fab aria-label="Example icon button with a bookmark icon" type="button" (click)="onCancelClick()">
+            <span class="material-icons" style="color: white; font-size: 45px;">home</span>
+          </button>
+          <div class="button_align">Home</div>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+            <button class="btn btn-4" mat-fab color="accent" aria-label="Example icon button with a bookmark icon"  (click)="manageVehicle()">
+              <span class="material-icons" style="color: rgb(255, 255, 255); font-size: 45px;">local_shipping</span>
+            </button>
+          <div class="button_align">Vehicle</div>
+        </mat-grid-tile>
+
+        <mat-grid-tile class="container">
+          <button class="btn btn-4" mat-fab aria-label="Example icon button with a bookmark icon" type="button" (click)="manageTrip()">          
+            <span class="material-icons" style="font-size: 45px; color: rgb(255, 255, 255);">departure_board</span>
+          </button>
+          <div class="button_align">Trip</div>
+        </mat-grid-tile>
+
+        <mat-grid-tile class="container">
+          <button class="btn btn-4" mat-fab aria-label="Example icon button with a bookmark icon" type="button" (click)="manageTripDays()">          
+            <span class="material-icons" style="font-size: 45px; color: rgb(255, 255, 255);">today</span>
+          </button>
+          <div class="button_align">Days</div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+  </section>

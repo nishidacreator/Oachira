@@ -1,0 +1,29 @@
+<mat-toolbar style="background-color: rgb(33,142,67); color: white; height: 40px;">
+  MANUFACTURER
+</mat-toolbar>
+
+<form [formGroup]="manufacturerForm" (ngSubmit)="onSubmit()">
+  <mat-card class="background">
+    <mat-card-content >
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Manufacturer Name" formControlName="manfactureName">
+            <mat-error *ngIf="manufacturerForm.controls['manfactureName'].hasError('required')">
+              Name <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button  mat-raised-button type="submit" [disabled]="!manufacturerForm.valid">ADD</button>&nbsp;&nbsp;
+      <button  mat-raised-button type="button" (click)="onCancelClick()">CANCEL</button>
+      <!-- <button *ngIf ="isEdit && !editAdminStatus" mat-raised-button (click)="editTherapistFunction()" enable mat-raised-button color="primary" type="button">UPDATE</button>
+      <button *ngIf ="isEdit && editAdminStatus" mat-raised-button (click)="editAdminFunction()" enable mat-raised-button color="primary" type="button">UPDATE</button> -->
+    </mat-card-actions>
+  </mat-card>
+</form>
+

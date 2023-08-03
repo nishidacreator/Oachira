@@ -1,0 +1,76 @@
+<mat-card class="container">
+    <mat-card-header>
+      <mat-card-title style="color: green;">COLLECTION</mat-card-title>
+    </mat-card-header>
+
+    <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+                <mat-label>SalesExecutive</mat-label>
+                <mat-select>
+                <input type="text" matInput [formControl]="searchControl" placeholder="Search">
+                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.id">
+                        {{ option.name }}{{getCollectionByUser(option.id)}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+    <table mat-table *ngIf="filteredCollection" [dataSource]="filteredCollection" class="mat-elevation-z8">
+  
+  
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef class="table-border">ID</th>
+        <td mat-cell *matCellDef="let element" class="table-border"> {{element.id}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="salesExecutiveId">
+        <th mat-header-cell *matHeaderCellDef class="table-border">Sales Executive Name</th>
+        <td mat-cell *matCellDef="let element" class="table-border"> {{element.salesexecutive.name}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="customerId">
+        <th mat-header-cell *matHeaderCellDef class="table-border">Customer Name</th>
+        <td mat-cell *matCellDef="let element" class="table-border"> {{element.customer.customerName}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef class="table-border">Amount</th>
+        <td mat-cell *matCellDef="let element" class="table-border"> {{element.amount}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="invoiceNo">
+        <th mat-header-cell *matHeaderCellDef class="table-border">Invoice No</th>
+        <td mat-cell *matCellDef="let element" class="table-border"> {{element.invoiceNo}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="paymentMode">
+        <th mat-header-cell *matHeaderCellDef class="table-border">Payment Mode</th>
+        <td mat-cell *matCellDef="let element" class="table-border"> {{element.paymentMode}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="remarks">
+        <th mat-header-cell *matHeaderCellDef class="table-border">Remarks</th>
+        <td mat-cell *matCellDef="let element" class="table-border"> {{element.remarks}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="routeId">
+        <th mat-header-cell *matHeaderCellDef class="table-border">Route</th>
+        <td mat-cell *matCellDef="let element" class="table-border"> {{element.route.routeName}} </td>
+      </ng-container>
+  
+      <!-- <ng-container matColumnDef="manage">
+        <th mat-header-cell *matHeaderCellDef>Manage</th>
+        <td mat-cell [style.background-color]="element.slotStatus == true ? 'lightgreen' : null" *matCellDef="let element">
+          <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <i  (click)="editCollection(element.id)"  class="fa fa-edit" style="font-size: 20px; color:green"></i>
+        &nbsp;&nbsp;
+        <i  (click)="deleteCollection(element.id)" class="fa fa-trash" style="font-size: 20px; color:red"></i>
+        </td>
+      </ng-container> -->
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </mat-card>

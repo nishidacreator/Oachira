@@ -1,0 +1,101 @@
+
+<form [formGroup]="dailyCollectionForm" (ngSubmit)="onSubmit()">
+    <mat-card class="background">
+      <div class="row">
+        <div class="col">
+          <mat-card-header>
+            <mat-card-title> COLLECTION </mat-card-title>
+          </mat-card-header>
+        </div>
+        <div class="col">
+          <mat-card-header>
+            <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onclick="history.back()">
+              <mat-icon>home</mat-icon>
+            </button>
+          </mat-card-header>
+        </div>
+      </div>
+      <mat-card-content >
+  
+        <div class="row box">
+          <div class="col box">
+            <mat-form-field class="full-width">
+                <mat-label>Customer Name</mat-label>
+                <input matInput type="text"  formControlName="customerId" 
+                [matAutocomplete]="auto" placeholder="Search for customer" >                
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                  <mat-option *ngFor="let option of customer"  [value]="option.id">
+                    {{option.customerName}}
+                  </mat-option>                        
+                </mat-autocomplete>                       
+              </mat-form-field>
+          </div>
+
+          <div class="col box">
+            <mat-form-field class="full-width">
+                <mat-label>Route Name</mat-label>
+                <input matInput type="text"  formControlName="routeId" 
+                [matAutocomplete]="auto" placeholder="Search for customer" >                
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                  <mat-option *ngFor="let option of routes"  [value]="option.id">
+                    {{option.routeName}}
+                  </mat-option>                        
+                </mat-autocomplete>                       
+              </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row box">
+          <div class="col box">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Amount" formControlName="amount">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row box">
+          <div class="col box">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Invoice No." formControlName="invoiceNo">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row box">
+          <div class="col box">
+            <label id="example-radio-group-label">Payment Mode: &nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" formControlName="paymentMode">
+              <mat-radio-button value="Cash">Cash</mat-radio-button>&nbsp;&nbsp;&nbsp;&nbsp;
+              <mat-radio-button value="GooglePay">Google Pay</mat-radio-button>&nbsp;&nbsp;&nbsp;&nbsp;
+              <mat-radio-button value="BankTransfer">Bank Transfer</mat-radio-button>&nbsp;&nbsp;&nbsp;&nbsp;
+              <mat-radio-button value="Cheque">Cheque</mat-radio-button>&nbsp;&nbsp;&nbsp;&nbsp;
+            </mat-radio-group>
+          </div>
+        </div>
+
+        
+        <div class="row box">
+          <div class="col box">
+            <mat-form-field class="full-width">
+              <textarea matInput placeholder="Remarks" formControlName="remarks"></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+  
+      <mat-card-actions>
+        <!-- <button *ngIf="isEdit == false" mat-raised-button  type="submit" [disabled]="!dailyCollectionForm.valid">
+          <span class="material-icons" style="font-size: 25px;">save</span>
+        </button>&nbsp;&nbsp;
+        <button *ngIf="isEdit == true" mat-raised-button  type="button" [disabled]="!dailyCollectionForm.valid" (click)="editFunction()">
+          <span class="material-icons" style="font-size: 30px;">edit_note</span>
+        </button>&nbsp;&nbsp; -->
+      </mat-card-actions>
+    </mat-card>
+  </form>
+  
+  
+  <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+  
+
+  

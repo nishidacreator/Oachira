@@ -1,0 +1,127 @@
+<form>
+    <mat-card class="background">
+      <div class="row">
+        <div class="col">
+          <mat-card-header>
+            <mat-card-title> CUSTOMERS </mat-card-title>
+          </mat-card-header>
+        </div>
+        
+        <div class="col">
+          <mat-card-header>
+            <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onclick="history.back()">
+              <mat-icon>exit_to_app</mat-icon>
+            </button>
+          </mat-card-header>
+        </div>
+      </div>
+
+      <mat-card-content >
+  
+        <div class="row" *ngIf="trip">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput disabled value="{{trip.driver}}" placeholder="Driver">
+            </mat-form-field>
+          </div>
+
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput disabled value="{{trip.salesMan}}" placeholder="Salesman">
+            </mat-form-field>
+          </div>
+
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput disabled value="{{trip.route.routeName}}" placeholder="Route">
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card><br>
+  </form>
+  
+
+  <!-- <div>          -->
+    <form [formGroup]="tripDetailsForm" (ngSubmit)="onSubmit()">  
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title> PRODUCTS </mat-card-title>
+        </mat-card-header>
+  
+        <mat-card-content>
+          <div> 
+            <div class="row" *ngFor="let object of tripDetails">
+              <div class="col">
+                <mat-form-field class="full-width">
+                  <input matInput disabled value="{{object.customer.customerName}}" placeholder="Customer">
+                </mat-form-field>
+              </div>
+    
+              <div class="col">
+                <mat-form-field class="full-width">
+                  <input matInput disabled value="{{object.amount}}" placeholder="Amount">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field class="full-width">
+                  <input matInput disabled value="{{object.invoiceNo}}" placeholder="Invoice No">
+                </mat-form-field>
+              </div>
+            </div>   
+
+            <table formArrayName="customers">
+              <table *ngFor="let quantity of customers().controls; let i=index" [formGroupName]="i">
+                <tr>
+                  <td>
+                    <mat-form-field class="full-width">
+                      <mat-label>Customer</mat-label>
+                      <mat-select formControlName="customerId">
+                      <input type="text" matInput [formControl]="searchCustomer" placeholder="Search">
+                          <mat-option *ngFor="let option of filteredCustomers | async" [value]="option.id">
+                              {{ option.customerName }}
+                          </mat-option>
+                      </mat-select>
+                  </mat-form-field>
+                  </td>
+  
+                  <td>
+                    <mat-form-field class="full-width">
+                      <input matInput placeholder="Amount" formControlName="amount">
+                    </mat-form-field>
+                  </td>
+  
+                  <td>
+                    <mat-form-field class="full-width">
+                      <input matInput placeholder="Invoice" formControlName="invoiceNo">
+                    </mat-form-field>
+                  </td>
+                <!-- </tr> -->
+                <!-- <tr> -->
+                  <td>
+                    <span class="material-icons" style="color: rgb(255, 0, 0); font-size: 25px; margin-top: 17px; margin-left: 75px;" (click)="removeCustomer(i)">cancel</span>
+                  </td>
+                </tr>
+              </table>
+              <tr>
+                <th>
+                  <button mat-raised-button  type="button" (click)="addCustomer()" color="primary">Add</button></th>
+                </tr>
+            </table>
+          </div>
+       </mat-card-content>
+
+       <mat-card-actions>
+        <button mat-raised-button type="button" class="btn btn-success" [disabled]="!tripDetailsForm.valid" (click)="onSubmit()">
+          <span class="material-icons" style="font-size: 25px;">save</span>
+        </button>  
+       </mat-card-actions>
+      </mat-card>
+
+     
+        
+    </form>  
+        
+    <br/>  
+  <!-- </div>  -->

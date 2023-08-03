@@ -1,0 +1,110 @@
+<form>
+    <mat-card class="background">
+      <div class="row">
+        <div class="col">
+          <mat-card-header>
+            <mat-card-title> PRODUCTS </mat-card-title>
+          </mat-card-header>
+        </div>
+        
+        <div class="col">
+          <mat-card-header>
+            <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onclick="history.back()">
+              <mat-icon>exit_to_app</mat-icon>
+            </button>
+          </mat-card-header>
+        </div>
+      </div>
+
+      <mat-card-content >
+  
+        <div class="row" *ngIf="pickList">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput disabled value="{{pickList.customer.customerName}}" placeholder="Customer">
+            </mat-form-field>
+          </div>]
+
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput disabled value="{{pickList.route.routeName}}" placeholder="Route">
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card><br>
+</form>
+  
+
+  <!-- <div>          -->
+    <form [formGroup]="pickListDetailsForm" (ngSubmit)="onSubmit()">  
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title> PRODUCTS </mat-card-title>
+        </mat-card-header>
+  
+        <mat-card-content>
+          <div> 
+            <div class="row" *ngFor="let product of listDetails">
+              <div class="col">
+                <mat-form-field class="full-width">
+                  <input matInput disabled value="{{product.product.productName}}" placeholder="Product">
+                </mat-form-field>
+              </div>
+    
+              <div class="col">
+                <mat-form-field class="full-width">
+                  <input matInput disabled value="{{product.quantity}}" placeholder="Quantity">
+                </mat-form-field>
+              </div>
+            </div>   
+
+            <table formArrayName="products">
+              <table *ngFor="let quantity of products().controls; let i=index" [formGroupName]="i">
+                <tr>
+                  <td>
+                    <mat-form-field appearance="fill" class="full-width">
+                      <mat-label>Product Name</mat-label>
+                      <input matInput type="text"  formControlName="productId" 
+                      [matAutocomplete]="auto" placeholder="Search for product name">                
+                      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                        <mat-option *ngFor="let option of filteredProduct$ | async"  [value]="option.id">
+                          {{option.productName}}
+                        </mat-option>                        
+                      </mat-autocomplete>                       
+                    </mat-form-field>
+
+                  <td>
+                    <mat-form-field appearance="fill"class="full-width">
+                      <input matInput placeholder="Quantity" formControlName="quantity">
+                    </mat-form-field>
+                  </td>
+ 
+                  <td>
+                    <span class="material-icons" style="color: rgb(255, 0, 0); font-size: 25px; margin-top: 17px; margin-left: 75px;" (click)="removeProduct(i)">cancel</span>
+                  </td>
+                </tr>
+              </table>
+              <tr>
+                <th>
+                  <div>
+                    <span class="material-icons" style="font-size: 25px; color: green;"(click)="addProduct()">add_box</span>
+                  </div>
+                </tr>
+            </table>
+          </div>
+       </mat-card-content>
+
+     
+       <mat-card-actions>
+        <button mat-raised-button class="btn btn-success">
+          <span class="material-icons" style="font-size: 25px;">save</span>
+        </button>  
+       </mat-card-actions>
+      </mat-card>
+
+     
+        
+    </form>  
+        
+    <br/>  

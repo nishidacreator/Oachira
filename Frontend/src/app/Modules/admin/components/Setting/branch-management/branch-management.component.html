@@ -1,0 +1,131 @@
+<mat-toolbar style="background-color: rgb(33,142,67); color: white; height: 40px;">
+  ADD BRANCH
+</mat-toolbar>
+
+<form [formGroup]="BranchForm" (ngSubmit)="onSubmit()">
+  <mat-card class="background">
+    <mat-card-content >
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+
+            <input matInput placeholder="Branch Name" formControlName="branchName">
+            <mat-error *ngIf="BranchForm.controls['branchName'].hasError('required')">
+              Warehouse Name <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+
+            <input matInput placeholder="Address" formControlName="address">
+            <mat-error *ngIf="BranchForm.controls['address'].hasError('required')">
+              Address <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+
+
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="full-width">
+          <input matInput placeholder="Street 1" formControlName="street1">
+          <mat-error *ngIf="BranchForm.controls['street1'].hasError('required')">
+           Street 1 <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col">
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Street 2" formControlName="street2">
+        <mat-error *ngIf="BranchForm.controls['street2'].hasError('required')">
+         Street 2 <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      </div>
+   </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width" >
+        <input matInput placeholder="city" formControlName="city">
+        <mat-error *ngIf="BranchForm.controls['city'].hasError('required')">
+        City <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col">
+       <mat-form-field class="full-width">
+        <input matInput placeholder="Country" formControlName="country">
+        <mat-error *ngIf="BranchForm.controls['country'].hasError('required')">
+        Country <strong>required</strong>
+        </mat-error>
+       </mat-form-field>
+     </div>
+</div>
+
+<div class="row">
+        <div class="col">
+          <mat-form-field  class="full-width">
+            <input matInput placeholder="State" formControlName="state">
+            <mat-error *ngIf="BranchForm.controls['state'].hasError('required')">
+              State <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+
+
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Zipcode" formControlName="zipcode">
+            <mat-error *ngIf="BranchForm.controls['zipcode'].hasError('required')">
+              Zipcode<strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+      </div>
+
+
+        <div class="row">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Email" formControlName="email">
+            <mat-error *ngIf="BranchForm.controls['email'].hasError('required')">
+              email <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+
+
+        <div class="row">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Phone" formControlName="phone">
+            <mat-error *ngIf="BranchForm.controls['phone'].hasError('required')">
+              phone <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button  mat-raised-button color="primary" type="submit" [disabled]="!BranchForm.valid">ADD</button>&nbsp;&nbsp;
+      <button  mat-raised-button color="primary" type="button" (click)="onCancelClick()">CANCEL</button>
+      <!-- <button *ngIf ="isEdit && !editAdminStatus" mat-raised-button (click)="editTherapistFunction()" enable mat-raised-button color="primary" type="button">UPDATE</button>
+      <button *ngIf ="isEdit && editAdminStatus" mat-raised-button (click)="editAdminFunction()" enable mat-raised-button color="primary" type="button">UPDATE</button> -->
+    </mat-card-actions>
+  </mat-card>
+</form>

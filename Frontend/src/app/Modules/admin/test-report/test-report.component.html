@@ -1,0 +1,91 @@
+
+
+<app-test-print></app-test-print>
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <!-- <style>
+            {{asset "./assets/Invoice styles.css"}}
+        </style>         -->
+
+    
+    </head>
+    <body>
+       
+
+        <div class="invoice-box">
+            <table cellpadding="0" cellspacing="0">
+                <tr class="top">
+                    <td colspan="2">
+                        <table>
+                
+                           
+                            <tr>
+                                <td class="title">
+                                    <!-- <img src="{{asset "./assets/Invoice logo.png" "dataURI"}}" style="width:100%; max-width:300px;" /> -->
+
+                                </td>
+                                <td>
+                                    Invoice #: {{testData.number}}
+                                    <!-- <br> Created: {{Date.now}}
+                                    <br> Due: {{testData.nowPlus20Days}} -->
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr class="information ">
+                    <td colspan="2 ">
+                        <table>
+                            <tr>
+                                <td>
+                                    {{testData.seller.name}}<br>
+                                    {{testData.seller.road}}<br>
+                                    {{testData.seller.country}}
+                                </td>
+                                <td>
+                                    {{testData.buyer.name}}<br>
+                                    {{testData.buyer.road}}<br>
+                                    {{testData.buyer.country}}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr class="heading ">
+                    <td>
+                        Item
+                    </td>
+                    <td>
+                        Price
+                    </td>
+                </tr>
+                <!-- {{#each items}} -->
+                <tr class="item">
+                    <td>
+                        {{testData.items[0].name}}
+                    </td>
+                    <td>
+                        $ {{testData.items[0].price}}
+                    </td>
+                </tr>
+                <!-- {{/each}} -->
+                <tr class="total ">
+                    <td></td>
+                    <td>
+                        <!-- Total: ${{total items}} -->
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+
+    <button (click)="print()">
+        <span class="material-icons">print</span>
+    </button>
+
+
+
+
+
+
+

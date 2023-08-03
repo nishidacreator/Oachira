@@ -1,0 +1,142 @@
+<form [formGroup]="pickListForm" (ngSubmit)="onSubmit()">
+    <mat-card class="background">
+      <div class="row">
+        <div class="col">
+          <mat-card-header>
+            <mat-card-title> PICK LIST </mat-card-title>
+          </mat-card-header>
+        </div>
+        
+        <div class="col">
+          <mat-card-header>
+            <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onclick="history.back()">
+              <mat-icon>exit_to_app</mat-icon>
+            </button>
+          </mat-card-header>
+        </div>
+      </div>
+
+      <mat-card-content >
+  
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <mat-select #id (selectionChange)="getCustomer(id.value)" placeholder="Route Name" formControlName="routeId">
+                <mat-option *ngFor="let item of routes" [value]="item.id">
+                  {{item.routeName}}
+                </mat-option>
+                <!-- &nbsp;&nbsp; &nbsp;&nbsp;<span class="material-icons" style="font-size: 30px; color: rgb(0, 128, 55);" (click)="addVendor()">playlist_add</span> -->
+              </mat-select>
+              <mat-error *ngIf="pickListForm.controls['routeId'].hasError('required')">
+                route <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col">
+            <mat-form-field class="full-width">
+              <mat-select placeholder="Customer" formControlName="customerId">
+                <span *ngIf="customer.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addCustomer()">playlist_add</span>
+                <mat-option *ngFor="let item of customer" [value]="item.id">
+                  {{item.customerName}}
+                </mat-option>
+                <mat-option *ngIf="customer.length === 0" [value]="'add'">
+                  <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addCustomer()">playlist_add</span>
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="pickListForm.controls['customerId'].hasError('required')">
+                customer <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <mat-label>Delivery Date</mat-label>
+              <input matInput  [matDatepickerFilter]="myFilter" [matDatepicker]="picker" formControlName="deliveryDate">
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div> 
+        </div>
+      </mat-card-content>
+    </mat-card><br>
+  </form>
+  
+
+  <!-- <div>          -->
+    <form [formGroup]="pickListDetailsForm" (ngSubmit)="onSubmit()">  
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title> PRODUCTS </mat-card-title>
+        </mat-card-header>
+  
+        <mat-card-content>
+          <div>         
+            <table formArrayName="products">
+              <table *ngFor="let quantity of products().controls; let i=index" [formGroupName]="i">
+                <tr>
+                  <td colspan="2">
+
+                    <!-- Search in MAT SELECT -->
+                    <mat-form-field class="full-width" appearance="fill">
+                      <mat-label>Select an option</mat-label>
+                      <mat-select formControlName="productId">
+                        <mat-form-field class="search-field">
+                          <div class="row">
+                            <!-- <mat-icon>search</mat-icon> -->
+                          <input matInput (input)="filterOptions($event)" placeholder="Search">
+                          <span *ngIf="product.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55); margin-top: 5px; margin-left: 5px;" (click)="addNewProduct()">playlist_add</span>
+                          </div>
+                        </mat-form-field>
+                        <mat-option *ngFor="let option of filteredOptions" [value]="option.id">
+                          {{ option.productName }}
+                        </mat-option>
+
+                        <mat-option *ngIf="product.length === 0" [value]="'add'">
+                          <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addNewProduct()">playlist_add</span>
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <!-- END -->
+                </tr>
+                
+                <tr>
+                  <td colspan="2">
+                    <mat-form-field appearance="fill"class="full-width">
+                      <input matInput placeholder="Quantity" formControlName="quantity">
+                    </mat-form-field>
+                  </td>
+                <!-- </tr> -->
+                <!-- <tr> -->
+                  <td>
+                    <span class="material-icons" style="color: rgb(255, 0, 0); font-size: 25px; margin-top: 17px; margin-left: 75px;" (click)="removeProduct(i)">cancel</span>
+                  </td>
+                </tr>
+              </table>
+              <tr>
+                <th>
+                  <div>
+                    <span class="material-icons" style="font-size: 25px; color: green;"(click)="addProduct()">add_box</span>
+                  </div>
+              </tr>
+            </table>
+          </div>
+       </mat-card-content>
+
+       <mat-card-actions>
+        <button mat-raised-button type="submit" class="btn btn-success" [disabled]="!pickListForm.valid || !pickListDetailsForm.valid">
+          <span class="material-icons" style="font-size: 25px;">save</span>
+        </button>  
+       </mat-card-actions>
+      </mat-card>
+
+     
+        
+    </form>  
+        
+    <br/>  
+  <!-- </div>  -->

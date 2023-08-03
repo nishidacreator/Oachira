@@ -1,0 +1,180 @@
+<mat-card>
+  <form [formGroup]="tripForm">
+      <mat-card class="background">
+        <div class="row">
+          <div class="col">
+            <mat-card-header>
+              <mat-card-title>TRIP</mat-card-title>
+            </mat-card-header>
+          </div>
+          <div class="col">
+            <mat-card-header>
+              <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onclick="history.back()">
+                <mat-icon>exit_to_app</mat-icon>
+              </button>
+            </mat-card-header>
+          </div>
+        </div>
+        <mat-card-content >
+    
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width">
+                  <mat-label>Route</mat-label>
+                  <mat-select formControlName="routeId"  #id (selectionChange)="byRouteId(id.value)">
+                  <input type="text" matInput [formControl]="searchControl" placeholder="Search">
+                      <mat-option *ngFor="let option of filteredOptions | async" [value]="option.id">
+                          {{ option.routeName }}
+                      </mat-option>
+                  </mat-select>
+              </mat-form-field>
+            </div>
+            
+            <div class="col">
+              <mat-form-field class="full-width">
+                <mat-label>Date</mat-label>
+                <input matInput  [matDatepickerFilter]="myFilter" [matDatepicker]="picker" formControlName="date">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div> 
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width">
+                  <mat-label>Salesman</mat-label>
+                  <mat-select formControlName="salesMan">
+                  <input type="text" matInput [formControl]="searchSalesman" placeholder="Search">
+                      <mat-option *ngFor="let option of filteredSalesman | async" [value]="option.name">
+                          {{ option.name }}
+                      </mat-option>
+                  </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="col">
+              <mat-form-field class="full-width">
+                  <mat-label>Driver</mat-label>
+                  <mat-select formControlName="driver">
+                  <input type="text" matInput [formControl]="searchDriver" placeholder="Search">
+                      <mat-option *ngFor="let option of filteredDriver | async" [value]="option.name">
+                          {{ option.name }}
+                      </mat-option>
+                  </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-card-content>
+
+      </mat-card>
+  </form>
+  <form [formGroup]="tripDetailsForm" (ngSubmit)="onSubmit()">  
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title> CUSTOMERS </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div>         
+          <table formArrayName="customers">
+            <table *ngFor="let quantity of customers().controls; let i=index" [formGroupName]="i">
+              <tr>
+                <td>
+                  <mat-form-field class="full-width">
+                    <mat-label>Customer</mat-label>
+                    <mat-select formControlName="customerId">
+                    <input type="text" matInput [formControl]="searchCustomer" placeholder="Search">
+                        <mat-option *ngFor="let option of filteredCustomers | async" [value]="option.id">
+                            {{ option.customerName }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                </td>
+
+                <td>
+                  <mat-form-field class="full-width">
+                    <input matInput placeholder="Amount" formControlName="amount">
+                  </mat-form-field>
+                </td>
+
+                <td>
+                  <mat-form-field class="full-width">
+                    <input matInput placeholder="Invoice" formControlName="invoiceNo">
+                  </mat-form-field>
+                </td>
+              <!-- </tr> -->
+              <!-- <tr> -->
+                <td>
+                  <span class="material-icons" style="color: rgb(255, 0, 0); font-size: 25px; margin-top: 17px; margin-left: 75px;" (click)="removeCustomer(i)">cancel</span>
+                </td>
+              </tr>
+            </table>
+            <tr>
+              <th>
+                <div>
+                  <span class="material-icons" style="font-size: 25px; color: green;"(click)="addCustomer()">add_box</span>
+                </div>
+            </tr>
+          </table>
+        </div>
+     </mat-card-content>
+
+    </mat-card>     
+  </form>
+  <mat-card-actions>
+    <button mat-raised-button type="button" class="btn btn-success" [disabled]="!tripForm.valid || !tripDetailsForm.valid" (click)="onSubmit()">
+      <span class="material-icons" style="font-size: 25px;">save</span>
+    </button>  
+  </mat-card-actions>
+</mat-card>
+
+<br><mat-card>
+  <mat-card-header>
+    <mat-card-title style="color: green;"> TRIPS</mat-card-title>
+  </mat-card-header>
+  <table mat-table *ngIf="trips" [dataSource]="trips" class="mat-elevation-z8">
+
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="routeId">
+      <th mat-header-cell *matHeaderCellDef>Route</th>
+      <td mat-cell *matCellDef="let element"> {{element.route.routeName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Date</th>
+      <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="driver">
+      <th mat-header-cell *matHeaderCellDef>driver</th>
+      <td mat-cell *matCellDef="let element"> {{element.driver}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="salesMan">
+      <th mat-header-cell *matHeaderCellDef>Salesman</th>
+      <td mat-cell *matCellDef="let element"> {{element.salesMan}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="manage">
+      <th mat-header-cell *matHeaderCellDef>Manage</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-raised-button style="background-color: green; margin-left: 8px;" (click)="viewTripDetails(element.id)" type="button">View</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</mat-card>

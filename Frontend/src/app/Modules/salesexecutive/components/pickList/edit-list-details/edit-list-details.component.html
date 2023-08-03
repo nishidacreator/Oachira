@@ -1,0 +1,50 @@
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <mat-card class="background">
+      <div class="row">
+        <div class="col">
+          <mat-card-header>
+            <mat-card-title>PRODUCTS</mat-card-title>
+          </mat-card-header>
+        </div>
+        <div class="col">
+          <mat-card-header>
+            <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onclick="history.back()">
+              <mat-icon>exit_to_app</mat-icon>
+            </button>
+          </mat-card-header>
+        </div>
+      </div>
+      <mat-card-content >
+  
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+                <mat-label>Products</mat-label>
+                <mat-select (selectionChange)="optionSelected($event)" formControlName="productId">
+                <input type="text" matInput [formControl]="searchControl" placeholder="Search">
+                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.id">
+                        {{ option.productName }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+          <div class="row">
+            <div class="col">
+                <mat-form-field appearance="fill"class="full-width">
+                    <input matInput placeholder="Quantity" formControlName="quantity">
+                </mat-form-field>
+            </div>
+          </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-raised-button type="submit" class="btn btn-success">
+          <span class="material-icons" style="font-size: 25px;">save</span>
+        </button>  
+       </mat-card-actions>
+
+    </mat-card>
+</form>
+

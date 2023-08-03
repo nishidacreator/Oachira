@@ -1,0 +1,55 @@
+<mat-toolbar style="background-color: rgb(33,142,67); color: white; height: 40px;">
+  CURRENCY
+</mat-toolbar>
+
+<form [formGroup]="currencyForm" (ngSubmit)="onSubmit()">
+  <mat-card class="background">
+    <mat-card-content>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Currency Name</mat-label>
+            <input matInput formControlName="currencyName">
+            <mat-error *ngIf="currencyForm.controls['currencyName'].hasError('required')">
+              Name <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Currency Code</mat-label>
+            <input matInput formControlName="currencyCode">
+            <mat-error *ngIf="currencyForm.controls['currencyCode'].hasError('required')">
+              Code <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Exchange Value(in INR)</mat-label>
+            <input matInput formControlName="exchangeValue">
+            <mat-error *ngIf="currencyForm.controls['exchangeValue'].hasError('required')">
+              Value <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button  mat-raised-button type="submit" [disabled]="!currencyForm.valid">ADD</button>&nbsp;&nbsp;
+      <button  mat-raised-button type="button" (click)="onCancelClick()">CANCEL</button>
+      <!-- <button *ngIf ="isEdit && !editAdminStatus" mat-raised-button (click)="editTherapistFunction()" enable mat-raised-button color="primary" type="button">UPDATE</button>
+      <button *ngIf ="isEdit && editAdminStatus" mat-raised-button (click)="editAdminFunction()" enable mat-raised-button color="primary" type="button">UPDATE</button> -->
+    </mat-card-actions>
+
+  </mat-card>
+</form>
