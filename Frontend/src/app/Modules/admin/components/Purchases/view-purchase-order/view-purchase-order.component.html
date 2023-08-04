@@ -1,47 +1,47 @@
 <mat-card class="container">
-    <div class="row">
-      <div class="col">
-        <mat-card-header>
-          <mat-card-title> PURCHASE ORDER </mat-card-title>
-        </mat-card-header>
-      </div>
-      
-      <div class="col">
-        <mat-card-header>
-          <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onclick="history.back()">
-            <mat-icon>exit_to_app</mat-icon>
-          </button>
-        </mat-card-header>
-      </div>
+  <div class="row">
+    <div class="col">
+      <mat-card-header>
+        <mat-card-title> PURCHASE ORDER </mat-card-title>
+      </mat-card-header>
     </div>
-      <table mat-table *ngIf="pEntry" [dataSource]="pEntry" class="mat-elevation-z8">
     
-    
-        <ng-container matColumnDef="purchaseOrderId">
-          <th mat-header-cell *matHeaderCellDef class="table-border">Puchase Order ID</th>
-          <td mat-cell *matCellDef="let element" class="table-border"> {{element.id}} </td>
-        </ng-container>
+    <div class="col">
+      <mat-card-header>
+        <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onclick="history.back()">
+          <mat-icon>exit_to_app</mat-icon>
+        </button>
+      </mat-card-header>
+    </div>
+  </div>
+    <table mat-table *ngIf="pEntry" [dataSource]="pEntry" class="mat-elevation-z8">
+  
+  
+      <ng-container matColumnDef="purchaseOrderId">
+        <th mat-header-cell *matHeaderCellDef class="table-border">Puchase Order ID</th>
+        <td mat-cell *matCellDef="let element" class="table-border"> {{element.id}} </td>
+      </ng-container>
 
-    
-        <ng-container matColumnDef="vendorId">
-          <th mat-header-cell *matHeaderCellDef class="table-border">Vendor</th>
-          <td mat-cell *matCellDef="let element" class="table-border"> {{element.vendor.vendorName}} </td>
-        </ng-container>
-    
+  
+      <ng-container matColumnDef="vendorId">
+        <th mat-header-cell *matHeaderCellDef class="table-border">Vendor</th>
+        <td mat-cell *matCellDef="let element" class="table-border"> {{element.vendor.vendorName}} </td>
+      </ng-container>
+  
 
-        <ng-container matColumnDef="requestedPurchaseDate">
-          <th mat-header-cell *matHeaderCellDef class="table-border">Requested Purchase Date</th>
-          <td mat-cell *matCellDef="let element" class="table-border"> {{element.purachseDate}} </td>
-        </ng-container>
-    
-        <ng-container matColumnDef="manage">
-          <th mat-header-cell *matHeaderCellDef>Manage</th>
-          <td mat-cell *matCellDef="let element">
-            <button mat-raised-button style="background-color: green; margin-left: 8px;"  type="button">View</button>
-          </td>
-        </ng-container>
-    
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-    </mat-card>
+      <ng-container matColumnDef="requestedPurchaseDate">
+        <th mat-header-cell *matHeaderCellDef class="table-border">Requested Purchase Date</th>
+        <td mat-cell *matCellDef="let element" class="table-border"> {{element.purachseDate}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="manage">
+        <th mat-header-cell *matHeaderCellDef>Manage</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-raised-button style="background-color: green; margin-left: 8px;"  type="button">View</button>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </mat-card>
