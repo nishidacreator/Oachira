@@ -1,0 +1,41 @@
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px;
+  }
+
+.box {
+   width:300px;
+   padding: 80px 0;
+  text-align: center;
+  color: white;
+  background-color: rgb(255,255,0);
+  border-radius: var(--mdc-elevated-card-container-shape, var(--mdc-shape-medium, 16px))
+}
+
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height:100px;
+}
+
+.footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+table {
+    width: 500px;
+}
+
+.dropbox{
+    width:200px;
+    border-radius: var(--mdc-elevated-card-container-shape, var(--mdc-shape-medium, 16px))
+}
+
+.background{
+    background-color: rgb(243,243,243);
+}
