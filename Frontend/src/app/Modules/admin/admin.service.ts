@@ -222,12 +222,8 @@ export class AdminService {
     return this._http.get<PurchaseEntry>(this.url + '/purchaseentry/'+ id);
   }
 
-  updatePurchaseAmount(id: number, data: any): Observable<PurchaseEntry>{
-    return this._http.patch<PurchaseEntry>(this.url + '/purchaseentry/amount/'+ id, data);
-  }
-
   addPurchaseEntryDetails(data: any){
-    return this._http.post(this.url + '/purchaseentrydetails', data)
+    return this._http.post(this.url + '/purchaseentry', data)
   }
 
   getPurchaseEntryDetailsByEntry(id: number): Observable<PurchaseEntryDetails[]>{
@@ -236,6 +232,12 @@ export class AdminService {
 
   findProduct(data : any):Observable<any>{
     return this._http.get<any>(this.url + '/product/filter' , data);
+  }
+
+  //PURCHASE ORDER
+
+  addPurchaseOrder(data : any){
+    return this._http.post(this.url + '/purchaseorder', data);
   }
 
   //VEHICLE
