@@ -1,3 +1,4 @@
+const User = require('../models/User/user')
 const cors = require('cors');
 const express = require('express');
 const dotenv = require('dotenv');
@@ -19,6 +20,8 @@ const tax = require('../router/Product/tax');
 const vendor = require('../router/vendor');
 const purchaseEntry = require('../router/Purchases/purchaseEntry');
 const purchaseEntryDetails = require('../router/Purchases/purchaseEntryDetails');
+const purchaseOrder =  require('../router/Purchases/purchaseOrder');
+const purchaseOrderDetails = require('../router/Purchases/purchaseOrderDetails')
 const stock = require('../router/stock');
 const transaction = require('../router/transaction');
 const vehicle = require('../router/route/vehicle');
@@ -35,6 +38,7 @@ const deliveryDays = require('../router/route/deliveryDays');
 const syncModel = require('../utils/association');
 
 const sequelize = require('../utils/db');
+
 
 const app = express();
 
@@ -62,6 +66,8 @@ app.use('/tax', tax);
 app.use('/vendor', vendor);
 app.use('/purchaseentry', purchaseEntry);
 app.use('/purchaseentrydetails', purchaseEntryDetails);
+app.use('/purchaseorder', purchaseOrder);
+app.use('/viewpurchaseorder',purchaseOrderDetails);
 app.use('/stock',stock);
 app.use('/transaction', transaction);
 app.use('/vehicle', vehicle);

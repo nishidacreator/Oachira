@@ -31,6 +31,8 @@ const categoryData = require('./categoryFirst.json');
 const bcrypt = require('bcrypt');
 
 const { JSON } = require('sequelize');
+const PurchaseOrder = require('../models/Purchases/purchaseOrder');
+const PurchaseOrderDetails = require('../models/Purchases/purchaseOrderDetails');
 
 async function syncModel(){
 
@@ -148,8 +150,20 @@ async function syncModel(){
     Route.hasMany(DeliveryDays, {foreignKey : 'routeId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     DeliveryDays.belongsTo(Route)
 
+    Vendor.hasMany(PurchaseOrder,{foreignKey : 'vendorId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    PurchaseOrder.belongsTo(Vendor)
 
-    await sequelize.sync({alter : true})
+    User.hasMany(PurchaseOrder,{foreignKey : 'userId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    PurchaseOrder.belongsTo(User)
+
+    Product.hasMany(PurchaseOrderDetails, {foreignKey : 'productId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    PurchaseOrderDetails.belongsTo(Product)
+
+    PurchaseOrder.hasMany(PurchaseOrderDetails,{foreignKey : 'purchaseOrderId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    PurchaseOrderDetails.belongsTo(PurchaseOrder)
+
+
+    await sequelize.sync({alter: true})
 
     const role = await Role.findAll({})
     if(role.length === 0){
@@ -171,7 +185,8 @@ async function syncModel(){
             {"name": "Manha", "phoneNumber": "2222222222", "password": hashedPassword, "roleId": 2, "status": true},
             {"name": "Amina", "phoneNumber": "3333333333", "password": hashedPassword, "roleId": 3, "status": true},
             {"name": "Anupama", "phoneNumber": "4444444444", "password": hashedPassword, "roleId": 4, "status": true},
-            {"name": "Nishida", "phoneNumber": "5555555555", "password": hashedPassword, "roleId": 5, "status": true}
+            {"name": "Nishida", "phoneNumber": "5555555555", "password": hashedPassword, "roleId": 5, "status": true},
+            {"name": "Rentu", "phoneNumber": "0123456789", "password": hashedPassword, "roleId": 1, "status": true}
         ])
     }
     
