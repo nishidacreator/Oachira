@@ -1,19 +1,12 @@
 import { Component, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  Validators,
-  FormArray,
-  FormGroup,
-  FormControl,
-} from "@angular/forms";
-import { MatDialogRef } from "@angular/material/dialog";
+import { FormBuilder, Validators, FormArray, FormGroup, FormControl} from "@angular/forms";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { Subscription, Observable } from "rxjs";
 import { AdminService } from "../../../admin.service";
 import { Product } from "../../../models/product";
-import { SecondaryUnit } from "../../../models/secondaryUnit";
 import { Vendor } from "../../../models/vendor";
+import { PurchaseOrder } from "../../../models/purchaseOrder";
 
 @Component({
   selector: "app-add-purchase-order",
@@ -21,21 +14,24 @@ import { Vendor } from "../../../models/vendor";
   styleUrls: ["./add-purchase-order.component.scss"],
 })
 export class AddPurchaseOrderComponent implements OnInit {
-  purchaseOrderNoCount = 1;
+  id!: number;
+  purchases: PurchaseOrder[] = [];
+  userSub!: Subscription
+  ivNum: string = '';
+  nextId!: any 
+  prefix!: string 
 
   constructor(
     private fb: FormBuilder,
     public adminService: AdminService,
-    public dialogRef: MatDialogRef<AddPurchaseOrderComponent>,
     private router: Router,
     private _snackBar: MatSnackBar
   ) {}
-  id!: number;
+ 
   ngOnInit(): void {
     this.vendorSubscriptions = this.getVendor();
     this.productSubscription = this.getProducts();
-
-    //User
+    //User Id
     const token: any = localStorage.getItem("token");
     let user = JSON.parse(token);
     this.id = user.id;
@@ -79,6 +75,53 @@ export class AddPurchaseOrderComponent implements OnInit {
     );
   }
 
+  generateInvoiceNum() {
+    this.userSub = this.adminService.getPurchaseOrder().subscribe((res)=>{
+      this.purchases = res;
+
+       // Check if there are any employees in the array
+      if (this.purchases.length > 0) {
+        const maxId = this.purchases.reduce((prevMax, inv) => {
+          console.log(inv)
+          // Extract the numeric part of the employee ID and convert it to a number
+          const idNumber = parseInt(inv.purchaseOrderNo.substring(5), 10);
+          console.log(idNumber)
+
+          this.prefix = this.extractLetters(inv.purchaseOrderNo);
+
+          // Check if the extracted numeric part is a valid number
+          if (!isNaN(idNumber)) {
+            return idNumber > prevMax ? idNumber : prevMax;
+          } else {
+            // If the extracted part is not a valid number, return the previous max
+            return prevMax;
+          }
+        }, 0);
+        // Increment the maxId by 1 to get the next ID
+        this.nextId = maxId + 1;
+        console.log(this.nextId)
+
+      } else {
+        // If there are no employees in the array, set the employeeId to 'EMP001'
+        this.nextId = 0o0;
+        this.prefix = 'INV'
+        
+      }
+      console.log(this.nextId + 'hih')
+
+      const paddedId = `${this.prefix}${this.nextId.toString().padStart(3, '0')}`;;
+
+      this.ivNum = paddedId;
+      
+      this.purchaseOrderForm.get('purchaseOrderNo')?.setValue(this.ivNum)
+    })
+
+  }
+
+  extractLetters(input: string): string {
+    return input.replace(/[^a-zA-Z]/g, '');
+  }
+
   vendor: Vendor[] = [];
   vendorSubscriptions!: Subscription;
   getVendor() {
@@ -101,7 +144,6 @@ export class AddPurchaseOrderComponent implements OnInit {
   private submitSubscription: Subscription = new Subscription();
   onSubmit() {
     this.entryStatus = true;
-
     let data = {
       purchaseOrderNo: this.purchaseOrderForm.get("purchaseOrderNo")?.value,
       vendorId: this.purchaseOrderForm.get("vendorId")?.value,
@@ -112,8 +154,7 @@ export class AddPurchaseOrderComponent implements OnInit {
     };
     console.log(data);
     this.submitSubscription = this.adminService
-      .addPurchaseOrder(data)
-      .subscribe(
+      .addPurchaseOrder(data).subscribe(
         (res) => {
           this._snackBar.open("Purchase added successfully...", "", {
             duration: 3000,
@@ -145,11 +186,6 @@ export class AddPurchaseOrderComponent implements OnInit {
     this.products().removeAt(i);
   }
 
-  unit$!: Observable<SecondaryUnit[]>;
-  getUnit() {
-    this.unit$ = this.adminService.getSecondaryUnit();
-  }
-
   viewPurchaseOrder() {
     this.router.navigateByUrl(
       "admin/purchases/purchaseorder/viewpurchaseorder"
@@ -168,7 +204,4 @@ export class AddPurchaseOrderComponent implements OnInit {
     this.router.navigateByUrl("admin/settings/product/addproduct");
   }
 
-  onCancelClick(): void {
-    this.dialogRef.close();
-  }
 }

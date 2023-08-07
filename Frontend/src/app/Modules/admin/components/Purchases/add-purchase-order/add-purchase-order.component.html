@@ -6,6 +6,13 @@
                     <mat-card-title>ADD NEW PURCHASE ORDER </mat-card-title>
                 </mat-card-header>
             </div>
+            <div class="col">
+                <mat-card-header>
+                  <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onclick="history.back()">
+                    <mat-icon>exit_to_app</mat-icon>
+                  </button>
+                </mat-card-header>
+              </div>
 
 
         </div>
@@ -14,8 +21,7 @@
                 <div class="col">
                     <div class="row">
                         <mat-form-field class="full-width">
-                            <input matInput placeholder="Purchase Order Id" formControlName="purchaseOrderNo"
-                                [readonly]="true">
+                            <input matInput placeholder="Purchase Order Id" formControlName="purchaseOrderNo">
                             <mat-error *ngIf="purchaseOrderForm.controls['purchaseOrderNo'].hasError('required')">
                                 Order Id <strong>required</strong>
                             </mat-error>
@@ -142,7 +148,6 @@
             <button mat-raised-button type="submit" class="btn btn-success">
                 <span class="material-icons" style="font-size: 25px;">save</span>
             </button>
-            <button mat-raised-button type="button" (click)="onCancelClick()">CANCEL</button>
         </mat-card-actions>
     </mat-card><br>
 </form>
