@@ -1,41 +1,54 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AdminService } from '../../../admin.service';
-import { PurchaseEntry } from '../../../models/purchaseEntry';
+import { PurchaseOrderDetails } from '../../../models/purchaseOrderDetails';
 
 @Component({
-  selector: 'app-view-purchase-order',
-  templateUrl: './view-purchase-order.component.html',
-  styleUrls: ['./view-purchase-order.component.scss']
+  selector: "app-view-purchase-order",
+  templateUrl: "./view-purchase-order.component.html",
+  styleUrls: ["./view-purchase-order.component.scss"],
 })
 export class ViewPurchaseOrderComponent implements OnInit {
-  constructor(private adminService: AdminService, private router: Router) { }
+  id: any;
+  displayedColumns: string[] = ["id", "productId", "quantity"];
+  pEDetails: PurchaseOrderDetails[] = [];
+  pESubscription!: Subscription;
+  customer: any;
+
+  constructor(
+    private adminSerivce: AdminService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+  ngOnInit(): void {
+    this.id = this.route.snapshot.params["id"];
+    this.pESubscription = this.getPurchaseOrderDetails();
+  }
 
   ngOnDestroy(): void {
-    this.pESubscription.unsubscribe()
+    this.pESubscription.unsubscribe();
   }
 
-  id: any;
-  date: any;
-  ngOnInit(): void {
-    this.pESubscription = this.getPurchaseEntry()
-
-    //USER
-    const token: any = localStorage.getItem('token')
-    let user = JSON.parse(token) 
-    this.id = user.id
+  getPurchaseOrderDetails() {
+    return this.adminSerivce
+      .getPurchaseOrderDetailsById(this.id)
+      .subscribe((res) => {
+        this.pEDetails = res;
+        console.log(this.pEDetails);
+      });
   }
 
-  displayedColumns : string[] = ['purchaseOrderId','vendorId', 'requestedPurchaseDate','manage']
-
-  pEntry: PurchaseEntry[] = []
-  pESubscription!: Subscription
-  getPurchaseEntry(){
-    return this.adminService.getPurchaseEntry().subscribe(res=>{
-      this.pEntry = res.filter(x=> x.userId === this.id)
-      console.log(this.pEntry)
-    })
+  addProducts() {
+    this.router.navigateByUrl(
+      "admin/purchases/purchaseorder/viewpurchaseorder/addmore/" +
+        this.id
+    );
   }
-  
+
 }
+
+
+
+
+

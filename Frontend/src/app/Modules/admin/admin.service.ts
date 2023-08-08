@@ -23,6 +23,8 @@ import { TripDetails } from './models/route/tripDetails';
 import { DeliveryDays } from './models/route/deliveryDays';
 import { PurchaseEntry } from './models/purchaseEntry';
 import { PurchaseEntryDetails } from './models/purchaseEntryDetails';
+import { PurchaseOrder } from './models/purchaseOrder';
+import { PurchaseOrderDetails } from './models/purchaseOrderDetails';
 // import * as puppeteer from 'puppeteer';
 
 @Injectable({
@@ -236,10 +238,17 @@ export class AdminService {
 
   //PURCHASE ORDER
 
+  getPurchaseOrder(): Observable<PurchaseOrder[]>{
+    return this._http.get<PurchaseOrder[]>(this.url + '/purchaseorder');
+  }
+
   addPurchaseOrder(data : any){
     return this._http.post(this.url + '/purchaseorder', data);
   }
 
+  getPurchaseOrderDetailsById(id: number): Observable<PurchaseOrderDetails[]>{
+    return this._http.get<PurchaseOrderDetails[]>(this.url + '/viewpurchaseorder/'+id);
+  }
   //VEHICLE
   addVehicle(data : any){
     return this._http.post(this.url +'/vehicle', data);

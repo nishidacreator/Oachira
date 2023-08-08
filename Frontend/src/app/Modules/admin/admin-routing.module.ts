@@ -44,6 +44,8 @@ import { ViewPurchaseEntryComponent } from './components/Purchases/view-purchase
 import { ViewPurchaseListComponent } from './components/Purchases/view-purchase-list/view-purchase-list.component';
 import { AddMoreProductsComponent } from './components/Purchases/add-more-products/add-more-products.component';
 import { PurchaseOrderComponent } from './components/Purchases/purchase-order/purchase-order.component';
+import { ViewPurchaseOrderComponent } from './components/Purchases/view-purchase-order/view-purchase-order.component';
+import { AddPurchaseOrderComponent } from './components/Purchases/add-purchase-order/add-purchase-order.component';
 // import { TripDetailsComponent } from './components/route/trip-details/trip-details.component';
 
 const routes: Routes = [
@@ -98,8 +100,12 @@ const routes: Routes = [
   {path: 'sales/viewpicklist/routemap', component: RouteMapComponent},
 
   {path :'purachases/purchaseorder', component: PurchaseOrderComponent},
+  {path :'purachases/addpurchaseorder', component: AddPurchaseOrderComponent},
+  {path :'purchases/purchaseorder/viewpurchaseorder/:id', component: ViewPurchaseOrderComponent},
+  {path : 'purchases/purchaseorder/viewpurchaseorder/addmore/:id', component: AddMoreProductsComponent},
 
   {path :'purachases/purchaseentry', component: PurchaseEntryManagementComponent},
+  {path :'purachases/purchaseentry/:id', component: PurchaseEntryManagementComponent},
   {path :'purchases/purchaseentry/viewpurchaseentry', component: ViewPurchaseEntryComponent},
   {path :'purchases/purchaseentry/viewpurchaseentry/viewlist/:id', component: ViewPurchaseListComponent},
   {path :'purchases/purchaseentry/viewpurchaseentry/viewlist/addmore/:id', component: AddMoreProductsComponent},
