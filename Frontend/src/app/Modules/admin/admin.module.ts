@@ -63,6 +63,8 @@ import { AddMoreProductsComponent } from './components/Purchases/add-more-produc
 import { PurchaseOrderComponent } from './components/Purchases/purchase-order/purchase-order.component';
 import { ViewPurchaseOrderComponent } from './components/Purchases/view-purchase-order/view-purchase-order.component';
 import { AddPurchaseOrderComponent } from './components/Purchases/add-purchase-order/add-purchase-order.component';
+import { StockComponent } from './components/Stock/stock/stock.component';
+import { StockDetailsComponent } from './components/Stock/stock-details/stock-details.component';
 
 @NgModule({
   declarations: [
@@ -115,7 +117,9 @@ import { AddPurchaseOrderComponent } from './components/Purchases/add-purchase-o
     AddMoreProductsComponent,
     PurchaseOrderComponent,
     ViewPurchaseOrderComponent,
-    AddPurchaseOrderComponent
+    AddPurchaseOrderComponent,
+    StockComponent,
+    StockDetailsComponent
   ],
   imports: [
     CommonModule,

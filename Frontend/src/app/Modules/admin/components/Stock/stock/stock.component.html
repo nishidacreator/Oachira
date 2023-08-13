@@ -1,0 +1,48 @@
+<mat-card class="background">
+    <div class="row">
+      <div class="col">
+        <mat-card-header>
+          <mat-card-title> STOCK </mat-card-title>
+        </mat-card-header>
+      </div>
+      
+      <div class="col">
+        <mat-card-header>
+          <!-- <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" (click)="viewPurchaseEntry()">
+            <mat-icon>visibility</mat-icon>
+          </button> -->
+          <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onclick="history.back()">
+            <mat-icon>exit_to_app</mat-icon>
+          </button>
+        </mat-card-header>
+      </div>
+    </div>
+
+    <mat-card-content >
+        <div class="container">
+            
+            <div class="table">
+                <div class="table-header">
+                    <div class="header__item"><a id="name" class="filter__link" href="#">Type</a></div>
+                    <div class="header__item"><a id="wins" class="filter__link filter__link--number" href="#">Product</a></div>
+                    <div class="header__item"><a id="draws" class="filter__link filter__link--number" href="#">Quantity</a></div>
+                    <div class="header__item"><a id="losses" class="filter__link filter__link--number" href="#">Rate</a></div>
+                    <div class="header__item"><a id="total" class="filter__link filter__link--number" href="#">Mrp</a></div>
+                    <div class="header__item"><a id="total" class="filter__link filter__link--number" href="#">Manage</a></div>
+                </div>
+                <div class="table-content" *ngFor="let item of stock">	
+                    <div class="table-row">		
+                        <div class="table-data">{{item.type == false? "Sales" : "Purchases"}}</div>
+                        <div class="table-data">{{item.product.productName}}</div>
+                        <div class="table-data">{{item.quantity}}</div>
+                        <div class="table-data">{{item.rate}}</div>
+                        <div class="table-data">{{item.mrp}}</div>
+                        <div class="table-data">
+                            <button mat-raised-button style="background-color: green; margin-left: 8px;" (click)="viewDetails(item.id)" type="button">View</button>
+                        </div>
+                    </div>
+                </div>	
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

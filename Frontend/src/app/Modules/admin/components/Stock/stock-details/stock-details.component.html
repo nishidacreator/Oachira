@@ -1,0 +1,44 @@
+<mat-card class="background">
+    <div class="row">
+      <div class="col">
+        <mat-card-header>
+          <mat-card-title> STOCK DEATILS </mat-card-title>
+        </mat-card-header>
+      </div>
+      
+      <div class="col">
+        <mat-card-header>
+          <!-- <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" (click)="viewPurchaseEntry()">
+            <mat-icon>visibility</mat-icon>
+          </button> -->
+          <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onclick="history.back()">
+            <mat-icon>exit_to_app</mat-icon>
+          </button>
+        </mat-card-header>
+      </div>
+    </div>
+
+    <mat-card-content >
+        <div class="container" *ngIf="details">
+            <ul class="responsive-table">
+              <li class="table-row">
+                <div class="col col-1" data-label="Job Id">Invoice Number:</div>
+                <div class="col col-1" data-label="Job Id">{{details.purchaseEntry.purchaseInvoice}}</div>
+                
+              </li>
+              <li class="table-row">
+                <div class="col col-1" data-label="Job Id">Invoice Date</div>
+                <div class="col col-1" data-label="Job Id">{{details.purchaseEntry.purachseDate | date:'dd/MM/yyyy'}}</div>
+              </li>
+              <li class="table-row">
+                <div class="col col-1" data-label="Job Id">Amount</div>
+                <div class="col col-1" data-label="Job Id">{{details.purchaseEntry.purchaseAmount}}</div>
+              </li>
+              <li class="table-row">
+                <div class="col col-1" data-label="Job Id">Vendor</div>
+                <div class="col col-1" data-label="Job Id">{{details.purchaseEntry.vendor.vendorName}}</div>
+              </li>
+            </ul>
+          </div>
+    </mat-card-content>
+</mat-card>
