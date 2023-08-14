@@ -25,7 +25,7 @@ import { TaxManagementComponent } from './components/Setting/tax-management/tax-
 import { CustomerCategoryComponent } from './components/Setting/customers/customer-category/customer-category.component';
 import { CustomerGradeComponent } from './components/Setting/customers/customer-grade/customer-grade.component';
 import { AddCustomerComponent } from './components/Setting/customers/add-customer/add-customer.component';
-import { PurchaseEntryManagementComponent } from './components/Purchases/purchase-entry-management/purchase-entry-management.component';
+import { AddPurchaseEntryComponent } from './components/Purchases/add--purchase-entry/add-purchase-entry.component';
 import { AddRouteDaysComponent } from './components/Setting/route/route/add-route-days/add-route-days.component';
 import { AddRouteDetailsComponent } from './components/Setting/route/route/add-route-details/add-route-details.component';
 import { AddRouteComponent } from './components/Setting/route/route/add-route/add-route.component';
@@ -63,6 +63,8 @@ import { AddMoreProductsComponent } from './components/Purchases/add-more-produc
 import { PurchaseOrderComponent } from './components/Purchases/purchase-order/purchase-order.component';
 import { ViewPurchaseOrderComponent } from './components/Purchases/view-purchase-order/view-purchase-order.component';
 import { AddPurchaseOrderComponent } from './components/Purchases/add-purchase-order/add-purchase-order.component';
+import { InvoiceListComponent } from './components/Purchases/invoice-list/invoice-list.component';
+import { ViewInvoiceComponent } from './components/Purchases/view-invoice/view-invoice.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +91,7 @@ import { AddPurchaseOrderComponent } from './components/Purchases/add-purchase-o
     AddRouteComponent,
     AddRouteDetailsComponent,
     AddRouteDaysComponent,
-    PurchaseEntryManagementComponent,
+    AddPurchaseEntryComponent,
     AddCustomerComponent,
     CustomerGradeComponent,
     CustomerCategoryComponent,
@@ -115,7 +117,9 @@ import { AddPurchaseOrderComponent } from './components/Purchases/add-purchase-o
     AddMoreProductsComponent,
     PurchaseOrderComponent,
     ViewPurchaseOrderComponent,
-    AddPurchaseOrderComponent
+    AddPurchaseOrderComponent,
+    InvoiceListComponent,
+    ViewInvoiceComponent
   ],
   imports: [
     CommonModule,

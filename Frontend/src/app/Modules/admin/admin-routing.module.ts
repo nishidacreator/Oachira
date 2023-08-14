@@ -15,7 +15,7 @@ import { SettingsComponent } from './components/Setting/settings/settings.compon
 import { VehicleManagementComponent } from './components/Setting/trip/vehicle-management/vehicle-management.component';
 import { VendorManagementComponent } from './components/Setting/vendor-management/vendor-management.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { PurchaseEntryManagementComponent } from './components/Purchases/purchase-entry-management/purchase-entry-management.component';
+import { AddPurchaseEntryComponent } from './components/Purchases/add--purchase-entry/add-purchase-entry.component';
 import { AddRouteDaysComponent } from './components/Setting/route/route/add-route-days/add-route-days.component';
 import { AddRouteDetailsComponent } from './components/Setting/route/route/add-route-details/add-route-details.component';
 import { AddRouteComponent } from './components/Setting/route/route/add-route/add-route.component';
@@ -46,6 +46,8 @@ import { AddMoreProductsComponent } from './components/Purchases/add-more-produc
 import { PurchaseOrderComponent } from './components/Purchases/purchase-order/purchase-order.component';
 import { ViewPurchaseOrderComponent } from './components/Purchases/view-purchase-order/view-purchase-order.component';
 import { AddPurchaseOrderComponent } from './components/Purchases/add-purchase-order/add-purchase-order.component';
+import { ViewInvoiceComponent } from './components/Purchases/view-invoice/view-invoice.component';
+import { InvoiceListComponent } from './components/Purchases/invoice-list/invoice-list.component';
 // import { TripDetailsComponent } from './components/route/trip-details/trip-details.component';
 
 const routes: Routes = [
@@ -104,12 +106,15 @@ const routes: Routes = [
   {path :'purchases/purchaseorder/viewpurchaseorder/:id', component: ViewPurchaseOrderComponent},
   {path : 'purchases/purchaseorder/viewpurchaseorder/addmore/:id', component: AddMoreProductsComponent},
 
-  {path :'purachases/purchaseentry', component: PurchaseEntryManagementComponent},
-  {path :'purachases/purchaseentry/:id', component: PurchaseEntryManagementComponent},
+  {path :'purachases/purchaseentry', component: ViewPurchaseEntryComponent},
+  {path :'purachases/addpurchaseentry', component: AddPurchaseEntryComponent},
+  {path :'purachases/purchaseentry/:id', component: AddPurchaseEntryComponent},
   {path :'purchases/purchaseentry/viewpurchaseentry', component: ViewPurchaseEntryComponent},
   {path :'purchases/purchaseentry/viewpurchaseentry/viewlist/:id', component: ViewPurchaseListComponent},
   {path :'purchases/purchaseentry/viewpurchaseentry/viewlist/addmore/:id', component: AddMoreProductsComponent},
 
+  {path :'purachases/invoices', component: InvoiceListComponent},
+  {path :'purachases/invoices', component: ViewInvoiceComponent},
 
   {path: 'settings/test', component: TestComponent}
  ]

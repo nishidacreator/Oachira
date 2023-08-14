@@ -4,6 +4,7 @@ const router = express.Router();
 const Vendor = require('../../models/vendor')
 const User = require('../../models/User/user');
 const PurchaseOrderDetails = require('../../models/Purchases/purchaseOrderDetails');
+const PurchaseEntry = require('../../models/Purchases/purchaseEntry');
 
 
 router.post('/', async (req, res) => {
@@ -30,7 +31,7 @@ router.post('/', async (req, res) => {
 router.get('/', async(req,res)=>{
 
     try {
-        const purchaseOrder = await PurchaseOrder.findAll({include : [Vendor, User], order:['id']});
+        const purchaseOrder = await PurchaseOrder.findAll({include : [Vendor, User, PurchaseEntry], order:['id']});
         res.send(purchaseOrder);
         
     } catch (error) {

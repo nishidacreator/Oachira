@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PurchaseEntryManagementComponent } from './purchase-entry-management.component';
+import { AddPurchaseEntryComponent } from './add-purchase-entry.component';
 
 describe('PurchaseEntryManagementComponent', () => {
-  let component: PurchaseEntryManagementComponent;
-  let fixture: ComponentFixture<PurchaseEntryManagementComponent>;
+  let component: AddPurchaseEntryComponent;
+  let fixture: ComponentFixture<AddPurchaseEntryComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PurchaseEntryManagementComponent ]
+      declarations: [ AddPurchaseEntryComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PurchaseEntryManagementComponent);
+    fixture = TestBed.createComponent(AddPurchaseEntryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
