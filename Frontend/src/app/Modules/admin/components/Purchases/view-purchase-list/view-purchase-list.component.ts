@@ -24,7 +24,7 @@ export class ViewPurchaseListComponent implements OnInit {
     this.pESubscription = this.getPurchaseEntryDetails()
   }
 
-  displayedColumns : string[] = ['id','productId', 'quantity', 'manage']
+  displayedColumns : string[] = ['id','productId','mrp', 'quantity', 'unitPrice','discount','netAmount','tax','taxAmount','grossAmount', 'manage']
 
   pEDetails: PurchaseEntryDetails[] = []
   pESubscription!: Subscription
