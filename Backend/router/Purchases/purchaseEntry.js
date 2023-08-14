@@ -11,9 +11,9 @@ const PurchaseTransaction = require('../../models/Stock/purchaseTransaction');
 
 router.post('/', async (req, res) => {
     try {
-            const {purchaseInvoice, vendorId, purchaseAmount, userId, eWayBillNo, purchaseEntryDetails, purachseDate} = req.body;
+            const {purchaseInvoice, vendorId, purchaseAmount, userId,purchaseOrderId, eWayBillNo, purchaseEntryDetails, purachseDate} = req.body;
 
-            const purchaseEntry = new PurchaseEntry({purchaseInvoice, vendorId, purchaseAmount, userId, eWayBillNo, purchaseEntryDetails, purachseDate});
+            const purchaseEntry = new PurchaseEntry({purchaseInvoice, vendorId, purchaseAmount, userId,purchaseOrderId, eWayBillNo, purchaseEntryDetails, purachseDate});
 
             await purchaseEntry.save();
 
@@ -73,6 +73,21 @@ router.get('/:id', async(req,res)=>{
     } catch (error) {
         res.send(error.message);
     }  
+})
+
+
+router.get('/view/:id', async(req,res)=>{
+
+  try {
+      const purchaseEntry = await PurchaseEntry.findOne({
+          where: { purchaseOrderId: req.params.id},
+          include : [Vendor, User], 
+          order:['id']});
+      res.send(purchaseEntry);
+      
+  } catch (error) {
+      res.send(error.message);
+  }  
 })
 
 

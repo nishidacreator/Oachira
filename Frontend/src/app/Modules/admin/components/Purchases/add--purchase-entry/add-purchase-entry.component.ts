@@ -9,20 +9,20 @@ import { Product } from '../../../models/product';
 import { Vendor } from '../../../models/vendor';
 import { Tax } from '../../../models/tax';
 import { User } from '../../../models/user';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BoldReportComponents } from '@boldreports/angular-reporting-components';
 import { InvoiceNumberComponent } from '../../Setting/prefixes/invoice-number/invoice-number.component';
 import { PurchaseEntry } from '../../../models/purchaseEntry';
 
 @Component({
-  selector: 'app-purchase-entry-management',
-  templateUrl: './purchase-entry-management.component.html',
-  styleUrls: ['./purchase-entry-management.component.scss']
+  selector: 'app-add-purchase-entry',
+  templateUrl: './add-purchase-entry.component.html',
+  styleUrls: ['./add-purchase-entry.component.scss']
 })
-export class PurchaseEntryManagementComponent implements OnInit {
+export class AddPurchaseEntryComponent implements OnInit {
 
   constructor(private fb: FormBuilder,public adminService: AdminService, private _snackBar: MatSnackBar,
-    public dialog: MatDialog, private renderer: Renderer2, private router: Router, private changeDetectorRef: ChangeDetectorRef){}
+    public dialog: MatDialog, private renderer: Renderer2, private router: Router,private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef){}
     
   ngOnDestroy(){
     // this.brandSubscription?.unsubscribe()
@@ -69,6 +69,7 @@ export class PurchaseEntryManagementComponent implements OnInit {
   // displayedColumns : String[] = ['productName','code','barCode','primaryUnitId','categoryId','brandId','manage']
 
   id!: number
+  purchaseOrderId: any;
   ngOnInit(): void {
     this.vendorSubscriptions = this.getVendor();
     this.productSubscription = this.getProducts();
@@ -80,6 +81,13 @@ export class PurchaseEntryManagementComponent implements OnInit {
     const token: any = localStorage.getItem('token')
     let user = JSON.parse(token) 
     this.id = user.id  
+
+    //purchaseOrderId
+    this.purchaseOrderId = this.route.snapshot.params['id']
+    console.log(this.purchaseOrderId)
+    if(this.purchaseOrderId){
+      this.getEntryByPurchaseOrderId();
+    }
   }
 
   //Search in MatSelect
@@ -127,7 +135,8 @@ export class PurchaseEntryManagementComponent implements OnInit {
       userId: this.id,
       eWayBillNo: this.purchaseEntryForm.get('eWayBillNo')?.value,
       purachseDate: this.purchaseEntryForm.get('purachseDate')?.value,
-      purchaseEntryDetails: this.productForm.getRawValue().products
+      purchaseEntryDetails: this.productForm.getRawValue().products,
+      purchaseOrderId: this.purchaseOrderId
     }
     console.log(data)
     this.submitSubscription = this.adminService.addPurachaseEntry(data).subscribe((res)=>{
@@ -307,4 +316,12 @@ export class PurchaseEntryManagementComponent implements OnInit {
   addNewProduct(){
     this.router.navigateByUrl('admin/settings/product/addproduct')
   }
+
+  pEntry! : PurchaseEntry
+  getEntryByPurchaseOrderId(){
+    return this.adminService.getPurchaseEntryByPurchaseOrderId(this.purchaseOrderId).subscribe(res=>{
+      this.pEntry = res
+      console.log(res)
+    })
+   }
 }

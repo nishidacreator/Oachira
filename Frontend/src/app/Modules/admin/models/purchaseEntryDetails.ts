@@ -5,7 +5,8 @@ import { Tax } from "./tax"
 
 export interface PurchaseEntryDetails{
     purchaseEntryId : number, 
-    purchaseEntry : PurchaseEntry 
+    purchaseEntry : PurchaseEntry,
+    purchaseOrderId : number,
     productId : number,
     product : Product
     quantity : number,

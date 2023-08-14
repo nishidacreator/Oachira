@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PurchaseEntry } from '../../../models/purchaseEntry';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from '../../../admin.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { AdminService } from '../../../admin.service';
 })
 export class ViewPurchaseEntryComponent implements OnInit {
 
-  constructor(private adminService: AdminService, private router: Router) { }
+  constructor(private adminService: AdminService, private router: Router, private route:ActivatedRoute) { }
 
   ngOnDestroy(): void {
     this.pESubscription.unsubscribe()
@@ -19,13 +19,14 @@ export class ViewPurchaseEntryComponent implements OnInit {
 
   id: any;
   date: any;
+  purchaseOrderId: any;
   ngOnInit(): void {
     this.pESubscription = this.getPurchaseEntry()
 
     //USER
     const token: any = localStorage.getItem('token')
     let user = JSON.parse(token) 
-    this.id = user.id
+    this.id = user.id   
   }
 
   displayedColumns : string[] = ['id','purachseDate','vendorId', 'purchaseInvoice', 'eWayBillNo', 'purchaseAmount', 'manage']
@@ -35,15 +36,16 @@ export class ViewPurchaseEntryComponent implements OnInit {
   getPurchaseEntry(){
     return this.adminService.getPurchaseEntry().subscribe(res=>{
       this.pEntry = res.filter(x=> x.user.id === this.id)
-      console.log(this.pEntry)
     })
   }
 
   viewPurchaseListDetails(id : number){
-    // console.log(id)
     this.router.navigateByUrl('admin/purchases/purchaseentry/viewpurchaseentry/viewlist/'+ id)
   }   
-  
+  addPurchaseEntry() {
+    this.router.navigateByUrl('admin/purachases/addpurchaseentry')
+   }
+
 }
 
 
