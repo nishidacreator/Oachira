@@ -162,6 +162,9 @@ async function syncModel(){
     PurchaseOrder.hasMany(PurchaseOrderDetails,{foreignKey : 'purchaseOrderId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     PurchaseOrderDetails.belongsTo(PurchaseOrder)
 
+    PurchaseOrder.hasOne(PurchaseEntry, {foreignKey : 'purchaseOrderId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    PurchaseEntry.belongsTo(PurchaseOrder)
+
 
     await sequelize.sync({alter: true})
 

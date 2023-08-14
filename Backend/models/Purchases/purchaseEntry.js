@@ -6,7 +6,7 @@ const PurchaseEntry = sequelize.define('purchaseEntry',{
     vendorId : {type : DataTypes.INTEGER, allowNull : false},
     purchaseAmount : {type : DataTypes.FLOAT, allowNull : false},
     userId : {type : DataTypes.INTEGER, allowNull : false},
-    purchaseOrderId : {type : DataTypes.INTEGER},
+    purchaseOrderId : {type : DataTypes.INTEGER, allowNull : true},
     eWayBillNo : {type : DataTypes.STRING},
     purachseDate : {type : DataTypes.DATEONLY, defaultValue: new Date()}
 },

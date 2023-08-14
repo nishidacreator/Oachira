@@ -15,7 +15,7 @@ export class PurchaseOrderComponent implements OnInit {
   pEntry: PurchaseOrder[] = [];
   pESubscription!: Subscription;
 
-  displayedColumns: string[] = ["purchaseOrderId","vendorId","requestedPurchaseDate","manage","addPurchaseEntry"];
+  displayedColumns: string[] = ["id","orderNo","vendorId","requestedPurchaseDate","manage","purchaseEntry"];
 
   constructor(
     public adminService: AdminService,
@@ -50,6 +50,10 @@ export class PurchaseOrderComponent implements OnInit {
   }  
 
   addPurchaseEntry(id : number){
+    this.router.navigateByUrl('admin/purachases/purchaseentry/'+id)
+  }
+
+  viewPurchaseEntry(id : number){
     this.router.navigateByUrl('admin/purachases/purchaseentry/'+id)
   }
 }

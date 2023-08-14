@@ -236,6 +236,10 @@ export class AdminService {
     return this._http.get<any>(this.url + '/product/filter' , data);
   }
 
+  getPurchaseEntryByPurchaseOrderId(id: number): Observable<PurchaseEntry>{
+    return this._http.get<PurchaseEntry>(this.url + '/purchaseentry/view/'+ id);
+  }
+
   //PURCHASE ORDER
 
   getPurchaseOrder(): Observable<PurchaseOrder[]>{
