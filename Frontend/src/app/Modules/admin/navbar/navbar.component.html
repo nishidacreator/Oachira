@@ -29,9 +29,10 @@
              <a *ngIf="isExpanded">INVENTORY</a>
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <!-- <a mat-list-item routerLink="addroom"  [routerLinkActive]="['active']">Assessments</a>
-          <a mat-list-item routerLink="addroom"  [routerLinkActive]="['active']">Leaves</a>
-          <a mat-list-item routerLink="addroom"  [routerLinkActive]="['active']">LMC</a> -->
+          <a mat-list-item routerLink="inventory/viewstock"  [routerLinkActive]="['active']">
+            <span class="material-icons" style="font-size: 25px; color: rgb(33,142,67); margin-right: 3px;">storage</span>
+            <div *ngIf="isExpanded">STOCK</div>
+          </a>
         </mat-expansion-panel>
       </mat-accordion>
 

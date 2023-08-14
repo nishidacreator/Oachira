@@ -5,7 +5,6 @@ const authorization = require('../../middleware/authorization');
 const PurchaseEntry = require('../../models/Purchases/purchaseEntry');
 const Product = require('../../models/Products/product');
 const SecondaryUnit = require('../../models/Products/secondaryUnit');
-const Stock = require('../../models/stock');
 const PrimaryUnit = require('../../models/Products/primayUnit')
 const Tax = require('../../models/Products/tax')
 

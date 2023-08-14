@@ -1,3 +1,4 @@
+import { StockComponent } from './components/Stock/stock/stock.component';
 import { AddCustomerComponent } from './components/Setting/customers/add-customer/add-customer.component';
 import { CustomerGradeComponent } from './components/Setting/customers/customer-grade/customer-grade.component';
 import { CustomerCategoryComponent } from './components/Setting/customers/customer-category/customer-category.component';
@@ -48,6 +49,7 @@ import { ViewPurchaseOrderComponent } from './components/Purchases/view-purchase
 import { AddPurchaseOrderComponent } from './components/Purchases/add-purchase-order/add-purchase-order.component';
 import { ViewInvoiceComponent } from './components/Purchases/view-invoice/view-invoice.component';
 import { InvoiceListComponent } from './components/Purchases/invoice-list/invoice-list.component';
+import { StockDetailsComponent } from './components/Stock/stock-details/stock-details.component';
 // import { TripDetailsComponent } from './components/route/trip-details/trip-details.component';
 
 const routes: Routes = [
@@ -104,7 +106,7 @@ const routes: Routes = [
   {path :'purachases/purchaseorder', component: PurchaseOrderComponent},
   {path :'purachases/addpurchaseorder', component: AddPurchaseOrderComponent},
   {path :'purchases/purchaseorder/viewpurchaseorder/:id', component: ViewPurchaseOrderComponent},
-  {path : 'purchases/purchaseorder/viewpurchaseorder/addmore/:id', component: AddMoreProductsComponent},
+  {path :'purchases/purchaseorder/viewpurchaseorder/addmore/:id', component: AddMoreProductsComponent},
 
   {path :'purachases/purchaseentry', component: ViewPurchaseEntryComponent},
   {path :'purachases/addpurchaseentry', component: AddPurchaseEntryComponent},
@@ -115,6 +117,8 @@ const routes: Routes = [
 
   {path :'purachases/invoices', component: InvoiceListComponent},
   {path :'purachases/invoices', component: ViewInvoiceComponent},
+  {path :'inventory/viewstock', component: StockComponent},
+  {path :'inventrory/viewstock/detail/:id', component: StockDetailsComponent},
 
   {path: 'settings/test', component: TestComponent}
  ]

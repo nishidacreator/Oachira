@@ -6,7 +6,8 @@ const authorization = require('../../middleware/authorization');
 const User = require('../../models/User/user');
 const PurchaseEntryDetails = require('../../models/Purchases/purchaseEntryDetails');
 const Transaction = require('../../models/transaction');
-
+const Stock = require('../../models/Stock/stock');
+const PurchaseTransaction = require('../../models/Stock/purchaseTransaction');
 
 router.post('/', async (req, res) => {
     try {
@@ -20,31 +21,26 @@ router.post('/', async (req, res) => {
 
             for(i=0; i<purchaseEntryDetails.length; i++){
                 purchaseEntryDetails[i].purchaseEntryId = purchaseEntryId
-            }
 
-                // //ADD TO TRANSACTION TABLE
-                // const transaction = await Transaction.findOne({ productId: purchaseEntryDetails[i].productId });
-
-                // if (!transaction) {
-                //     console.log("Transaction not found")
-                //     // If the transaction does not exist, create a new one
-                //     transaction = new Transaction({
-                //         productId: purchaseEntryDetails[i].productId,
-                //         quantity: purchaseEntryDetails[i].stockIn
-                //     });
-
-                //     await transaction.save();
-                //     res.send(transaction)
-                // } else {
-                //     // If the transaction exists, update the quantity by adding the stockIn value
-                //     console.log("Transaction updated")
-                //     console.log(transaction+"hiiiii")
-                //     // transaction.quantity += purchaseEntryDetails[i].stockIn;
-                // }
-
-                // Save the transaction to the database
-               
-
+                // STOCK
+                let data = {
+                  purchaseEntryId: purchaseEntryId,
+                  type: true,
+                  productId: purchaseEntryDetails[i].productId,
+                  quantity:  purchaseEntryDetails[i].quantity,
+                  rate: purchaseEntryDetails[i].rate,
+                  mrp: purchaseEntryDetails[i].mrp,
+                }
+                const stock = await Stock.create(data)
+                
+                const stockId = stock.id
+                let transactionData = {
+                  stockId: stockId,
+                  purchaseEntryId: purchaseEntryId
+                }
+                const transaction = await PurchaseTransaction.create(transactionData)
+                console.log(transaction)
+            }               
             const pEntryDetails = await PurchaseEntryDetails.bulkCreate(purchaseEntryDetails)
 
             res.send(pEntryDetails);

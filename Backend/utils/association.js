@@ -13,8 +13,8 @@ const Tax = require('../models/Products/tax');
 const Vendor = require('../models/vendor');
 const PurchaseEntry = require('../models/Purchases/purchaseEntry');
 const PurchaseEntryDetails = require('../models/Purchases/purchaseEntryDetails');
-const Stock = require('../models/stock');
-const Transaction = require('../models/transaction');
+// const Stock = require('../models/stock');
+// const Transaction = require('../models/transaction');
 const Vehicle = require('../models/route/vehicle');
 const Route = require('../models/route/route');
 const CollectionDays = require('../models/route/collectionDays');
@@ -33,6 +33,8 @@ const bcrypt = require('bcrypt');
 const { JSON } = require('sequelize');
 const PurchaseOrder = require('../models/Purchases/purchaseOrder');
 const PurchaseOrderDetails = require('../models/Purchases/purchaseOrderDetails');
+const Stock = require('../models/Stock/stock');
+const PurchaseTransaction = require('../models/Stock/purchaseTransaction');
 
 async function syncModel(){
 
@@ -63,14 +65,14 @@ async function syncModel(){
     User.hasMany(PurchaseEntry,{foreignKey : 'userId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     PurchaseEntry.belongsTo(User)
 
-    Product.hasMany(Stock, {foreignKey : 'productId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    Stock.belongsTo(Product)
+    // Product.hasMany(Stock, {foreignKey : 'productId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    // Stock.belongsTo(Product)
 
-    PrimaryUnit.hasMany(Stock, {foreignKey : 'primaryUnitId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    Stock.belongsTo(PrimaryUnit)
+    // PrimaryUnit.hasMany(Stock, {foreignKey : 'primaryUnitId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    // Stock.belongsTo(PrimaryUnit)
 
-    SecondaryUnit.hasMany(Stock, {foreignKey : 'secondaryUnitId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    Stock.belongsTo(SecondaryUnit)
+    // SecondaryUnit.hasMany(Stock, {foreignKey : 'secondaryUnitId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    // Stock.belongsTo(SecondaryUnit)
 
     Product.hasMany(PurchaseEntryDetails, {foreignKey : 'productId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     PurchaseEntryDetails.belongsTo(Product)
@@ -84,14 +86,14 @@ async function syncModel(){
     Tax.hasMany(PurchaseEntryDetails, {foreignKey : 'taxId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     PurchaseEntryDetails.belongsTo(Tax)
     
-    Stock.hasMany(Transaction,{foreignKey : 'stockId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    Transaction.belongsTo(Stock)
+    // Stock.hasMany(Transaction,{foreignKey : 'stockId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    // Transaction.belongsTo(Stock)
     
-    Customer.hasMany(Transaction, {foreignKey : 'customerId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    Transaction.belongsTo(Customer)
+    // Customer.hasMany(Transaction, {foreignKey : 'customerId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    // Transaction.belongsTo(Customer)
 
-    Product.hasMany(Transaction, {foreignKey : 'productId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    Transaction.belongsTo(Product)
+    // Product.hasMany(Transaction, {foreignKey : 'productId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    // Transaction.belongsTo(Product)
 
     Vehicle.hasMany(Route, {foreignKey : 'vehicleId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     Route.belongsTo(Vehicle)
@@ -162,6 +164,15 @@ async function syncModel(){
     PurchaseOrder.hasMany(PurchaseOrderDetails,{foreignKey : 'purchaseOrderId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     PurchaseOrderDetails.belongsTo(PurchaseOrder)
 
+    // STOCK
+    Product.hasMany(Stock,{foreignKey : 'productId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    Stock.belongsTo(Product)
+
+    Stock.hasMany(PurchaseTransaction,{foreignKey: 'stockId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    PurchaseTransaction.belongsTo(Stock)
+
+    PurchaseEntry.hasMany(PurchaseTransaction,{foreignKey: 'purchaseEntryId', onDelete : 'CASCADE'})
+    PurchaseTransaction.belongsTo(PurchaseEntry)
     PurchaseOrder.hasOne(PurchaseEntry, {foreignKey : 'purchaseOrderId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     PurchaseEntry.belongsTo(PurchaseOrder)
 

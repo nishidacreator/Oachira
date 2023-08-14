@@ -156,6 +156,7 @@ export class AddPurchaseOrderComponent implements OnInit {
     this.submitSubscription = this.adminService
       .addPurchaseOrder(data).subscribe(
         (res) => {
+          console.log(res);
           this._snackBar.open("Purchase added successfully...", "", {
             duration: 3000,
           });

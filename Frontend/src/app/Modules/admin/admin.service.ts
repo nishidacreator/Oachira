@@ -25,6 +25,8 @@ import { PurchaseEntry } from './models/purchaseEntry';
 import { PurchaseEntryDetails } from './models/purchaseEntryDetails';
 import { PurchaseOrder } from './models/purchaseOrder';
 import { PurchaseOrderDetails } from './models/purchaseOrderDetails';
+import { Stock } from './models/stock/stock';
+import { PurchaseTransaction } from './models/stock/purchaseTransaction';
 // import * as puppeteer from 'puppeteer';
 
 @Injectable({
@@ -409,20 +411,23 @@ export class AdminService {
     return this._http.patch<DeliveryDays>(this.url+'/tripdays/'+id, data);
   }
 
-
-  //Dynamically adding Products
-  productsArray : any = []
-
-  getTempProducts(){
-    for(let i=0; i<=100000; i++){
-      let newProduct ={
-        id : i,
-        productName : "Product"+ i 
-      };
-      this.productsArray.push(newProduct)
-    }
-    return this.productsArray
+  // STOCK
+  getStocks(): Observable<Stock[]>{
+    return this._http.get<Stock[]>(this.url +'/stock');
   }
+
+  getPurchaseTransaction(): Observable<PurchaseTransaction[]>{
+    return this._http.get<PurchaseTransaction[]>(this.url +'/stock');
+  }
+
+  getStocksById(id: number): Observable<Stock>{
+    return this._http.get<Stock>(this.url +'/stock/'+ id);
+  }
+
+  getPurchaseTransactionByStockId(id: number): Observable<PurchaseTransaction>{
+    return this._http.get<PurchaseTransaction>(this.url +'/purchasetransaction/stockid/'+ id);
+  }
+  
 }
 
 
