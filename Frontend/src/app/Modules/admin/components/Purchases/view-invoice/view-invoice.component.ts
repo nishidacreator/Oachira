@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { AdminService } from '../../../admin.service';
+import { PurchaseInvoiceDetails } from '../../../models/purchaseInvoiceDetails';
+
+
 
 @Component({
   selector: 'app-view-invoice',
@@ -6,10 +12,103 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./view-invoice.component.scss']
 })
 export class ViewInvoiceComponent implements OnInit {
+  invoiceDetails: any;
+  vendorDetails:any;
+  charges:any;
 
-  constructor() { }
+  constructor(private adminSerivce: AdminService, private router: Router, private route: ActivatedRoute) { }
 
-  ngOnInit(): void {
+  ngOnDestroy(): void {
+    this.pISubscription.unsubscribe()
   }
 
+
+  id: any
+  ngOnInit(): void {
+    this.getPurchaseInvoiceDetails();
+   this.id = this.route.snapshot.params['id']
+
+    // this.pISubscription = this.getPurchaseInvoiceDetails()
+
+    const token: any = localStorage.getItem('token')
+    let user = JSON.parse(token) 
+    this.id = user.id   
+  
+  }
+
+  displayedColumns : string[] = ['id','productId','mrp', 'quantity', 'unitPrice','discount','netAmount','tax','taxAmount','grossAmount']
+
+  pIDetails: PurchaseInvoiceDetails[] = [];
+  pISubscription!: Subscription
+  customer : any
+  getPurchaseInvoiceDetails(){
+    return this.adminSerivce.getPurchaseInvoices().subscribe((res)=>{
+      this.invoiceDetails = res;
+      this.vendorDetails = this.invoiceDetails.vendor;
+      console.log(this.vendorDetails)
+      // console.log(res)
+      this.pIDetails = this.invoiceDetails.purchaseEntryDetails;
+      console.log(this.pIDetails)
+    })
+  } 
+
+
+  
+
+  cId!: number
+  editDetails(id : number){
+    this.router.navigateByUrl('salesexecutive/picklist/view/picklistdetails/editdetails/'+ id)
+  }
+
+  // deleteDetails(id : number){
+  //   this.sEService.deletePickListDetails(id).subscribe((res)=>{
+  //   })
+  //   this.getPickListDetails()
+  // }
+
+  calculateLineAmount(item: any): number {
+    return item.quantity * item.rate;
+  }
+  
+  calculateTotalLineAmount(): number {
+    let total = 0;
+    if (this.invoiceDetails && this.invoiceDetails.purchaseEntryDetails) {
+      for (const item of this.invoiceDetails.purchaseEntryDetails) {
+        total += this.calculateLineAmount(item);
+      }
+    }
+    return total;
+  }
+
+  calculateTax(item: any): number {
+    return item.taxAmount; 
+  }
+  
+    calculateTotalTax(): number {
+      let totalTax = 0;
+      if (this.invoiceDetails && this.invoiceDetails.purchaseEntryDetails) {
+        for (const item of this.invoiceDetails.purchaseEntryDetails) {
+          const taxAmount = this.calculateTax(item);
+          totalTax += taxAmount;
+        }
+      }
+      return totalTax;
+    }
+    
+  
+
+  calculateTotalAmount(): number {
+
+    return this.calculateTotalLineAmount() + this.calculateTotalTax() + (this.charges || 0);
+  
+  }
+
+
+
+  download(){
+    window.print()
+  }
+  
 }
+
+

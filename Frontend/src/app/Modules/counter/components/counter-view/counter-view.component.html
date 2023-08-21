@@ -1,0 +1,165 @@
+<form [formGroup]="billForm">
+  <mat-card class="billing-counter">
+    <mat-card-title>Billing</mat-card-title>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <div class="row">
+        <div class="col">
+          <mat-form-field>
+            <input matInput placeholder="Membership" formControlName="membership">
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field>
+            <input matInput placeholder="Mobile" formControlName="mobileNo">
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Customer Name" formControlName="customerName">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Address" formControlName="address">
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Sales Person" formControlName="salesMan">
+            <mat-error *ngIf="billForm.controls['salesMan'].hasError('required')">
+              Sales Person<strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Delivery Boy" formControlName="deliveryBoy">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Bill Type" formControlName="billType">
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Bill Date" formControlName="billDate">
+            <mat-error *ngIf="billForm.controls['billDate'].hasError('required')">
+              Date <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Bill No." formControlName="billNo">
+            <mat-error *ngIf="billForm.controls['billNo'].hasError('required')">
+              Bill No. <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-divider></mat-divider>
+    <div>
+      <form [formGroup]="itemsListForm">
+          <mat-card>
+              <mat-card-header>
+                  <mat-card-title> PURCHASE ORDER DETAILS</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                  <div>
+                      <ul formArrayName="items">
+                          <div class="table-container">
+                              <table class="purchase-table">
+                                  <thead>
+                                      <tr>
+                                        <th>Sl.No.</th>
+                                        <th>Item Code</th>
+                                        <th>Item Name</th>
+                                        <th>Quantity</th>
+                                        <th>Unit</th>
+                                        <th>Rate</th>
+                                        <th>Amount</th>
+                                      </tr>
+                                  </thead>
+
+                                  <tbody>
+                                      <tr *ngFor="let list of items().controls; let i=index"
+                                          [formGroupName]="i">
+                                          <td>
+                                            <mat-form-field class="full-width">
+                                              <input matInput  formControlName="slNo" [value]="i + 1">
+                                            </mat-form-field>
+                                          </td>
+                                          <td>
+                                            <mat-form-field class="full-width">
+                                              <input matInput  formControlName="itemCode">
+                                            </mat-form-field>
+                                          </td>
+                                          <td>
+                                            <mat-form-field class="full-width">
+                                              <input matInput  formControlName="itemName">
+                                            </mat-form-field>
+                                          </td>
+                                          <td>
+                                            <mat-form-field class="full-width">
+                                              <input matInput  formControlName="quantity">
+                                            </mat-form-field>
+                                          </td>
+                                          <td>
+                                            <mat-form-field class="full-width">
+                                              <input matInput  formControlName="unit">
+                                            </mat-form-field>
+                                          </td>
+                                          <td>
+                                            <mat-form-field class="full-width">
+                                              <input matInput  formControlName="rate">
+                                            </mat-form-field>
+                                          </td>
+                                          <td>
+                                            <mat-form-field class="full-width">
+                                              <input matInput  formControlName="amount">
+                                            </mat-form-field>
+                                          </td>
+                                          <td>
+                                              <!-- <span class="material-icons"
+                                                  style="color: rgb(255, 0, 0); font-size: 25px; margin-top: 17px;"
+                                                  (click)="removeProduct(i)">cancel</span> -->
+                                          </td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                          <div>
+                              <span class="material-icons" style="font-size: 40px; color: green;"
+                                  (click)="addProduct()">add_box</span>
+                          </div>
+                      </ul>
+                  </div>
+              </mat-card-content>
+          </mat-card>
+
+
+
+      </form>
+
+      <br />
+  </div>
+
+
+  <div class="total">
+    <p>SubTotal: </p>
+    <p>GST 5%: </p>
+    <p>Packing Charges: </p>
+    <p>Discount:</p>
+    <p>Amount</p>
+  </div>
+
+    <button mat-raised-button color="warn" (click)="clearBilling()">Clear</button>
+  </mat-card>
+</form>

@@ -21,7 +21,8 @@ const vendor = require('../router/vendor');
 const purchaseEntry = require('../router/Purchases/purchaseEntry');
 const purchaseEntryDetails = require('../router/Purchases/purchaseEntryDetails');
 const purchaseOrder =  require('../router/Purchases/purchaseOrder');
-const purchaseOrderDetails = require('../router/Purchases/purchaseOrderDetails')
+const purchaseOrderDetails = require('../router/Purchases/purchaseOrderDetails');
+const purchaseInvoice = require('../router/Purchases/purchaseInvoice')
 // ROUTE
 const vehicle = require('../router/route/vehicle');
 const route = require('../router/route/route');
@@ -72,6 +73,7 @@ app.use('/purchaseentry', purchaseEntry);
 app.use('/purchaseentrydetails', purchaseEntryDetails);
 app.use('/purchaseorder', purchaseOrder);
 app.use('/viewpurchaseorder',purchaseOrderDetails);
+app.use('/invoices', purchaseInvoice)
 
 app.use('/vehicle', vehicle);
 app.use('/route', route);
