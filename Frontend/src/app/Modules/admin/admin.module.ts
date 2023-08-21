@@ -63,7 +63,6 @@ import { AddMoreProductsComponent } from './components/Purchases/add-more-produc
 import { PurchaseOrderComponent } from './components/Purchases/purchase-order/purchase-order.component';
 import { ViewPurchaseOrderComponent } from './components/Purchases/view-purchase-order/view-purchase-order.component';
 import { AddPurchaseOrderComponent } from './components/Purchases/add-purchase-order/add-purchase-order.component';
-import { InvoiceListComponent } from './components/Purchases/invoice-list/invoice-list.component';
 import { ViewInvoiceComponent } from './components/Purchases/view-invoice/view-invoice.component';
 import { StockComponent } from './components/Stock/stock/stock.component';
 import { StockDetailsComponent } from './components/Stock/stock-details/stock-details.component';
@@ -120,7 +119,6 @@ import { StockDetailsComponent } from './components/Stock/stock-details/stock-de
     PurchaseOrderComponent,
     ViewPurchaseOrderComponent,
     AddPurchaseOrderComponent,
-    InvoiceListComponent,
     ViewInvoiceComponent,
     StockComponent,
     StockDetailsComponent

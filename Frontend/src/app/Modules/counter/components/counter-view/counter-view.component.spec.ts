@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InvoiceListComponent } from './invoice-list.component';
+import { CounterViewComponent } from './counter-view.component';
 
-describe('InvoiceListComponent', () => {
-  let component: InvoiceListComponent;
-  let fixture: ComponentFixture<InvoiceListComponent>;
+describe('CounterViewComponent', () => {
+  let component: CounterViewComponent;
+  let fixture: ComponentFixture<CounterViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InvoiceListComponent ]
+      declarations: [ CounterViewComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(InvoiceListComponent);
+    fixture = TestBed.createComponent(CounterViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
