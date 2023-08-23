@@ -49,6 +49,7 @@ import { ViewPurchaseOrderComponent } from './components/Purchases/view-purchase
 import { AddPurchaseOrderComponent } from './components/Purchases/add-purchase-order/add-purchase-order.component';
 import { ViewInvoiceComponent } from './components/Purchases/view-invoice/view-invoice.component';
 import { StockDetailsComponent } from './components/Stock/stock-details/stock-details.component';
+import { AddVehicleComponent } from './components/Setting/trip/add-vehicle/add-vehicle.component';
 // import { TripDetailsComponent } from './components/route/trip-details/trip-details.component';
 
 const routes: Routes = [
@@ -88,6 +89,7 @@ const routes: Routes = [
   {path: 'settings/route/addtrip/tripdetails/addmore/:id', component: AddMoreTripDetailsComponent},
   {path: 'settings/trip/deliverydays', component: TripDaysComponent},
   {path: 'settings/trip/vehicle', component: VehicleManagementComponent},
+  {path: 'settings/trip/addVehicle', component: AddVehicleComponent},
 
   //AutoGeneration
   {path: 'settings/autogeneration/invoicenumber', component: InvoiceNumberComponent},
