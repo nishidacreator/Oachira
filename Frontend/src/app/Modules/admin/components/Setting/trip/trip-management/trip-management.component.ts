@@ -29,6 +29,11 @@ export class TripManagementComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  addVehicle(){
+    this.router.navigateByUrl('admin/settings/trip/addVehicle');
+    this.dialogRef.close();
+  }
+
   manageTripDays(){
     this.router.navigateByUrl('admin/settings/trip/deliverydays')
     this.dialogRef.close();

@@ -294,6 +294,7 @@ export class AdminService {
     return this._http.patch<Vehicle>(this.url+'/vehicle/'+id, data);
   }
 
+
   //Route
   addRoute(data : any){
     return this._http.post(this.url +'/route', data);

@@ -1,5 +1,5 @@
 const express = require('express');
-const VehicleType = require('../../models/route/vehicletype');
+const VehicleType = require('../../models/route/vehicleType');
 const router = express.Router();
 
 
