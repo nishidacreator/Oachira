@@ -29,6 +29,7 @@ import { Stock } from './models/stock/stock';
 import { PurchaseTransaction } from './models/stock/purchaseTransaction';
 import { PurchaseInvoiceDetails } from './models/purchaseInvoiceDetails';
 import { environment } from 'src/environments/environment';
+import { VehicleType } from './models/vehicle/vehicle-type';
 // import * as puppeteer from 'puppeteer';
 
 @Injectable({
@@ -268,6 +269,15 @@ export class AdminService {
     return this._http.get<PurchaseInvoiceDetails[]>(this.url + '/invoices/1');
   }
   //VEHICLE
+
+  addVehicleType(data: any){
+    return this._http.post(this.url + '/vehicletype', data);
+  }
+
+  getVehicleType(): Observable<VehicleType[]>{
+    return this._http.get<VehicleType[]>(this.url +'/vehicletype');
+  }
+
   addVehicle(data : any){
     return this._http.post(this.url +'/vehicle', data);
   }
