@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { AdminService } from 'src/app/Modules/admin/admin.service';
-import { Vehicle } from 'src/app/Modules/admin/models/vehicle/vehicle';
+import { VehicleType } from 'src/app/Modules/admin/models/vehicle/vehicle-type';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
 
 @Component({
@@ -17,15 +17,18 @@ export class AddVehicleComponent implements OnInit {
   constructor(private fb: FormBuilder,public adminService: AdminService, private _snackBar: MatSnackBar,
     public dialog: MatDialog){}
 
- 
+  ngOnDestroy() {
+    this.vehicleTypeSubscription?.unsubscribe()
+  }
+
   addVehicleType = this.fb.group({
-    vehicleType: ['', Validators.required]
+    typeName: ['', Validators.required]
   });
 
   displayedColumns : string[] = ['id','vehicleType']
 
   ngOnInit(): void {
-    this.getVehicle()
+    this.vehicleTypeSubscription = this.getVehicle()
   }
 
 
@@ -45,9 +48,10 @@ export class AddVehicleComponent implements OnInit {
     Object.keys(this.addVehicleType.controls).forEach(key=>{this.addVehicleType.get(key)?.setErrors(null)})
   }
 
-  vehicle: Vehicle[] = [];
+  vehicle: VehicleType[] = [];
+  vehicleTypeSubscription? : Subscription
   getVehicle(){
-    return this.adminService.getVehicle().subscribe((res)=>{
+    return this.adminService.getVehicleType().subscribe((res)=>{
       this.vehicle = res
     })
   }   
@@ -78,10 +82,10 @@ export class AddVehicleComponent implements OnInit {
     let vehi: any= this.vehicle.find(x =>x.id == id)
     
     //Populate the object by the ID
-    let vehicleType = vehi.vehicleType.toString();
+    let typeName = vehi.typeName.toString();
     
     this.addVehicleType.patchValue({
-      vehicleType : vehicleType,
+      typeName : typeName,
     })
     this.vehicleId = id;
   }
