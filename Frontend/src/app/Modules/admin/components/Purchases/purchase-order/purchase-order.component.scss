@@ -7,6 +7,11 @@ button:enabled {
   color : white
 }
 
+span:hover{
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
 // .background{
 //   border-radius: 8px;
 //   background-color: white;
@@ -62,20 +67,6 @@ table{
 }
 
 
-span {
-  cursor: pointer;
-}
-
-span:hover {
-background-position: right center;
-//background-color: #3e8e41/* change the direction of the change here */
-}
-
-span:active {
-//background-color: #3e8e41;
-box-shadow: 0 5px white;
-transform: translateY(5px);
-}
 
 @media(max-width:576px)
 {
@@ -123,212 +114,48 @@ padding: 5px;
 
 
 
-// .full-width{
-//     width: 100%;
-// }
+.styled-table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
 
-// .search-field {
-//   width: 100%;
-// }
+.styled-table thead tr {
+  background-color: #daeedf;
+  color: black;
+  text-align: left;
+  text-transform: uppercase;
+}
 
-// .search-field input {
-//   border: 1px solid #ccc;
-//   border-radius: 4px;
-//   padding: 8px;
-//   font-size: 14px;
-// }
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
 
-// .search-field input:focus {
-//   outline: none;
-//   border-color: #2196F3; /* Change the border color when focused */
-// }
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
 
-// .search-field ::placeholder{
-//   color: #999; 
-// }
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
 
-// button:enabled {
-//   background-color :rgb(56, 151, 86); 
-//   color : white
-// }
+.styled-table tbody tr:last-of-type {
+  border-bottom: 2px solid #e0e7e6;
+}
 
-// .product{
-//   background-color : white; 
-//   color : black
-// }
+.styled-table tbody tr.active-row {
+  font-weight: bold;
+  color: #009879;
+}
 
-// :host ::ng-deep .p-inputtext {
-//     color: green;
-//     border: 2px solid green;
-//     border-radius: 10px;
-// }
-
-// :host ::ng-deep .p-inputtext:focus:enabled,
-// :host ::ng-deep .p-inputtext:hover
-// {
-//     box-shadow: none;
-//     border: 2px solid green;
-// }
+.material-icons:hover {
+  color: red;
+  }
   
-
-// .row {
-//   display: flex;
-//   flex-direction: row;
-// }
-
-// .col {
-//   flex: 1;
-//   margin-right: 20px;
-// }
-
-// .col:last-child {
-//   margin-right: 0;
-// }
-
-// span {
-//   cursor: pointer;
-// }
-
-// // span:hover {
-// //   background-position: right center;
-// // }
-
-// // span:active {
-// //   box-shadow: 0 5px white;
-// //   transform: translateY(5px);
-// // }
-
-// .table.submitted td.ng-invalid {
-//   background-color: red;
-// }
-
-// .container {
-//   max-width: 1000px;
-//   margin-left: auto;
-//   margin-right: auto;
-//   padding-left: 10px;
-//   padding-right: 10px;
-// }
-
-// h2 {
-//   font-size: 26px;
-//   margin: 20px 0;
-//   text-align: center;
-//   small {
-//     font-size: 0.5em;
-//   }
-// }
-
-// *{
-//   box-sizing: border-box;
-//   -webkit-box-sizing: border-box;
-//   -moz-box-sizing: border-box;
-// }
-
-// body{
-//   font-family: Helvetica;
-//   -webkit-font-smoothing: antialiased;
-//   background: rgba( 71, 147, 227, 1);
-// }
-
-// h2{
-//   text-align: center;
-//   font-size: 18px;
-//   text-transform: uppercase;
-//   letter-spacing: 1px;
-//   color: white;
-//   // padding: 30px 0;
-// }
-
-// .table-container {
-//   margin-top: 20px;
-// }
-
-// .purchase-table {
-//   width: 100%;
-//   border-collapse: collapse;
-// }
-
-// .purchase-table th,
-// .purchase-table td {
-//   padding: 8px;
-//   text-align: left;
-//   border-right: 1px solid #ddd;
-// }
-
-// .purchase-table th {
-//   background-color: #f2f2f2;
-//   color: #333;
-// }
-
-// .purchase-table tbody tr:hover {
-//   background-color: #f5f5f5;
-// }
-
-// .purchase-table .total {
-//   font-weight: bold;
-// }
-
-// .purchase-table .highlight {
-//   background-color: yellow;
-// }
-
-
-// .fl-table {
-//   width: 100%;
-//   border-collapse: collapse;
-//   font-size: 14px;
-//   border-collapse: separate;
-//   border-spacing: 0;
-// }
-
-// .fl-table-border{
-//   border-right: 1px solid #080808;
-//   padding: 5px;
-// }
-
-// .fl-table th {
-//   background-color: #f5f5f5;
-//   text-align: center;
-//   padding: 8px;
-// }
-
-// .fl-table td {
-//   text-align: center;
-//   padding: 8px;
-// }
-
-// .fl-table input,
-// .fl-table mat-form-field {
-//   width: 100%;
-// }
-
-// .search-field {
-//   width: 100%;
-// }
-
-// .material-icons {
-//   cursor: pointer;
-// }
-
-// .material-icons:hover {
-//   color: red;
-// }
-
-// .material-icons:active {
-//   color: darkred;
-// }
-
-// .material-icons[contenteditable="true"]:hover {
-//   color: green;
-// }
-
-// .material-icons[contenteditable="true"]:active {
-//   color: darkgreen;
-// }
-
-
-// .table-container {
-//   overflow-x: auto;
-// }
-
+  .material-icons:active {
+  color: darkred;
+  }

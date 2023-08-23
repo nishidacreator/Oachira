@@ -66,6 +66,7 @@ import { AddPurchaseOrderComponent } from './components/Purchases/add-purchase-o
 import { ViewInvoiceComponent } from './components/Purchases/view-invoice/view-invoice.component';
 import { StockComponent } from './components/Stock/stock/stock.component';
 import { StockDetailsComponent } from './components/Stock/stock-details/stock-details.component';
+import { EditPurchaseEntryDetailsComponent } from './components/Purchases/edit-purchase-entry-details/edit-purchase-entry-details.component';
 
 @NgModule({
   declarations: [
@@ -121,7 +122,8 @@ import { StockDetailsComponent } from './components/Stock/stock-details/stock-de
     AddPurchaseOrderComponent,
     ViewInvoiceComponent,
     StockComponent,
-    StockDetailsComponent
+    StockDetailsComponent,
+    EditPurchaseEntryDetailsComponent
   ],
   imports: [
     CommonModule,

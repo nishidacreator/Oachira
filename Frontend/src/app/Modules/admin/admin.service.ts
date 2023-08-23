@@ -253,6 +253,10 @@ export class AdminService {
     return this._http.post(this.url + '/purchaseorder', data);
   }
 
+  getPurchaseOrderById(id: number): Observable<PurchaseOrder>{
+    return this._http.get<PurchaseOrder>(this.url + '/purchaseorder/'+id);
+  }
+
   getPurchaseOrderDetailsById(id: number): Observable<PurchaseOrderDetails[]>{
     return this._http.get<PurchaseOrderDetails[]>(this.url + '/viewpurchaseorder/'+id);
   }

@@ -14,51 +14,36 @@
         </mat-card-header>
       </div>
     </div>
-      <table mat-table *ngIf="pEntry" [dataSource]="pEntry" class="mat-elevation-z8">
-    
-    
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef class="table-border">ID</th>
-          <td mat-cell *matCellDef="let element" class="table-border"> {{element.id}} </td>
-        </ng-container>
 
-        <ng-container matColumnDef="purchaseAmount">
-          <th mat-header-cell *matHeaderCellDef class="table-border">purchaseAmount</th>
-          <td mat-cell *matCellDef="let element" class="table-border"> {{element.purchaseAmount}} </td>
-        </ng-container>
-    
-        <ng-container matColumnDef="vendorId">
-          <th mat-header-cell *matHeaderCellDef class="table-border">Vendor</th>
-          <td mat-cell *matCellDef="let element" class="table-border"> {{element.vendor.vendorName}} </td>
-        </ng-container>
-    
-        <ng-container matColumnDef="purchaseInvoice">
-          <th mat-header-cell *matHeaderCellDef class="table-border">Purchase Invoice</th>
-          <td mat-cell *matCellDef="let element" class="table-border"> {{element.purchaseInvoice}} </td>
-        </ng-container>
-    
-        <ng-container matColumnDef="eWayBillNo">
-          <th mat-header-cell *matHeaderCellDef class="table-border">eWayBillNo</th>
-          <td mat-cell *matCellDef="let element" class="table-border"> {{element.eWayBillNo}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="purachseDate">
-          <th mat-header-cell *matHeaderCellDef class="table-border">purachseDate</th>
-          <td mat-cell *matCellDef="let element" class="table-border"> {{element.purachseDate}} </td>
-        </ng-container>
-    
-        <ng-container matColumnDef="manage">
-          <th mat-header-cell *matHeaderCellDef>Manage</th>
-          <td mat-cell *matCellDef="let element">
-            <button mat-raised-button style="background-color: green; margin-left: 8px;" (click)="viewPurchaseListDetails(element.id)" type="button">View</button>
-          </td>
-        </ng-container>
-    
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
+    <table class="styled-table">
+      <thead>
+          <tr>
+              <th>id</th>
+              <th>purachse Date</th>
+              <th>purchase Invoice</th>
+              <th>e Way Bill No</th>
+              <th>vendor Name</th>
+              <th>purchase Amount</th>
+              <th>view</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let element of pEntry">
+              <td>{{element.id}}</td>
+              <td>{{element.purachseDate}}</td>
+              <td>{{element.purchaseInvoice}}</td>
+              <td>{{element.eWayBillNo}}</td>
+              <td>{{element.vendor.vendorName}}</td>
+              <td> {{element.purchaseAmount}}</td>
+              <td>
+                <span class="material-icons" style=" margin-left: 8px;" (click)="viewPurchaseListDetails(element.id)">open_in_new</span>
+              </td>
+              
+          </tr>
+      </tbody>
+    </table>
       <div>
         <span class="material-icons" style="font-size: 40px; color: green;"
-          (click)="addPurchaseEntry()">add_box</span>
+          (click)="addPurchaseEntry()">playlist_add</span>
       </div>
     </mat-card>

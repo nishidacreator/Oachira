@@ -49,6 +49,7 @@ import { ViewPurchaseOrderComponent } from './components/Purchases/view-purchase
 import { AddPurchaseOrderComponent } from './components/Purchases/add-purchase-order/add-purchase-order.component';
 import { ViewInvoiceComponent } from './components/Purchases/view-invoice/view-invoice.component';
 import { StockDetailsComponent } from './components/Stock/stock-details/stock-details.component';
+import { EditPurchaseEntryDetailsComponent } from './components/Purchases/edit-purchase-entry-details/edit-purchase-entry-details.component';
 // import { TripDetailsComponent } from './components/route/trip-details/trip-details.component';
 
 const routes: Routes = [
@@ -113,6 +114,7 @@ const routes: Routes = [
   {path :'purchases/purchaseentry/viewpurchaseentry', component: ViewPurchaseEntryComponent},
   {path :'purchases/purchaseentry/viewpurchaseentry/viewlist/:id', component: ViewPurchaseListComponent},
   {path :'purchases/purchaseentry/viewpurchaseentry/viewlist/addmore/:id', component: AddMoreProductsComponent},
+  {path :'purchases/purchaseentry/viewpurchaseentry/viewlist/editlist/:id', component: EditPurchaseEntryDetailsComponent},
 
  
   {path :'purchases/viewPurchaseDetaills/invoices/:id', component: ViewInvoiceComponent},

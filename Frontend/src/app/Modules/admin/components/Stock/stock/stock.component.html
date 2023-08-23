@@ -20,29 +20,32 @@
 
     <mat-card-content >
         <div class="container">
+
+          <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>ProductName</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>MRP</th>
+                    <th>View</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of stock">
+                    <td>{{item.type == false? "Sales" : "Purchases"}}</td>
+                    <td>{{item.product.productName}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{item.rate}}</td>
+                    <td>{{item.mrp}}</td>
+                    <td>
+                      <span class="material-icons" style=" margin-left: 8px;" (click)="viewDetails(item.id)">open_in_new</span>
+                    </td>
+                </tr>
+            </tbody>
+          </table>
             
-            <div class="table">
-                <div class="table-header">
-                    <div class="header__item"><a id="name" class="filter__link" href="#">Type</a></div>
-                    <div class="header__item"><a id="wins" class="filter__link filter__link--number" href="#">Product</a></div>
-                    <div class="header__item"><a id="draws" class="filter__link filter__link--number" href="#">Quantity</a></div>
-                    <div class="header__item"><a id="losses" class="filter__link filter__link--number" href="#">Rate</a></div>
-                    <div class="header__item"><a id="total" class="filter__link filter__link--number" href="#">Mrp</a></div>
-                    <div class="header__item"><a id="total" class="filter__link filter__link--number" href="#">Manage</a></div>
-                </div>
-                <div class="table-content" *ngFor="let item of stock">	
-                    <div class="table-row">		
-                        <div class="table-data">{{item.type == false? "Sales" : "Purchases"}}</div>
-                        <div class="table-data">{{item.product.productName}}</div>
-                        <div class="table-data">{{item.quantity}}</div>
-                        <div class="table-data">{{item.rate}}</div>
-                        <div class="table-data">{{item.mrp}}</div>
-                        <div class="table-data">
-                            <button mat-raised-button style="background-color: green; margin-left: 8px;" (click)="viewDetails(item.id)" type="button">View</button>
-                        </div>
-                    </div>
-                </div>	
-            </div>
         </div>
     </mat-card-content>
 </mat-card>

@@ -20,6 +20,7 @@ export class ViewPurchaseListComponent implements OnInit {
   id: any
   ngOnInit(): void {
    this.id = this.route.snapshot.params['id']
+   console.log(this.id)
 
     this.pESubscription = this.getPurchaseEntryDetails()
   }
@@ -42,7 +43,7 @@ export class ViewPurchaseListComponent implements OnInit {
 
   cId!: number
   editDetails(id : number){
-    this.router.navigateByUrl('salesexecutive/picklist/view/picklistdetails/editdetails/'+ id)
+    this.router.navigateByUrl('admin/purchases/purchaseentry/viewpurchaseentry/viewlist/editlist/'+ id)
   }
 
   // deleteDetails(id : number){

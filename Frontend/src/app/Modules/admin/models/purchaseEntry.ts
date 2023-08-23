@@ -2,6 +2,7 @@ import { User } from "./user";
 import { Vendor } from "./vendor";
 
 export interface PurchaseEntry{
+    id: number;
     purchaseInvoice : string,
     vendorId : number,
     vendor : Vendor
