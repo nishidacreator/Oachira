@@ -181,7 +181,7 @@ async function syncModel(){
     
 
 
-    await sequelize.sync({alter: true})
+    await sequelize.sync({force: true})
 
     const role = await Role.findAll({})
     if(role.length === 0){

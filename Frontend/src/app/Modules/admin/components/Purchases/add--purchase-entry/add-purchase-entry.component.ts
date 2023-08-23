@@ -279,6 +279,7 @@ export class AddPurchaseEntryComponent implements OnInit {
     let quantity = this.products().at(this.productIndex).get('quantity')?.value;
     let rate = this.products().at(this.productIndex).get('rate')?.value;
     let discount = this.products().at(this.productIndex).get('discount')?.value;
+    console.log(quantity, rate, discount)
 
     if(quantity && rate){
       this.netAmount = (quantity*rate)-discount;
