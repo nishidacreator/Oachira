@@ -9,16 +9,23 @@
     </div>
 
 <div class="header">
-    <mat-card class="dropbox">
-        <mat-card-subtitle style="color:green">Choose a date</mat-card-subtitle>
-        <div style="display: flex; align-items: center;">
-            <input matInput [matDatepicker]="picker" style="border: none;">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        </div>
-        <mat-datepicker #picker></mat-datepicker>
+    <mat-card class="dropbox" style="display: flex;align-items: center;">
+        <mat-form-field style="flex: 1;">
+                <mat-label style="color: green;">Enter a date range</mat-label>
+                <div class="date-range-container">
+                  <mat-date-range-input [rangePicker]="picker" class="custom-date-range-input">
+                    <input matStartDate placeholder="Start date" style="flex:1;">
+                    <input matEndDate placeholder="End date" style="flex:1;">
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                </div>
+            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+    
+            <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
     </mat-card>
     <mat-card class="dropbox">
-        <mat-card-subtitle style="color:green"> Choose service </mat-card-subtitle>
+        <mat-card-subtitle style="color: green"> Choose service </mat-card-subtitle>
         <mat-select>
             <mat-option value="sales">Sales</mat-option>
             <mat-option value="purchases">Purchases</mat-option>
@@ -82,6 +89,22 @@
   </table>
     </mat-card>
 <br>
+<mat-card style="width:500px;">
+    <mat-card-content>
+        Graph
+      <!-- <mat-card-title>Grocery Sales and Purchases</mat-card-title>
+      <div style="display: flex; justify-content: center;">
+        <div style="width: 80%;">
+          <canvas baseChart
+                  [datasets]="barChartData"
+                  [labels]="barChartLabels"
+                  [options]="barChartOptions"
+                  [legend]="barChartLegend"
+                  [chartType]="barChartType"></canvas>
+        </div>
+      </div> -->
+    </mat-card-content>
+  </mat-card>
 <mat-card style="width:500px;">
     <mat-card-content>
         Graph
