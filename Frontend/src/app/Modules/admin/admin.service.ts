@@ -28,6 +28,7 @@ import { PurchaseOrderDetails } from './models/purchaseOrderDetails';
 import { Stock } from './models/stock/stock';
 import { PurchaseTransaction } from './models/stock/purchaseTransaction';
 import { PurchaseInvoiceDetails } from './models/purchaseInvoiceDetails';
+import { environment } from 'src/environments/environment';
 // import * as puppeteer from 'puppeteer';
 
 @Injectable({
@@ -35,7 +36,7 @@ import { PurchaseInvoiceDetails } from './models/purchaseInvoiceDetails';
 })
 export class AdminService {
 
-  url = 'http://localhost:8000'
+  url = environment.baseUrl;
 
   constructor(private _http:HttpClient) { }
 
