@@ -6,13 +6,14 @@ import { Role } from './models/role';
 import { Token } from '@angular/compiler';
 import { User } from './models/user';
 import { mapTo } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  url = 'http://localhost:8000'
+  url = environment.baseUrl;
 
   private readonly token = 'token'
   private readonly JWT_TOKEN = 'JWT_TOKEN';
