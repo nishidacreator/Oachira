@@ -60,18 +60,9 @@ margin-right: 20px;
 margin-right: 0;
 }
 
-span:hover{
-  cursor: pointer;
-  transform: scale(1.2);
+span {
+cursor: pointer;
 }
-// span:hover {
-//   background-position: right center;
-// }
-
-// span:active {
-//   box-shadow: 0 5px white;
-//   transform: translateY(5px);
-// }
 
 .table.submitted td.ng-invalid {
 background-color: red;

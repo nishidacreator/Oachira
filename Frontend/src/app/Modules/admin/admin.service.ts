@@ -28,6 +28,7 @@ import { PurchaseOrderDetails } from './models/purchaseOrderDetails';
 import { Stock } from './models/stock/stock';
 import { PurchaseTransaction } from './models/stock/purchaseTransaction';
 import { PurchaseInvoiceDetails } from './models/purchaseInvoiceDetails';
+import { environment } from 'src/environments/environment';
 // import * as puppeteer from 'puppeteer';
 
 @Injectable({
@@ -35,7 +36,7 @@ import { PurchaseInvoiceDetails } from './models/purchaseInvoiceDetails';
 })
 export class AdminService {
 
-  url = 'http://localhost:8000'
+  url = environment.baseUrl;
 
   constructor(private _http:HttpClient) { }
 
@@ -251,6 +252,10 @@ export class AdminService {
 
   addPurchaseOrder(data : any){
     return this._http.post(this.url + '/purchaseorder', data);
+  }
+
+  getPurchaseOrderById(id: number): Observable<PurchaseOrder>{
+    return this._http.get<PurchaseOrder>(this.url + '/purchaseorder/'+id);
   }
 
   getPurchaseOrderDetailsById(id: number): Observable<PurchaseOrderDetails[]>{

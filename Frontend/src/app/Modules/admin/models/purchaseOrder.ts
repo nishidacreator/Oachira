@@ -1,7 +1,9 @@
+import { PurchaseEntry } from "./purchaseEntry";
 import { User } from "./user";
 import { Vendor } from "./vendor";
 
 export interface PurchaseOrder{
+    id: number;
     purchaseOrderNo : string,
     vendorId : number,
     vendor : Vendor
@@ -11,4 +13,6 @@ export interface PurchaseOrder{
     //purchaseOrderId : ,
     eWayBillNo : string,
     purachseDate : string
+    requestedPurchaseDate: Date
+    purchaseEntry: PurchaseEntry
 }

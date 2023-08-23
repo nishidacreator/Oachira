@@ -5,13 +5,14 @@ import { Observable } from 'rxjs';
 import { PickList } from './models/pickList';
 import { PickListDetails } from './models/pickListDetails';
 import { SecondaryUnit } from '../admin/models/secondaryUnit';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SalesExecutiveService {
 
-  url = 'http://localhost:8000'
+  url = environment.baseUrl;
 
   constructor(private _http:HttpClient) { }
 

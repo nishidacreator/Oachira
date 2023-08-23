@@ -11,10 +11,7 @@
         
         <div class="col">
           <mat-card-header>
-            <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" (click)="viewPurchaseEntry()">
-              <mat-icon>visibility</mat-icon>
-            </button>
-            <button mat-mini-fab color="primary" type="button" style="margin-left: 5px;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onclick="history.back()">
+            <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" onclick="history.back()">
               <mat-icon>exit_to_app</mat-icon>
             </button>
           </mat-card-header>
@@ -105,123 +102,126 @@
     <form [formGroup]="productForm">  
       <mat-card>
         <mat-card-header>
-          <mat-card-title> PRODUCTS </mat-card-title>
+          <mat-card-title> DETAILS </mat-card-title>
         </mat-card-header>
   
         <mat-card-content>
           <div>
             <ul formArrayName="products">
-              <div class="table-container">
-                <table class="purchase-table">
-                    <thead>
-                    <tr>
-                        <th>Product Name</th>
-                        <th>MRP</th>
-                        <th>Quantity</th>
-                        <th>Unit Price</th>
-                        <th>Discount</th>
-                        <th>Net Amount</th>
-                        <th>Tax</th>
-                        <th>Tax Amount</th>
-                        <th>Gross Amount</th>
-                        <!-- <th>Secondary Unit</th> -->
-                        <th>Action</th>
-                    </tr>
-                    </thead>
+              
+            <div class="container">
+              <table class="responsive-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">MRP</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Unit Price</th>
+                    <th scope="col">Discount</th>
+                    <th scope="col">Net Amount</th>
+                    <th scope="col">Tax</th>
+                    <th scope="col">Tax Amount</th>
+                    <th scope="col">Gross Amount</th>
+                    <!-- <th>Secondary Unit</th> -->
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr *ngFor="let quantity of products().controls; let i=index" [formGroupName]="i">
+                    <td scope="row">
+                      <mat-form-field>
+                        <mat-label>Select an option</mat-label>
+                        <mat-select formControlName="productId">
+                          <mat-form-field class="search-field">
+                            <div class="row">
+                              <!-- <mat-icon>search</mat-icon> -->
+                            <input matInput (input)="filterOptions($event)" placeholder="Search">
+                            <span *ngIf="product.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55); margin-top: 5px; margin-left: 5px;" (click)="addNewProduct()">playlist_add</span>
+                            </div>
+                          </mat-form-field>
+                          <mat-option *ngFor="let option of filteredOptions" [value]="option.id">
+                            {{ option.productName }}
+                          </mat-option>
+
+                          <mat-option *ngIf="product.length === 0" [value]="'add'">
+                            <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addNewProduct()">playlist_add</span>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </td>
                     
-                    <tbody>
-                    <tr *ngFor="let quantity of products().controls; let i=index" [formGroupName]="i">
-                      <td>
-                        <mat-form-field>
-                          <mat-label>Select an option</mat-label>
-                          <mat-select formControlName="productId">
-                            <mat-form-field class="search-field">
-                              <div class="row">
-                                <!-- <mat-icon>search</mat-icon> -->
-                              <input matInput (input)="filterOptions($event)" placeholder="Search">
-                              <span *ngIf="product.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55); margin-top: 5px; margin-left: 5px;" (click)="addNewProduct()">playlist_add</span>
-                              </div>
-                            </mat-form-field>
-                            <mat-option *ngFor="let option of filteredOptions" [value]="option.id">
-                              {{ option.productName }}
-                            </mat-option>
+                    <td>
+                      <mat-form-field>
+                        <input matInput placeholder="MRP"  formControlName="mrp">
+                      </mat-form-field>
+                    </td>
 
-                            <mat-option *ngIf="product.length === 0" [value]="'add'">
-                              <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addNewProduct()">playlist_add</span>
-                            </mat-option>
-                          </mat-select>
-                        </mat-form-field>
-                      </td>
-                      
-                      <td>
-                        <mat-form-field>
-                          <input matInput placeholder="MRP"  formControlName="mrp">
-                        </mat-form-field>
-                      </td>
+                    <td>
+                      <mat-form-field>
+                        <input matInput placeholder="Quantity" formControlName="quantity">
+                      </mat-form-field>
+                    </td>
 
-                      <td>
-                        <mat-form-field>
-                          <input matInput placeholder="Quantity" formControlName="quantity">
-                        </mat-form-field>
-                      </td>
+                    <td>
+                      <mat-form-field>
+                        <input matInput placeholder="Unit Price"  formControlName="rate">
+                      </mat-form-field>
+                    </td>
 
-                      <td>
-                        <mat-form-field>
-                          <input matInput placeholder="Unit Price"  formControlName="rate">
-                        </mat-form-field>
-                      </td>
+                    <td>
+                      <mat-form-field>
+                        <input matInput placeholder="Discount"  formControlName="discount">{{calculateAmount()}}
+                      </mat-form-field>
+                    </td>
 
-                      <td>
-                        <mat-form-field>
-                          <input matInput placeholder="Discount"  formControlName="discount">{{calculateAmount()}}
-                        </mat-form-field>
-                      </td>
+                    <!-- <td>
+                      <mat-form-field>
+                        <mat-select placeholder="Secondary Unit" formControlName="secondaryUnitId">
+                          <mat-option *ngFor="let item of unit$ | async" [value]="item.id">
+                            {{item.secondaryUnitName}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </td> -->
+                    
+                    <td>
+                      <mat-form-field>
+                        <input matInput placeholder="Net Amount"  formControlName="netAmount">
+                      </mat-form-field>
+                    </td>
 
-                      <!-- <td>
-                        <mat-form-field>
-                          <mat-select placeholder="Secondary Unit" formControlName="secondaryUnitId">
-                            <mat-option *ngFor="let item of unit$ | async" [value]="item.id">
-                              {{item.secondaryUnitName}}
-                            </mat-option>
-                          </mat-select>
-                        </mat-form-field>
-                      </td> -->
-                      
-                      <td>
-                        <mat-form-field>
-                          <input matInput placeholder="Net Amount"  formControlName="netAmount">
-                        </mat-form-field>
-                      </td>
+                    <td>
+                      <mat-form-field>
+                        <mat-select placeholder="Tax" formControlName="taxId" #id (selectionChange)="getTaxAmount(id.value)">
+                          <mat-option *ngFor="let item of tax$ | async" [value]="item.id">
+                            {{item.taxName}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </td>
 
-                      <td>
-                        <mat-form-field>
-                          <mat-select placeholder="Tax" formControlName="taxId" #id (selectionChange)="getTaxAmount(id.value)">
-                            <mat-option *ngFor="let item of tax$ | async" [value]="item.id">
-                              {{item.taxName}}
-                            </mat-option>
-                          </mat-select>
-                        </mat-form-field>
-                      </td>
+                    <td>
+                      <mat-form-field>
+                        <input matInput placeholder="Tax Amount"  formControlName="taxAmount">
+                      </mat-form-field>
+                    </td>
 
-                      <td>
-                        <mat-form-field>
-                          <input matInput placeholder="Tax Amount"  formControlName="taxAmount">
-                        </mat-form-field>
-                      </td>
+                    <td>
+                      <mat-form-field>
+                        <input matInput placeholder="Gross Amount"  formControlName="grossAmount" [disabled]="true">
+                      </mat-form-field>
+                    </td>
 
-                      <td>
-                        <mat-form-field>
-                          <input matInput placeholder="Gross Amount"  formControlName="grossAmount" [disabled]="true">
-                        </mat-form-field>
-                      </td>
+                    <td>
+                      <span class="material-icons" style="color: rgb(255, 0, 0); font-size: 25px; margin-top: 17px;" (click)="removeProduct(i)">cancel</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-                      <td>
-                        <span class="material-icons" style="color: rgb(255, 0, 0); font-size: 25px; margin-top: 17px;" (click)="removeProduct(i)">cancel</span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+             
               <div>
                 <span class="material-icons" style="font-size: 40px; color: green;"(click)="addProduct()">add_box</span>
               </div>

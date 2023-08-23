@@ -174,6 +174,14 @@ export class AddPurchaseOrderComponent implements OnInit {
     Object.keys(this.purchaseOrderForm.controls).forEach((key) => {
       this.purchaseOrderForm.get(key)?.setErrors(null);
     });
+
+    this.productsListForm.reset();
+    this.productsListForm.setErrors(null);
+    Object.keys(this.productsListForm.controls).forEach((key) => {
+      this.productsListForm.get(key)?.setErrors(null);
+    });
+
+    this.router.navigateByUrl('/admin/purachases/purchaseorder')
   }
 
   //PURCHASE ORDER DETAILS

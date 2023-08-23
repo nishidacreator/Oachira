@@ -14,53 +14,37 @@
       </mat-card-header>
     </div>
   </div>
-    <table mat-table *ngIf="pEntry" [dataSource]="pEntry" class="mat-elevation-z8">
-  
-  
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef class="table-border">ID</th>
-        <td mat-cell *matCellDef="let element" class="table-border"> {{element.id}} </td>
-      </ng-container>
-      
-      <ng-container matColumnDef="orderNo">
-        <th mat-header-cell *matHeaderCellDef class="table-border">Order No.</th>
-        <td mat-cell *matCellDef="let element" class="table-border"> {{element.purchaseOrderNo}} </td>
-      </ng-container>
 
-
-  
-      <ng-container matColumnDef="vendorId">
-        <th mat-header-cell *matHeaderCellDef class="table-border">Vendor</th>
-        <td mat-cell *matCellDef="let element" class="table-border"> {{element.vendor.vendorName}} </td>
-      </ng-container>
-  
-
-      <ng-container matColumnDef="requestedPurchaseDate">
-        <th mat-header-cell *matHeaderCellDef class="table-border">Requested Purchase Date</th>
-        <td mat-cell *matCellDef="let element" class="table-border"> {{element.requestedPurchaseDate}} </td>
-      </ng-container>
-  
-      <ng-container matColumnDef="manage">
-        <th mat-header-cell *matHeaderCellDef>Manage</th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-raised-button style="background-color: green; margin-left: 8px;" (click)="viewPurchaseOrderDetails(element.id)" type="button">View</button>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="purchaseEntry">
-        <th mat-header-cell *matHeaderCellDef>Purchase Entry</th>
-        <td mat-cell *matCellDef="let element">
-          <button  *ngIf="element.purchaseEntry" mat-raised-button style="background-color: green; margin-left: 8px;" (click)="addPurchaseEntry(element.id)" type="button">View</button>
-          <button  *ngIf="!element.purchaseEntry" mat-raised-button style="background-color: green; margin-left: 8px;" (click)="viewPurchaseEntry(element.id)" type="button">Add</button>
-        </td>
-      </ng-container>
-  
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+  <table class="styled-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Purchase Order No</th>
+            <th>Vendor</th>
+            <th>Required Date</th>
+            <th>Manage</th>
+            <th>purchase Entry</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let element of pEntry">
+            <td>{{element.id}}</td>
+            <td>{{element.purchaseOrderNo}}</td>
+            <td>{{element.vendor.vendorName}}</td>
+            <td>{{element.requestedPurchaseDate}}</td>
+            <td>
+              <span class="material-icons" style=" margin-left: 8px;" (click)="viewPurchaseOrderDetails(element.id)">open_in_new</span>
+            </td>
+            <td>
+              <span *ngIf="element.purchaseEntry" class="material-icons" style=" margin-left: 8px;" (click)="viewPurchaseEntry(element.id)">open_in_new</span>
+              <span *ngIf="!element.purchaseEntry" class="material-icons" style="margin-left: 8px;" (click)="addPurchaseEntry(element.id)">post_add</span>
+            </td>
+        </tr>
+    </tbody>
+  </table>
     <div>
       <span class="material-icons" style="font-size: 40px; color: green;"
-        (click)="addPurchaseOrder()">add_box</span>
+        (click)="addPurchaseOrder()">playlist_add</span>
     </div>
   </mat-card>
 

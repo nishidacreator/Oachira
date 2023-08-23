@@ -44,6 +44,7 @@ export class VendorManagementComponent implements OnDestroy{
       this.clearControls()
     },(error=>{
       alert(error)
+      
     }))
   }
 

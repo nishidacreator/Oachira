@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col">
                 <mat-card-header>
-                    <mat-card-title>ADD NEW PURCHASE ORDER </mat-card-title>
+                    <mat-card-title> PURCHASE ORDER </mat-card-title>
                 </mat-card-header>
             </div>
             <div class="col">
@@ -50,7 +50,7 @@
 
                 <div class="col">
                     <mat-form-field class="full-width">
-                        <mat-label>Requested Purchase Date</mat-label>
+                        <mat-label>Required Date</mat-label>
                         <input matInput [matDatepicker]="picker" formControlName="requestedPurchaseDate">
                         <mat-hint>MM/DD/YYYY</mat-hint>
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -65,26 +65,27 @@
             <form [formGroup]="productsListForm">
                 <mat-card>
                     <mat-card-header>
-                        <mat-card-title> PURCHASE ORDER DETAILS</mat-card-title>
+                        <mat-card-title> DETAILS</mat-card-title>
                     </mat-card-header>
 
                     <mat-card-content>
                         <div>
                             <ul formArrayName="products">
-                                <div class="table-container">
-                                    <table class="purchase-table">
+                                <div class="container">
+                                    <table class="responsive-table">
                                         <thead>
                                             <tr>
-                                                <th>Product Name</th>
-                                                <th>Quantity</th>
+                                                <th scope="col">Product Name</th>
+                                                <th scope="col">Quantity</th>
+                                                <th scope="col"></th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
                                             <tr *ngFor="let quantity of products().controls; let i=index"
                                                 [formGroupName]="i">
-                                                <td>
-                                                    <mat-form-field>
+                                                <td scope="row">
+                                                    <mat-form-field class="full-width">
                                                         <mat-label>Select an option</mat-label>
                                                         <mat-select formControlName="productId">
                                                             <mat-form-field class="search-field">
@@ -112,14 +113,14 @@
                                                 </td>
 
 
-                                                <td>
-                                                    <mat-form-field>
+                                                <td scope="row">
+                                                    <mat-form-field class="full-width">
                                                         <input matInput placeholder="Quantity"
                                                             formControlName="quantity">
                                                     </mat-form-field>
                                                 </td>
 
-                                                <td>
+                                                <td scope="row">
                                                     <span class="material-icons"
                                                         style="color: rgb(255, 0, 0); font-size: 25px; margin-top: 17px;"
                                                         (click)="removeProduct(i)">cancel</span>
@@ -130,7 +131,7 @@
                                 </div>
                                 <div>
                                     <span class="material-icons" style="font-size: 40px; color: green;"
-                                        (click)="addProduct()">add_box</span>
+                                        (click)="addProduct()">queue</span>
                                 </div>
                             </ul>
                         </div>

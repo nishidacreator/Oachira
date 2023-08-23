@@ -36,7 +36,7 @@
   
           <div class="col">
             <mat-form-field class="full-width">
-              <mat-select placeholder="Secondary Unit" formControlName="primaryUnitId">
+              <mat-select placeholder="Primary Unit" formControlName="primaryUnitId">
                 <mat-option *ngFor="let item of units$ | async" [value]="item.id">
                   {{item.primaryUnitName}}
                 </mat-option>
