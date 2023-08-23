@@ -199,7 +199,7 @@ async function syncModel(){
     const hashedPassword = await bcrypt.hash('asdfgh', salt)
     if(user.length === 0){
         User.bulkCreate([
-            {"name": "Sultan", "phoneNumber": "1111111111", "password": hashedPassword, "roleId": 1, "status": true},
+            {"name": "Admin", "phoneNumber": "1111111111", "password": hashedPassword, "roleId": 1, "status": true},
             {"name": "Manha", "phoneNumber": "2222222222", "password": hashedPassword, "roleId": 2, "status": true},
             {"name": "Amina", "phoneNumber": "3333333333", "password": hashedPassword, "roleId": 3, "status": true},
             {"name": "Anupama", "phoneNumber": "4444444444", "password": hashedPassword, "roleId": 4, "status": true},
