@@ -51,6 +51,10 @@ export class ViewPurchaseListComponent implements OnInit {
   //   })
   //   this.getPickListDetails()
   // }
+
+  viewInvoice(){
+    this.router.navigateByUrl('admin/purchases/viewPurchaseDetaills/invoices/' + this.id)
+  }
   
 }
 

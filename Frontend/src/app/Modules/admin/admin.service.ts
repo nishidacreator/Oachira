@@ -27,6 +27,7 @@ import { PurchaseOrder } from './models/purchaseOrder';
 import { PurchaseOrderDetails } from './models/purchaseOrderDetails';
 import { Stock } from './models/stock/stock';
 import { PurchaseTransaction } from './models/stock/purchaseTransaction';
+import { PurchaseInvoiceDetails } from './models/purchaseInvoiceDetails';
 // import * as puppeteer from 'puppeteer';
 
 @Injectable({
@@ -258,6 +259,12 @@ export class AdminService {
 
   getPurchaseOrderDetailsById(id: number): Observable<PurchaseOrderDetails[]>{
     return this._http.get<PurchaseOrderDetails[]>(this.url + '/viewpurchaseorder/'+id);
+  }
+
+  //PURCHASEINVOICE
+
+  getPurchaseInvoices(): Observable<PurchaseInvoiceDetails[]>{
+    return this._http.get<PurchaseInvoiceDetails[]>(this.url + '/invoices/1');
   }
   //VEHICLE
   addVehicle(data : any){

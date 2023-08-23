@@ -48,7 +48,6 @@ import { PurchaseOrderComponent } from './components/Purchases/purchase-order/pu
 import { ViewPurchaseOrderComponent } from './components/Purchases/view-purchase-order/view-purchase-order.component';
 import { AddPurchaseOrderComponent } from './components/Purchases/add-purchase-order/add-purchase-order.component';
 import { ViewInvoiceComponent } from './components/Purchases/view-invoice/view-invoice.component';
-import { InvoiceListComponent } from './components/Purchases/invoice-list/invoice-list.component';
 import { StockDetailsComponent } from './components/Stock/stock-details/stock-details.component';
 import { EditPurchaseEntryDetailsComponent } from './components/Purchases/edit-purchase-entry-details/edit-purchase-entry-details.component';
 // import { TripDetailsComponent } from './components/route/trip-details/trip-details.component';
@@ -117,8 +116,8 @@ const routes: Routes = [
   {path :'purchases/purchaseentry/viewpurchaseentry/viewlist/addmore/:id', component: AddMoreProductsComponent},
   {path :'purchases/purchaseentry/viewpurchaseentry/viewlist/editlist/:id', component: EditPurchaseEntryDetailsComponent},
 
-  {path :'purachases/invoices', component: InvoiceListComponent},
-  {path :'purachases/invoices', component: ViewInvoiceComponent},
+ 
+  {path :'purchases/viewPurchaseDetaills/invoices/:id', component: ViewInvoiceComponent},
   {path :'inventory/viewstock', component: StockComponent},
   {path :'inventrory/viewstock/detail/:id', component: StockDetailsComponent},
 

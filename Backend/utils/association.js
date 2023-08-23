@@ -164,6 +164,10 @@ async function syncModel(){
     PurchaseOrder.hasMany(PurchaseOrderDetails,{foreignKey : 'purchaseOrderId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     PurchaseOrderDetails.belongsTo(PurchaseOrder)
 
+    PurchaseOrder.hasOne(PurchaseEntry, {foreignKey : 'purchaseOrderId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    PurchaseEntry.belongsTo(PurchaseOrder)
+
+
     // STOCK
     Product.hasMany(Stock,{foreignKey : 'productId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     Stock.belongsTo(Product)
@@ -173,8 +177,8 @@ async function syncModel(){
 
     PurchaseEntry.hasMany(PurchaseTransaction,{foreignKey: 'purchaseEntryId', onDelete : 'CASCADE'})
     PurchaseTransaction.belongsTo(PurchaseEntry)
-    PurchaseOrder.hasOne(PurchaseEntry, {foreignKey : 'purchaseOrderId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    PurchaseEntry.belongsTo(PurchaseOrder)
+
+    
 
 
     await sequelize.sync({alter: true})
