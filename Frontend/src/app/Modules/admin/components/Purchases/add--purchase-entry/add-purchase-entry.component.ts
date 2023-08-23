@@ -13,6 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BoldReportComponents } from '@boldreports/angular-reporting-components';
 import { InvoiceNumberComponent } from '../../Setting/prefixes/invoice-number/invoice-number.component';
 import { PurchaseEntry } from '../../../models/purchaseEntry';
+import { VendorManagementComponent } from '../../Setting/vendor-management/vendor-management.component';
 
 @Component({
   selector: 'app-add-purchase-entry',
@@ -22,7 +23,17 @@ import { PurchaseEntry } from '../../../models/purchaseEntry';
 export class AddPurchaseEntryComponent implements OnInit {
 
   constructor(private fb: FormBuilder,public adminService: AdminService, private _snackBar: MatSnackBar,
-    public dialog: MatDialog, private renderer: Renderer2, private router: Router,private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef){}
+    public dialog: MatDialog, private renderer: Renderer2, private router: Router,private route: ActivatedRoute,
+    private changeDetectorRef: ChangeDetectorRef){
+      
+    //User
+    const token: any = localStorage.getItem('token')
+    let user = JSON.parse(token) 
+    this.id = user.id  
+
+    //purchaseOrderId
+    this.purchaseOrderId = this.route.snapshot.params['id']
+    }
     
   ngOnDestroy(){
     // this.brandSubscription?.unsubscribe()
@@ -31,6 +42,25 @@ export class AddPurchaseEntryComponent implements OnInit {
     this.vendorSubscriptions.unsubscribe()
     // this.taxIdSubscription.unsubscribe()
   }
+
+  id!: number
+  purchaseOrderId: any;
+  ngOnInit(): void {
+    this.vendorSubscriptions = this.getVendor();
+    this.productSubscription = this.getProducts();
+    this.getTax();
+    this.getUnit();
+    this.generateInvoiceNum()
+
+    if(this.purchaseOrderId){
+      this.getPurchaseOrder();
+    }
+
+    this.purchaseEntryForm.valueChanges.subscribe(changes=>{
+      this.purchaseEntryForm.value
+    })
+  }
+
   
 
   purchaseEntryForm = this.fb.group({
@@ -51,12 +81,12 @@ export class AddPurchaseEntryComponent implements OnInit {
     return this.productForm.get("products") as FormArray  
   }  
     
-  newProduct(): FormGroup {  
+  newProduct(initialValue?: any): FormGroup {  
     return this.fb.group({ 
-      productId: ['', Validators.required],  
-      quantity: ['', Validators.required],  
-      discount: [''],
-      rate: ['', Validators.required],
+      productId: [initialValue ? initialValue.productId : '', Validators.required],
+      quantity: [initialValue ? initialValue.quantity : null, Validators.required],
+      discount: [null],
+      rate: [null, Validators.required],
       grossAmount: [''],
       // secondaryUnitId: ['', Validators.required],
       taxId: [''],
@@ -68,27 +98,6 @@ export class AddPurchaseEntryComponent implements OnInit {
 
   // displayedColumns : String[] = ['productName','code','barCode','primaryUnitId','categoryId','brandId','manage']
 
-  id!: number
-  purchaseOrderId: any;
-  ngOnInit(): void {
-    this.vendorSubscriptions = this.getVendor();
-    this.productSubscription = this.getProducts();
-    this.getTax();
-    this.getUnit();
-    this.generateInvoiceNum()
-
-    //User
-    const token: any = localStorage.getItem('token')
-    let user = JSON.parse(token) 
-    this.id = user.id  
-
-    //purchaseOrderId
-    this.purchaseOrderId = this.route.snapshot.params['id']
-    console.log(this.purchaseOrderId)
-    if(this.purchaseOrderId){
-      this.getEntryByPurchaseOrderId();
-    }
-  }
 
   //Search in MatSelect
   myControl = new FormControl<string | Product>('');
@@ -140,6 +149,7 @@ export class AddPurchaseEntryComponent implements OnInit {
     }
     console.log(data)
     this.submitSubscription = this.adminService.addPurachaseEntry(data).subscribe((res)=>{
+      console.log(res)
       this._snackBar.open("Purchase added successfully...","" ,{duration:3000})
       this.clearControls()
     },(error=>{
@@ -151,6 +161,12 @@ export class AddPurchaseEntryComponent implements OnInit {
     this.purchaseEntryForm.reset()
     this.purchaseEntryForm.setErrors(null)
     Object.keys(this.purchaseEntryForm.controls).forEach(key=>{this.purchaseEntryForm.get(key)?.setErrors(null)})
+
+    this.productForm.reset()
+    this.productForm.setErrors(null)
+    Object.keys(this.productForm.controls).forEach(key=>{this.productForm.get(key)?.setErrors(null)})
+
+    this.router.navigateByUrl('/admin/purachases/purchaseentry')
   }
 
   invoiceNumber!: string
@@ -310,18 +326,46 @@ export class AddPurchaseEntryComponent implements OnInit {
   }
 
   addVendor(){
-    this.router.navigateByUrl('admin/settings/vendor')
+    const dialogRef = this.dialog.open(VendorManagementComponent, {
+      width: '1000px',
+      data: {status : 'dialogue'}
+    });
+    dialogRef.afterClosed().subscribe(result =>{
+      this.getVendor()
+    } )
   }
 
   addNewProduct(){
     this.router.navigateByUrl('admin/settings/product/addproduct')
   }
 
-  pEntry! : PurchaseEntry
-  getEntryByPurchaseOrderId(){
-    return this.adminService.getPurchaseEntryByPurchaseOrderId(this.purchaseOrderId).subscribe(res=>{
-      this.pEntry = res
+  getPurchaseOrder(){
+    this.adminService.getPurchaseOrderById(this.purchaseOrderId).subscribe(res=>{
       console.log(res)
+
+      let vendor:any = res.vendor.id
+      let date: any = res.requestedPurchaseDate
+      
+      this.purchaseEntryForm.patchValue({
+        vendorId: vendor,
+        purachseDate: date
+      })
+
+      this.adminService.getPurchaseOrderDetailsById(res.id).subscribe(details => {
+        const productsArray = [];
+      
+        for (let i = 0; i < details.length; i++) {
+          const product: any = {
+            productId: details[i].product.id,
+            quantity: details[i].quantity,
+          };     
+          this.products().push(this.newProduct(product));  // Create a FormGroup for each product
+        }
+      });      
     })
-   }
+  }
+
+  getProduct(){
+    
+  }
 }

@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col">
       <mat-card-header>
-        <mat-card-title> PRODUCTS </mat-card-title>
+        <mat-card-title> PURCHASE ENTRY DETAILS </mat-card-title>
       </mat-card-header>
     </div>
 
@@ -16,73 +16,43 @@
     </div>
   </div>
   <br>
-  <table mat-table *ngIf="pEDetails" [dataSource]="pEDetails" class="mat-elevation-z8">
 
-
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef class="table-border">ID</th>
-      <td mat-cell *matCellDef="let element" class="table-border"> {{element.id}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="productId">
-      <th mat-header-cell *matHeaderCellDef class="table-border">productId</th>
-      <td mat-cell *matCellDef="let element" class="table-border"> {{element.product.productName}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="mrp">
-      <th mat-header-cell *matHeaderCellDef class="table-border">MRP</th>
-      <td mat-cell *matCellDef="let element" class="table-border"> {{element.mrp}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="quantity">
-      <th mat-header-cell *matHeaderCellDef class="table-border">quantity</th>
-      <td mat-cell *matCellDef="let element" class="table-border"> {{element.quantity}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="unitPrice">
-      <th mat-header-cell *matHeaderCellDef class="table-border">Unit Price</th>
-      <td mat-cell *matCellDef="let element" class="table-border"> {{element.rate}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="discount">
-      <th mat-header-cell *matHeaderCellDef class="table-border">Discount</th>
-      <td mat-cell *matCellDef="let element" class="table-border"> {{element.discount}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="netAmount">
-      <th mat-header-cell *matHeaderCellDef class="table-border">Net Amount</th>
-      <td mat-cell *matCellDef="let element" class="table-border"> {{element.netAmount}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="tax">
-      <th mat-header-cell *matHeaderCellDef class="table-border">Tax</th>
-      <td mat-cell *matCellDef="let element" class="table-border"> {{element.tax.taxName}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="taxAmount">
-      <th mat-header-cell *matHeaderCellDef class="table-border">Tax AMount</th>
-      <td mat-cell *matCellDef="let element" class="table-border"> {{element.taxAmount}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="grossAmount">
-      <th mat-header-cell *matHeaderCellDef class="table-border">Gross Amount</th>
-      <td mat-cell *matCellDef="let element" class="table-border"> {{element.grossAmount}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="manage">
-      <th mat-header-cell *matHeaderCellDef>Manage</th>
-      <td mat-cell *matCellDef="let element">
-        <link rel="stylesheet" type="text/css"
-          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-        <i (click)="editDetails(element.id)" class="fa fa-edit" style="font-size: 20px; color:green"></i>
-        &nbsp;&nbsp;
-        <!-- <i  (click)="deleteDetails(element.id)" class="fa fa-trash" style="font-size: 20px; color:red"></i> -->
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <table class="styled-table">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>product Name</th>
+            <th>mrp</th>
+            <th>quantity</th>
+            <th>rate</th>
+            <th>discount</th>
+            <th>netAmount</th>
+            <th>taxName</th>
+            <th>taxAmount</th>
+            <th>grossAmount</th>
+            <th>manage</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let element of pEDetails">
+            <td>{{element.id}}</td>
+            <td>{{element.product.productName}}</td>
+            <td>{{element.mrp}}</td>
+            <td>{{element.quantity}}</td>
+            <td>{{element.rate}}</td>
+            <td>{{element.discount}}</td>
+            <td>{{element.netAmount}}</td>
+            <td>{{element.tax.taxName}}</td>
+            <td>{{element.taxAmount}}</td>
+            <td>{{element.grossAmount}}</td>
+            <td>
+              <span class="material-icons" style=" margin-left: 8px;" (click)="editDetails(element.id)">edit_note</span>
+            </td>
+            
+        </tr>
+    </tbody>
   </table>
+
 
   <br><button mat-raised-button style="background-color: green; margin-left: 8px;" type="button"
     (click)="addProducts()">Add More</button>

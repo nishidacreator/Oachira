@@ -4,6 +4,7 @@ import { SecondaryUnit } from "./secondaryUnit"
 import { Tax } from "./tax"
 
 export interface PurchaseEntryDetails{
+    id : number
     purchaseEntryId : number, 
     purchaseEntry : PurchaseEntry,
     purchaseOrderId : number,

@@ -7,32 +7,6 @@
     color : white
   }
   
-  // .background{
-  //   border-radius: 8px;
-  //   background-color: white;
-  //   display: flex;
-  //   margin-left: 200px;
-  //   margin-right: 200px;
-  //   flex-direction: column;
-  //   width: auto;
-  //   height: auto;
-  //   // justify-content: center;
-  //   // align-items: center;
-  // }
-  
-//   @media(max-width:784px)
-//   {
-//       .background{
-//           padding: 0px;
-//           margin: 0px;
-//           width: auto;
-//           display: flex;
-//           flex-direction: column;
-//           // justify-content: center;
-//           // align-items: center;
-//       }
-//   }
-  
   .example-radio-group {
     display: flex;
     flex-direction: row;
@@ -120,5 +94,48 @@ table{
     overflow-x: auto;
 }
 
+.styled-table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
 
+.styled-table thead tr {
+  background-color: #daeedf;
+  color: black;
+  text-align: left;
+  text-transform: uppercase;
+}
 
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+  border-bottom: 2px solid #e0e7e6;
+}
+
+.styled-table tbody tr.active-row {
+  font-weight: bold;
+  color: #009879;
+}
+
+.material-icons:hover {
+  color: red;
+}
+  
+  .material-icons:active {
+  color: darkred;
+  }
