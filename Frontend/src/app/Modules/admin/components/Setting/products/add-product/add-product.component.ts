@@ -90,13 +90,15 @@ export class AddProductComponent implements OnInit {
   }
 
   products : Product[]=[];
+  dataSource! : MatTableDataSource<any>
   getProducts(){
     return this.adminService.getProduct().subscribe((res)=>{
       this.products = res
+      this.dataSource = new MatTableDataSource(res)
+    
     })
   }
 
-  dataSource = new MatTableDataSource(this.products);
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
