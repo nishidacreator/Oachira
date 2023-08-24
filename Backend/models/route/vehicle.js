@@ -3,7 +3,7 @@ const sequelize = require('../../utils/db');
 
 const Vehicle = sequelize.define('vehicle',{
     registrationNumber : {type : DataTypes.STRING, allowNull : false},
-    vehicleType : {type : DataTypes.STRING, allowNull : false},
+    vehicleTypeId : {type : DataTypes.INTEGER, allowNull : false},
     taxExpiry : {type : DataTypes.DATEONLY, allowNull : false},
     insuranceExpiry : {type : DataTypes.DATEONLY, allowNull : false},
     polutionExpiry : {type : DataTypes.DATEONLY, allowNull : false},

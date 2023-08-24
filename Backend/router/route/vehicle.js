@@ -2,12 +2,13 @@ const express = require('express');
 const Vehicle = require('../../models/route/vehicle');
 const router = express.Router();
 const authenticateToken = require('../../middleware/authorization');
+const VehicleType = require('../../models/route/vehicleType');
 
 router.post('/', async (req, res) => {
     try {
-            const {registrationNumber, vehicleType, taxExpiry, insuranceExpiry, polutionExpiry, capacity} = req.body;
+            const {registrationNumber, vehicleTypeId, taxExpiry, insuranceExpiry, polutionExpiry, capacity} = req.body;
 
-            const vehicle = new Vehicle({registrationNumber, vehicleType, taxExpiry, insuranceExpiry, polutionExpiry, capacity});
+            const vehicle = new Vehicle({registrationNumber, vehicleTypeId, taxExpiry, insuranceExpiry, polutionExpiry, capacity});
 
             await vehicle.save();
 
@@ -21,7 +22,7 @@ router.post('/', async (req, res) => {
 router.get('/', async(req,res)=>{
 
     try {
-        const vehicle = await Vehicle.findAll({});
+        const vehicle = await Vehicle.findAll({include: [VehicleType]});
         res.send(vehicle);
     } catch (error) {
         res.send(error.message);

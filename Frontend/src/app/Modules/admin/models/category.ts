@@ -1,6 +1,6 @@
 export interface Category{
     id : number
-    categoryImage : string
+    category_image : string
     categoryName : string
     taxable : boolean
 }
