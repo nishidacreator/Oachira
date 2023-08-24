@@ -62,8 +62,10 @@ export class AddPurchaseOrderComponent implements OnInit {
 
   myControl = new FormControl<string | Product>("");
   filteredOptions: Product[] = [];
+  searchValue: string = ''; 
   filterOptions(event: Event) {
     let value = (event.target as HTMLInputElement).value;
+    this.searchValue = value;
     this.filteredOptions = this.product.filter(
       (option) =>
         (option.productName &&
@@ -73,6 +75,9 @@ export class AddPurchaseOrderComponent implements OnInit {
         (option.barCode &&
           option.barCode.toLowerCase().includes(value?.toLowerCase()))
     );
+
+    this.searchValue = ''; // Clear the search input value
+    this.filteredOptions = []; // Clear the filtered options
   }
 
   generateInvoiceNum() {

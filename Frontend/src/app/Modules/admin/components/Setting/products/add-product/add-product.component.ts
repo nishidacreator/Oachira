@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { Product } from '../../../../models/product';
 import { SecondaryUnit } from '../../../../models/secondaryUnit';
 import { PrimaryUnit } from 'src/app/Modules/admin/models/primaryUnit';
 import { ProductManagementComponent } from '../product-management/product-management.component';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-add-product',
@@ -95,9 +96,11 @@ export class AddProductComponent implements OnInit {
     })
   }
 
-  // loadBrand(){
-  //   this.getBrands();
-  // }
+  dataSource = new MatTableDataSource(this.products);
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
   deleteProduct(id:any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {

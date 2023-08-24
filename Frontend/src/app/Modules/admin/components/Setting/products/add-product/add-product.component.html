@@ -123,6 +123,12 @@
     <mat-card-header>
       <mat-card-title style="color: green;"> PRODUCTS</mat-card-title>
     </mat-card-header>
+
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+    </mat-form-field>
+
     <table mat-table *ngIf="products" [dataSource]="products" class="mat-elevation-z8">
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef>ID</th>
