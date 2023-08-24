@@ -16,10 +16,10 @@ import { PurchaseOrder } from "../../../models/purchaseOrder";
 export class AddPurchaseOrderComponent implements OnInit {
   id!: number;
   purchases: PurchaseOrder[] = [];
-  userSub!: Subscription
-  ivNum: string = '';
-  nextId!: any 
-  prefix!: string 
+  userSub!: Subscription;
+  ivNum: string = "";
+  nextId!: any;
+  prefix!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -27,7 +27,7 @@ export class AddPurchaseOrderComponent implements OnInit {
     private router: Router,
     private _snackBar: MatSnackBar
   ) {}
- 
+
   ngOnInit(): void {
     this.vendorSubscriptions = this.getVendor();
     this.productSubscription = this.getProducts();
@@ -64,28 +64,33 @@ export class AddPurchaseOrderComponent implements OnInit {
   filteredOptions: Product[] = [];
   filterOptions(event: Event) {
     let value = (event.target as HTMLInputElement).value;
-    this.filteredOptions = this.product.filter(
-      (option) =>
+    this.filteredOptions = this.product.filter((option) => {
+      if (
         (option.productName &&
           option.productName.toLowerCase().includes(value?.toLowerCase())) ||
         (option.code &&
           option.code.toLowerCase().includes(value?.toLowerCase())) ||
         (option.barCode &&
           option.barCode.toLowerCase().includes(value?.toLowerCase()))
-    );
+      ) {
+        return true;
+      } else {
+        return null;
+      }
+    });
   }
 
   generateInvoiceNum() {
-    this.userSub = this.adminService.getPurchaseOrder().subscribe((res)=>{
+    this.userSub = this.adminService.getPurchaseOrder().subscribe((res) => {
       this.purchases = res;
 
-       // Check if there are any employees in the array
+      // Check if there are any employees in the array
       if (this.purchases.length > 0) {
         const maxId = this.purchases.reduce((prevMax, inv) => {
-          console.log(inv)
+          console.log(inv);
           // Extract the numeric part of the employee ID and convert it to a number
           const idNumber = parseInt(inv.purchaseOrderNo.substring(5), 10);
-          console.log(idNumber)
+          console.log(idNumber);
 
           this.prefix = this.extractLetters(inv.purchaseOrderNo);
 
@@ -99,27 +104,26 @@ export class AddPurchaseOrderComponent implements OnInit {
         }, 0);
         // Increment the maxId by 1 to get the next ID
         this.nextId = maxId + 1;
-        console.log(this.nextId)
-
+        console.log(this.nextId);
       } else {
         // If there are no employees in the array, set the employeeId to 'EMP001'
         this.nextId = 0o0;
-        this.prefix = 'INV'
-        
+        this.prefix = "INV";
       }
-      console.log(this.nextId + 'hih')
+      console.log(this.nextId + "hih");
 
-      const paddedId = `${this.prefix}${this.nextId.toString().padStart(3, '0')}`;;
+      const paddedId = `${this.prefix}${this.nextId
+        .toString()
+        .padStart(3, "0")}`;
 
       this.ivNum = paddedId;
-      
-      this.purchaseOrderForm.get('purchaseOrderNo')?.setValue(this.ivNum)
-    })
 
+      this.purchaseOrderForm.get("purchaseOrderNo")?.setValue(this.ivNum);
+    });
   }
 
   extractLetters(input: string): string {
-    return input.replace(/[^a-zA-Z]/g, '');
+    return input.replace(/[^a-zA-Z]/g, "");
   }
 
   vendor: Vendor[] = [];
@@ -154,7 +158,8 @@ export class AddPurchaseOrderComponent implements OnInit {
     };
     console.log(data);
     this.submitSubscription = this.adminService
-      .addPurchaseOrder(data).subscribe(
+      .addPurchaseOrder(data)
+      .subscribe(
         (res) => {
           console.log(res);
           this._snackBar.open("Purchase added successfully...", "", {
@@ -181,7 +186,7 @@ export class AddPurchaseOrderComponent implements OnInit {
       this.productsListForm.get(key)?.setErrors(null);
     });
 
-    this.router.navigateByUrl('/admin/purachases/purchaseorder')
+    this.router.navigateByUrl("/admin/purachases/purchaseorder");
   }
 
   //PURCHASE ORDER DETAILS
@@ -212,5 +217,4 @@ export class AddPurchaseOrderComponent implements OnInit {
   addNewProduct() {
     this.router.navigateByUrl("admin/settings/product/addproduct");
   }
-
 }
