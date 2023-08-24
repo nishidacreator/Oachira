@@ -136,16 +136,16 @@
                           <mat-form-field class="search-field">
                             <div class="row">
                               <!-- <mat-icon>search</mat-icon> -->
-                            <input matInput (input)="filterOptions($event)" placeholder="Search">
-                            <span *ngIf="product.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55); margin-top: 5px; margin-left: 5px;" (click)="addNewProduct()">playlist_add</span>
+                              <input matInput (input)="filterOptions($event)" placeholder="Search">
                             </div>
                           </mat-form-field>
                           <mat-option *ngFor="let option of filteredOptions" [value]="option.id">
                             {{ option.productName }}
                           </mat-option>
-
-                          <mat-option *ngIf="product.length === 0" [value]="'add'">
-                            <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addNewProduct()">playlist_add</span>
+                      
+                          <mat-option *ngIf="product.length === 0 || filteredOptions.length === 0" [value]="'add'">
+                            <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);"
+                              (click)="addNewProduct()">playlist_add</span>
                           </mat-option>
                         </mat-select>
                       </mat-form-field>
