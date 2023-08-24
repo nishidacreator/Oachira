@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
 import { AdminService } from '../../../../admin.service';
 import { Vehicle } from '../../../../models/vehicle/vehicle';
+import { VehicleType } from 'src/app/Modules/admin/models/vehicle/vehicle-type';
 
 @Component({
   selector: 'app-vehicle-management',
@@ -23,7 +24,7 @@ export class VehicleManagementComponent {
 
   vehicleForm = this.fb.group({
     registrationNumber: ['', Validators.required],
-    vehicleType: ['', Validators.required],
+    vehicleTypeId: ['', Validators.required],
     taxExpiry : ['', Validators.required],
     insuranceExpiry : ['', Validators.required],
     polutionExpiry : ['', Validators.required],
@@ -34,12 +35,18 @@ export class VehicleManagementComponent {
 
   ngOnInit(): void {
     this.vehicleSubscription = this.getVehicle()
+    this.getVehicleType()
   }
 
   vehicles =[
     {name: '4 Wheeler'},
     {name: '3 Wheeler'},
   ];
+
+  vehicles$!: Observable<VehicleType[]>
+  getVehicleType(){
+    this.vehicles$ = this.adminService.getVehicleType();
+  }
 
   onSubmit(){
     this.adminService.addVehicle(this.vehicleForm.getRawValue()).subscribe((res)=>{
@@ -92,7 +99,7 @@ export class VehicleManagementComponent {
     
     //Populate the object by the ID
     let registrationNumber = vehi.registrationNumber.toString();
-    let vehicleType = vehi.vehicleType.toString();
+    let vehicleTypeId = vehi.vehicleTypeId;
     let taxExpiry = vehi.taxExpiry.toString();
     let insuranceExpiry = vehi.insuranceExpiry.toString();
     let polutionExpiry = vehi.polutionExpiry.toString();
@@ -100,7 +107,7 @@ export class VehicleManagementComponent {
     
     this.vehicleForm.patchValue({
       registrationNumber : registrationNumber,
-      vehicleType : vehicleType,
+      vehicleTypeId : vehicleTypeId,
       taxExpiry : taxExpiry,
       insuranceExpiry : insuranceExpiry,
       polutionExpiry : polutionExpiry,
@@ -114,7 +121,7 @@ export class VehicleManagementComponent {
 
     let data: any ={
       registrationNumber : this.vehicleForm.get('registrationNumber')?.value,
-      vehicleType : this.vehicleForm.get('vehicleType')?.value,
+      vehicleTypeId : this.vehicleForm.get('vehicleTypeId')?.value,
       taxExpiry : this.vehicleForm.get('taxExpiry')?.value,
       insuranceExpiry : this.vehicleForm.get('insuranceExpiry')?.value,
       polutionExpiry : this.vehicleForm.get('polutionExpiry')?.value,
@@ -122,7 +129,7 @@ export class VehicleManagementComponent {
     }
     
     this.adminService.updateVehicle(this.vehicleId, data).subscribe((res)=>{
-      this._snackBar.open("Brand updated successfully...","" ,{duration:3000})
+      this._snackBar.open("Vehicle updated successfully...","" ,{duration:3000})
       this.getVehicle();
       this.clearControls();
     },(error=>{
