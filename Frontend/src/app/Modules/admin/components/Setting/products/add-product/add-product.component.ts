@@ -38,8 +38,8 @@ export class AddProductComponent implements OnInit {
     primaryUnitId: ['', Validators.required],
     categoryId: ['', Validators.required],
     brandId: ['', Validators.required],
-    reorderQuantity: [''],
-    loyaltyPoint: ['']
+    reorderQuantity: [],
+    loyaltyPoint: []
   });
 
   displayedColumns : String[] = ['id','productName','code','barCode','primaryUnitId','categoryId','brandId','manage']
@@ -73,8 +73,9 @@ export class AddProductComponent implements OnInit {
 
   private submitSubscription : Subscription = new Subscription();
   onSubmit(){
+    console.log(this.productForm.getRawValue())
     this.submitSubscription = this.adminService.addProduct(this.productForm.getRawValue()).subscribe((res)=>{
-      console
+      console.log(res)
       this._snackBar.open("Product added successfully...","" ,{duration:3000})
       this.clearControls()
     },(error=>{

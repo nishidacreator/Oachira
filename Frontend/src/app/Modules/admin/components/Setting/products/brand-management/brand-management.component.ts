@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { ProductManagementComponent } from '../product-management/product-management.component';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-brand-management',
@@ -52,11 +53,18 @@ export class BrandManagementComponent implements OnDestroy {
 
   brands: Brand[] = [];
   brandSubscription? : Subscription
+  dataSource! : MatTableDataSource<Brand>
   getBrands(){
     return this.adminService.getBrand().subscribe((res)=>{
       this.brands = res
+      // this.dataSource = this.brands
     })
-  }   
+  } 
+  
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
   deleteBrand(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
