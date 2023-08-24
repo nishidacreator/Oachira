@@ -60,8 +60,6 @@ export class CategoryManagementComponent implements OnDestroy{
 
   formData = new FormData();
   onUpload(){  
-    // const file : any = this.productCategoryForm.get('category_image')?.value!
-
     if(!this.file){
       this._snackBar.open("Please choose an image first","" ,{duration:3000})
     }
@@ -74,13 +72,10 @@ export class CategoryManagementComponent implements OnDestroy{
 
   private submitSubscription : Subscription = new Subscription();
   onSubmit(){
-    let data = {
-      category_image : this.formData,
-      categoryName : this.productCategoryForm.get(['categoryName'])?.value,
-      taxable : this.productCategoryForm.get(['taxable'])?.value
-    }
+    this.formData.append('categoryName', this.productCategoryForm.get(['categoryName'])?.value)
+    this.formData.append('taxable', this.productCategoryForm.get(['taxable'])?.value)
 
-    this.submitSubscription = this.adminService.addCategory(data).subscribe((res)=>{
+    this.submitSubscription = this.adminService.addCategory(this.formData).subscribe((res)=>{
       this._snackBar.open("Category added successfully...","" ,{duration:3000})
       this.clearControls()
     },(error=>{
@@ -127,13 +122,22 @@ export class CategoryManagementComponent implements OnDestroy{
     this.isEdit=true;
 
     let category: any= this.category.find(x =>x.id == id)
+    console.log(category)
       
     let categoryName = category.categoryName.toString();
-    let taxable = category.taxable.toString()
+    let taxable = category.taxable.toString();
+    let category_image = category.category_image;2
+    
+    // let reader: any = new FileReader();
+    //     reader.readAsDataURL(category_image)
+    //     reader.onload = (event: any) =>{
+    //       this.url = event.target.result;
+    //     }   
     
     this.productCategoryForm.patchValue({
       categoryName : categoryName,
-      taxable : taxable
+      taxable : taxable,
+      // category_image : category_image
     })
     this.categoryId = id;
   }

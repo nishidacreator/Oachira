@@ -15,6 +15,7 @@ const PurchaseEntry = require('../models/Purchases/purchaseEntry');
 const PurchaseEntryDetails = require('../models/Purchases/purchaseEntryDetails');
 // const Stock = require('../models/stock');
 // const Transaction = require('../models/transaction');
+const VehicleType = require('../models/route/vehicleType');
 const Vehicle = require('../models/route/vehicle');
 const Route = require('../models/route/route');
 const CollectionDays = require('../models/route/collectionDays');
@@ -94,6 +95,9 @@ async function syncModel(){
 
     // Product.hasMany(Transaction, {foreignKey : 'productId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     // Transaction.belongsTo(Product)
+
+    VehicleType.hasMany(Vehicle, {foreignKey : 'vehicleTypeId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    Vehicle.belongsTo(VehicleType)
 
     Vehicle.hasMany(Route, {foreignKey : 'vehicleId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     Route.belongsTo(Vehicle)
