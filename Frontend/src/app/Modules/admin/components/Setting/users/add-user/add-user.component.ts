@@ -57,7 +57,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
   onSubmit(){
     this.adminService.addUser(this.userForm.getRawValue()).subscribe((res)=>{
-      this._snackBar.open("Role added successfully...","" ,{duration:3000})
+      this._snackBar.open("Role added successfully...","" ,{duration:3000});
+      this.getUsers();
       // this.getRoles()
       this.clearControls()
     },(error=>{

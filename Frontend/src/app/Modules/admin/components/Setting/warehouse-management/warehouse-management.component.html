@@ -126,7 +126,7 @@
     </mat-card-content>
 
     <mat-card-actions>
-      <button  mat-raised-button type="submit" [disabled]="!warehouseForm.valid">ADD</button>&nbsp;&nbsp;
+      <button  mat-raised-button type="submit" [disabled]="warehouseForm.pristine || !warehouseForm.valid">ADD</button>&nbsp;&nbsp;
     </mat-card-actions>
   </mat-card>
 </form>

@@ -79,7 +79,7 @@
     </mat-card-content>
 
     <mat-card-actions>
-      <button *ngIf ="!isEdit"  mat-raised-button type="submit" [disabled]="!vendorForm.valid">ADD</button>&nbsp;&nbsp;
+      <button *ngIf ="!isEdit"  mat-raised-button type="submit" [disabled]="vendorForm.pristine || !vendorForm.valid">ADD</button>&nbsp;&nbsp;
       <button *ngIf ="isEdit" mat-raised-button (click)="editFunction()" enable mat-raised-button color="primary" type="button">UPDATE</button>
     </mat-card-actions>
   </mat-card>

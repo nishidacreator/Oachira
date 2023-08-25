@@ -77,7 +77,7 @@
       </div>
       </mat-card-content>
       <mat-card-actions>
-        <button  mat-raised-button type="submit" *ngIf="isEdit == false" [disabled]="!userForm.valid">ADD</button>&nbsp;&nbsp;
+        <button mat-raised-button type="submit" *ngIf="isEdit == false" [disabled]="userForm.pristine || !userForm.valid">ADD</button>
         <button  mat-raised-button (click)="editFunction()" *ngIf="isEdit == true" [disabled]="!userForm.valid">UPDATE</button>&nbsp;&nbsp;
       </mat-card-actions>
     </mat-card>  
