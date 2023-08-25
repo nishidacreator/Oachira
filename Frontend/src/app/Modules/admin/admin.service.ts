@@ -277,6 +277,14 @@ export class AdminService {
     return this._http.get<VehicleType[]>(this.url +'/vehicletype');
   }
 
+  deleteVehicleType(id : Number){
+    return this._http.delete(this.url+'/vehicletype/'+ id);
+  }
+
+  updateVehicleType(id:Number, data:any): Observable<VehicleType>{
+    return this._http.patch<VehicleType>(this.url+'/vehicletype/'+id, data);
+  }
+
   addVehicle(data : any){
     return this._http.post(this.url +'/vehicle', data);
   }
