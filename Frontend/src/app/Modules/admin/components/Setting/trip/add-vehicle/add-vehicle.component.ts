@@ -25,7 +25,7 @@ export class AddVehicleComponent implements OnInit {
     typeName: ['', Validators.required]
   });
 
-  displayedColumns : string[] = ['id','vehicleType']
+  displayedColumns : string[] = ['id','vehicleType','manage']
 
   ngOnInit(): void {
     this.vehicleTypeSubscription = this.getVehicle()
@@ -56,7 +56,7 @@ export class AddVehicleComponent implements OnInit {
     })
   }   
 
-  deleteVehicle(id : any){
+  deleteVehicleName(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
       width: '250px',
       data: {}
@@ -64,7 +64,7 @@ export class AddVehicleComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.adminService.deleteVehicle(id).subscribe((res)=>{
+        this.adminService.deleteVehicleType(id).subscribe((res)=>{
           this.getVehicle()
           this._snackBar.open("Vehicle deleted successfully...","" ,{duration:3000})
         },(error=>{
@@ -76,7 +76,7 @@ export class AddVehicleComponent implements OnInit {
 
   isEdit = false;
   vehicleId : any;
-  editVehicle(id : any){
+  editVehicleName(id : any){
     this.isEdit = true;
     //Get the product based on the ID
     let vehi: any= this.vehicle.find(x =>x.id == id)
@@ -94,10 +94,10 @@ export class AddVehicleComponent implements OnInit {
     this.isEdit = false;
 
     let data: any ={
-      vehicleType : this.addVehicleType.get('vehicleType')?.value,
+      typeName : this.addVehicleType.get('typeName')?.value,
     }
     
-    this.adminService.updateVehicle(this.vehicleId, data).subscribe((res)=>{
+    this.adminService.updateVehicleType(this.vehicleId, data).subscribe((res)=>{
       this._snackBar.open("Brand updated successfully...","" ,{duration:3000})
       this.getVehicle();
       this.clearControls();
