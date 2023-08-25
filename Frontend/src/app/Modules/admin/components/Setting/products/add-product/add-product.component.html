@@ -123,64 +123,41 @@
     <mat-card-header>
       <mat-card-title style="color: green;"> PRODUCTS</mat-card-title>
     </mat-card-header>
-
+    
     <mat-form-field>
       <mat-label>Search</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
     </mat-form-field>
-
-    <table mat-table *ngIf="products" [dataSource]="dataSource" class="mat-elevation-z8">
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef>ID</th>
-        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="productName">
-        <th mat-header-cell *matHeaderCellDef>Product Name</th>
-        <td mat-cell *matCellDef="let element"> {{element.productName}} </td>
-      </ng-container>
-  
-      <ng-container matColumnDef="code">
-        <th mat-header-cell *matHeaderCellDef>Code</th>
-        <td mat-cell *matCellDef="let element"> {{element.code}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="barCode">
-      <th mat-header-cell *matHeaderCellDef>Barcode</th>
-      <td mat-cell *matCellDef="let element"> {{element.barCode}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="primaryUnitId">
-    <th mat-header-cell *matHeaderCellDef>Primary Unit</th>
-    <td mat-cell *matCellDef="let element"> {{element.primaryUnit.primaryUnitName}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="categoryId">
-      <th mat-header-cell *matHeaderCellDef>Category</th>
-      <td mat-cell *matCellDef="let element"> {{element.category.categoryName}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="brandId">
-    <th mat-header-cell *matHeaderCellDef>Brand</th>
-    <td mat-cell *matCellDef="let element"> {{element.brand.brandName}} </td>
-    </ng-container>
-  
-    <!-- <ng-container matColumnDef="loyaltyPoint">
-    <th mat-header-cell *matHeaderCellDef>Loyalty Point</th>
-    <td mat-cell *matCellDef="let element"> {{element.loyaltyPoint}} </td>
-    </ng-container> -->
-  
-    <ng-container matColumnDef="manage">
-      <th mat-header-cell *matHeaderCellDef>Manage</th>
-      <td mat-cell [style.background-color]="element.slotStatus == true ? 'lightgreen' : null" *matCellDef="let element">
-        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-      <i  (click)="editProduct(element.id)"  class="fa fa-edit" style="font-size: 20px; color:green"></i>
-      &nbsp;&nbsp;
-      <i  (click)="deleteProduct(element.id)" class="fa fa-trash" style="font-size: 20px; color:red"></i>
-      </td>
-    </ng-container>
-  
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <table class="styled-table">
+      <thead>
+          <tr>
+              <th>id</th>
+              <th>Product Name</th>
+              <th>Code</th>
+              <th>Barcode</th>
+              <th>Primary Unit</th>
+              <th>Category</th>
+              <th>Brand</th>
+              <th>Manage</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let element of filtered">
+              <td>{{element.id}}</td>
+              <td>{{element.productName}}</td>
+              <td>{{element.code}}</td>
+              <td>{{element.barCode}}</td>
+              <td>{{element.primaryUnit.primaryUnitName}}</td>
+              <td>{{element.category.categoryName}}</td>
+              <td>{{element.brand.brandName}}</td>
+              <td>
+                <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+                <i  (click)="editProduct(element.id)"  class="fa fa-edit" style="font-size: 20px; color:green"></i>
+                &nbsp;&nbsp;
+                <i  (click)="deleteProduct(element.id)" class="fa fa-trash" style="font-size: 20px; color:red"></i>
+                </td> 
+          </tr>
+      </tbody>
     </table>
+    <mat-paginator [length]="products.length" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
   </mat-card>

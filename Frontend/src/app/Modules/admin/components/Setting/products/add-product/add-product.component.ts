@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -12,6 +12,7 @@ import { SecondaryUnit } from '../../../../models/secondaryUnit';
 import { PrimaryUnit } from 'src/app/Modules/admin/models/primaryUnit';
 import { ProductManagementComponent } from '../product-management/product-management.component';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-add-product',
@@ -29,7 +30,6 @@ export class AddProductComponent implements OnInit {
     this.productSubscription?.unsubscribe()
     this.submitSubscription.unsubscribe()
   }
-  
 
   productForm = this.fb.group({
     productName: ['', Validators.required],
@@ -95,15 +95,34 @@ export class AddProductComponent implements OnInit {
   getProducts(){
     return this.adminService.getProduct().subscribe((res)=>{
       this.products = res
-      this.dataSource = new MatTableDataSource(res)
-    
+      this.filtered = this.products.slice(0, this.pageSize);
+      // this.paginatedData = this.filtered.slice(0, this.pageSize);
     })
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  pageSize = 10;
+  pageIndex = 0;
+  paginatedData: any[] = [];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  onPageChange(event: PageEvent): void {
+    const startIndex = event.pageIndex * event.pageSize;
+    this.filtered = this.filtered.slice(startIndex, startIndex + event.pageSize);
   }
+
+  filterValue: any;
+  filtered!: any[];
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.filterValue = filterValue;
+    this.filtered = this.products.filter(element =>
+      element.productName.toLowerCase().includes(filterValue) 
+      // && element.code.toLowerCase().includes(filterValue)
+      // && element.barCode.toLowerCase().includes(filterValue)
+    );
+  }
+
 
   deleteProduct(id:any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {

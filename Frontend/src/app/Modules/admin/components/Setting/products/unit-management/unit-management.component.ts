@@ -95,7 +95,18 @@ export class UnitManagementComponent implements OnDestroy {
   getPrimaryUnits(){
     return this.adminService.getPrimaryUnit().subscribe((res)=>{
       this.pUnits = res
+      this.filtered = this.pUnits
     })
+  }
+
+  filterValue: any;
+  filtered!: any[];
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.filterValue = filterValue;
+    this.filtered = this.pUnits.filter(element =>
+      element.primaryUnitName.toLowerCase().includes(filterValue) 
+    );
   }
 
   sUnits : SecondaryUnit[] = [];
@@ -103,7 +114,19 @@ export class UnitManagementComponent implements OnDestroy {
   getSecondaryUnits(){
     return this.adminService.getSecondaryUnit().subscribe((res)=>{
       this.sUnits = res
+      this.secFiltered = this.sUnits
     })
+  }
+
+  secFilterValue: any;
+  secFiltered!: any[];
+  applySecFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.filterValue = filterValue;
+    this.filtered = this.sUnits.filter(element =>
+      element.secondaryUnitName.toLowerCase().includes(filterValue) &&
+      element.primaryUnitId.primaryUnitName.toLowerCase().includes(filterValue)
+    );
   }
 
   deletePUnit(id : any){
