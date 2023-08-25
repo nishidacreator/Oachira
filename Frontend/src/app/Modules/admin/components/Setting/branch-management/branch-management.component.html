@@ -122,7 +122,7 @@
     </mat-card-content>
 
     <mat-card-actions>
-      <button  mat-raised-button color="primary" type="submit" [disabled]="!BranchForm.valid">ADD</button>&nbsp;&nbsp;
+      <button  mat-raised-button color="primary" type="submit" [disabled]="BranchForm.pristine || !BranchForm.valid">ADD</button>&nbsp;&nbsp;
       <button  mat-raised-button color="primary" type="button" (click)="onCancelClick()">CANCEL</button>
       <!-- <button *ngIf ="isEdit && !editAdminStatus" mat-raised-button (click)="editTherapistFunction()" enable mat-raised-button color="primary" type="button">UPDATE</button>
       <button *ngIf ="isEdit && editAdminStatus" mat-raised-button (click)="editAdminFunction()" enable mat-raised-button color="primary" type="button">UPDATE</button> -->

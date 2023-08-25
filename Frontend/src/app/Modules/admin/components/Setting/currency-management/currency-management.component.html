@@ -45,7 +45,7 @@
     </mat-card-content>
 
     <mat-card-actions>
-      <button  mat-raised-button type="submit" [disabled]="!currencyForm.valid">ADD</button>&nbsp;&nbsp;
+      <button  mat-raised-button type="submit" [disabled]="currencyForm.pristine || !currencyForm.valid">ADD</button>&nbsp;&nbsp;
       <button  mat-raised-button type="button" (click)="onCancelClick()">CANCEL</button>
       <!-- <button *ngIf ="isEdit && !editAdminStatus" mat-raised-button (click)="editTherapistFunction()" enable mat-raised-button color="primary" type="button">UPDATE</button>
       <button *ngIf ="isEdit && editAdminStatus" mat-raised-button (click)="editAdminFunction()" enable mat-raised-button color="primary" type="button">UPDATE</button> -->
