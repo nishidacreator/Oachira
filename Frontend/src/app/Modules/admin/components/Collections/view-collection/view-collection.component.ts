@@ -98,7 +98,6 @@ export class ViewCollectionComponent implements OnInit {
 
   deleteCollection(id : number){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
-      width: '250px',
       data: {}
     });
 

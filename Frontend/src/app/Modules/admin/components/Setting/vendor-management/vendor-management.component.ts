@@ -58,7 +58,6 @@ export class VendorManagementComponent implements OnDestroy{
 
   deleteVendor(id: number){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
-      width: '250px',
       data: {}
     });
 

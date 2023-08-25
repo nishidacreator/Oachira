@@ -43,7 +43,7 @@ export class AddRouteComponent implements OnInit {
   ngOnInit(): void {
     this.getVehicle()
     this.userSubscription = this.getDriver()
-    this.routeSubscription = this.getRoute()
+    // this.routeSubscription = this.getRoute()
   }
 
   homeClick(){
@@ -78,6 +78,8 @@ export class AddRouteComponent implements OnInit {
   onSubmit(){
     this.submitSubscription = this.adminService.addRoute(this.routeForm.getRawValue()).subscribe((res)=>{
       this._snackBar.open("Route added successfully...","" ,{duration:3000})
+      console.log("added successfully")
+      this.getRoute()
       this.clearControls()
     },(error=>{
       alert(error)
@@ -96,13 +98,13 @@ export class AddRouteComponent implements OnInit {
   getRoute(){
     return this.adminService.getRoute().subscribe((res)=>{
       this.routes = res
+      console.log("this.routes")
     })
   }  
 
   private deleteSubscription : Subscription = new Subscription();
   deleteRoute(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
-      width: '250px',
       data: {}
     });
 

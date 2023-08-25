@@ -108,7 +108,6 @@ export class UnitManagementComponent implements OnDestroy {
 
   deletePUnit(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
-      width: '250px',
       data: {}
     });
 
@@ -127,7 +126,6 @@ export class UnitManagementComponent implements OnDestroy {
 
 deleteSUnit(id : any){
   const dialogRef = this.dialog.open(DeleteDialogueComponent, {
-    width: '250px',
     data: {}
   });
 

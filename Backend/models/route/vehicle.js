@@ -7,7 +7,9 @@ const Vehicle = sequelize.define('vehicle',{
     taxExpiry : {type : DataTypes.DATEONLY, allowNull : false},
     insuranceExpiry : {type : DataTypes.DATEONLY, allowNull : false},
     polutionExpiry : {type : DataTypes.DATEONLY, allowNull : false},
-    capacity : {type : DataTypes.STRING, allowNull : false}
+    capacity : {type : DataTypes.STRING, allowNull : false},
+    permitExpiry : {type : DataTypes.DATEONLY, allowNull : false},
+    fitnessExpiry : {type : DataTypes.DATEONLY, allowNull : false}
 },
 {
     freezeTableName: true,

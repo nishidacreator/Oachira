@@ -70,7 +70,6 @@ export class RoleManagementComponent {
 
   deleteRole(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
-      width: '250px',
       data: {}
     });
 

@@ -28,10 +28,12 @@ export class VehicleManagementComponent {
     taxExpiry : ['', Validators.required],
     insuranceExpiry : ['', Validators.required],
     polutionExpiry : ['', Validators.required],
-    capacity : ['', Validators.required]
+    capacity : ['', Validators.required],
+    fitnessExpiry : ['', Validators.required],
+    permitExpiry : ['', Validators.required]
   });
 
-  displayedColumns : string[] = ['id','registrationNumber','vehicleType','taxExpiry','insuranceExpiry','polutionExpiry','capacity','manage']
+  displayedColumns : string[] = ['id','registrationNumber','vehicleType','taxExpiry','insuranceExpiry','polutionExpiry', 'fitnessExpiry', 'permitExpiry' ,'capacity','manage']
 
   ngOnInit(): void {
     this.vehicleSubscription = this.getVehicle()
@@ -50,6 +52,7 @@ export class VehicleManagementComponent {
 
   onSubmit(){
     this.adminService.addVehicle(this.vehicleForm.getRawValue()).subscribe((res)=>{
+      console.log(res);
       this._snackBar.open("Vehicle added successfully...","" ,{duration:3000})
       this.clearControls()
     },(error=>{

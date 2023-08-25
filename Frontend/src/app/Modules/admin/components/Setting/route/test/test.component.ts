@@ -89,7 +89,6 @@ export class TestComponent implements OnInit {
 
   deleteRoute(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
-      width: '250px',
       data: {}
     });
 
@@ -191,6 +190,7 @@ export class TestComponent implements OnInit {
     })
     this.submitted = true
     this.clearControls()
+    this.getRoute()
   }
 
   addCollectionDays(){

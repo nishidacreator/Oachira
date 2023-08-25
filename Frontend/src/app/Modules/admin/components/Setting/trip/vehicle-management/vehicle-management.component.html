@@ -25,9 +25,7 @@
               </mat-error>
             </mat-form-field>
           </div>
-        </div>
 
-        <div class="row">
           <div class="col">
             <mat-form-field class="full-width">
               <mat-select placeholder="Vehicle Type" formControlName="vehicleTypeId">
@@ -48,6 +46,35 @@
               </mat-error>
             </mat-form-field>
           </div>
+
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput type="date" placeholder="Pollution Expiry" formControlName="polutionExpiry">
+              <mat-error *ngIf="vehicleForm.controls['polutionExpiry'].hasError('required')">
+                field <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput type="date" placeholder="Permit Expiry" formControlName="permitExpiry">
+              <mat-error *ngIf="vehicleForm.controls['permitExpiry'].hasError('required')">
+                field <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput type="date" placeholder="Fitness Expiry" formControlName="fitnessExpiry">
+              <mat-error *ngIf="vehicleForm.controls['fitnessExpiry'].hasError('required')">
+                field <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
         </div>
 
         <div class="row">
@@ -59,20 +86,7 @@
               </mat-error>
             </mat-form-field>
           </div>
-        </div>
 
-        <div class="row">
-          <div class="col">
-            <mat-form-field class="full-width">
-              <input matInput type="date" placeholder="Polution Expiry" formControlName="polutionExpiry">
-              <mat-error *ngIf="vehicleForm.controls['polutionExpiry'].hasError('required')">
-                field <strong>required</strong>
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-
-        <div class="row">
           <div class="col">
             <mat-form-field class="full-width">
               <input matInput placeholder="Capacity" formControlName="capacity">
@@ -121,6 +135,16 @@
       <ng-container matColumnDef="taxExpiry">
         <th mat-header-cell *matHeaderCellDef>Tax Expiry</th>
         <td mat-cell *matCellDef="let element"> {{element.taxExpiry}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fitnessExpiry">
+        <th mat-header-cell *matHeaderCellDef>Fitness Expiry</th>
+        <td mat-cell *matCellDef="let element"> {{element.fitnessExpiry}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="permitExpiry">
+        <th mat-header-cell *matHeaderCellDef>Permit Expiry</th>
+        <td mat-cell *matCellDef="let element"> {{element.permitExpiry}} </td>
       </ng-container>
   
       <ng-container matColumnDef="insuranceExpiry">

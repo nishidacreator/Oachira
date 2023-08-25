@@ -67,6 +67,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   }
 
   clearControls(){
+    this.getUsers()
     this.userForm.reset()
     this.userForm.setErrors(null)
     Object.keys(this.userForm.controls).forEach(key=>{this.userForm.get(key)?.setErrors(null)})
@@ -84,7 +85,6 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
   deleteUser(id: number){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
-      width: '250px',
       data: {}
     });
 

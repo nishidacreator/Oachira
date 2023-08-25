@@ -6,9 +6,9 @@ const VehicleType = require('../../models/route/vehicleType');
 
 router.post('/', async (req, res) => {
     try {
-            const {registrationNumber, vehicleTypeId, taxExpiry, insuranceExpiry, polutionExpiry, capacity} = req.body;
+            const {registrationNumber, vehicleTypeId, taxExpiry, insuranceExpiry, polutionExpiry, capacity, permitExpiry, fitnessExpiry} = req.body;
 
-            const vehicle = new Vehicle({registrationNumber, vehicleTypeId, taxExpiry, insuranceExpiry, polutionExpiry, capacity});
+            const vehicle = new Vehicle({registrationNumber, vehicleTypeId, taxExpiry, insuranceExpiry, polutionExpiry, capacity, permitExpiry, fitnessExpiry});
 
             await vehicle.save();
 
