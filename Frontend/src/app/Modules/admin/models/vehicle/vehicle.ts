@@ -9,4 +9,6 @@ export interface Vehicle{
     insuranceExpiry : Date,
     polutionExpiry : Date,
     capacity : Date
+    fitnessExpiry : Date
+    permitExpiry : Date
 }

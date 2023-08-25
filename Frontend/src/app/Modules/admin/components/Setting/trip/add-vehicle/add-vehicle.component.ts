@@ -58,7 +58,6 @@ export class AddVehicleComponent implements OnInit {
 
   deleteVehicleName(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
-      width: '250px',
       data: {}
     });
 

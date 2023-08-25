@@ -100,7 +100,6 @@ export class CategoryManagementComponent implements OnDestroy{
 
   deleteCategory(id:any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
-      width: '250px',
       data: {}
     });
 

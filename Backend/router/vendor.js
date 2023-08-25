@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
 router.get('/', async(req,res)=>{
 
     try {
-        const vendor = await Vendor.findAll({});
+        const vendor = await Vendor.findAll({order:['id']});
         res.send(vendor);
         
     } catch (error) {

@@ -97,7 +97,6 @@ export class AddRouteDetailsComponent implements OnInit {
   private deleteSubscription : Subscription = new Subscription();
   deleteDetails(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
-      width: '250px',
       data: {}
     });
 
