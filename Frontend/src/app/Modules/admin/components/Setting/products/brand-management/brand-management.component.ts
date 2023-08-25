@@ -57,13 +57,18 @@ export class BrandManagementComponent implements OnDestroy {
   getBrands(){
     return this.adminService.getBrand().subscribe((res)=>{
       this.brands = res
-      // this.dataSource = this.brands
+      this.filteredBrands = this.brands
     })
   } 
   
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  filterValue: any;
+  filteredBrands!: any[];
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.filterValue = filterValue;
+    this.filteredBrands = this.brands.filter(element =>
+      element.brandName.toLowerCase().includes(filterValue)
+    );
   }
 
   deleteBrand(id : any){

@@ -75,6 +75,11 @@
   <mat-card-header>
     <mat-card-title style="color: green;"> PRODUCT CATEGORY</mat-card-title>
   </mat-card-header>
+
+  <mat-form-field>
+    <mat-label>Search</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+  </mat-form-field>
   <table class="styled-table">
     <thead>
         <tr>
@@ -86,7 +91,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let element of category">
+        <tr *ngFor="let element of filtered">
             <td>{{element.id}}</td>
             <!-- <td><img [src]="element.category_image" alt="Category Image"></td> -->
             <td>{{element.categoryName}}</td>

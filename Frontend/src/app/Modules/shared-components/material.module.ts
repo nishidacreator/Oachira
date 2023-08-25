@@ -25,7 +25,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatStepperModule} from '@angular/material/stepper';
-
+import {MatPaginatorModule} from '@angular/material/paginator';
 @NgModule({
   declarations: [],
   imports: [
@@ -55,7 +55,8 @@ import {MatStepperModule} from '@angular/material/stepper';
     MatNativeDateModule,
     MatAutocompleteModule,
     MatSlideToggleModule,
-    MatStepperModule
+    MatStepperModule,
+    MatPaginatorModule
   ],
 
   exports: [
@@ -85,7 +86,8 @@ import {MatStepperModule} from '@angular/material/stepper';
     MatNativeDateModule,
     MatAutocompleteModule,
     MatSlideToggleModule,
-    MatStepperModule
+    MatStepperModule,
+    MatPaginatorModule
   ]
 })
 export class MaterialModule { }

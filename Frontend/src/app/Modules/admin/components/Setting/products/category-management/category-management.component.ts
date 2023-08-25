@@ -95,7 +95,18 @@ export class CategoryManagementComponent implements OnDestroy{
   getCategory(){
     return this.adminService.getCategory().subscribe((res)=>{
       this.category = res
+      this.filtered = this.category
     })
+  }
+
+  filterValue: any;
+  filtered!: any[];
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.filterValue = filterValue;
+    this.filtered = this.category.filter(element =>
+      element.categoryName.toLowerCase().includes(filterValue)
+    );
   }
 
   deleteCategory(id:any){
