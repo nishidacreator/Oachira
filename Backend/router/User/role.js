@@ -20,14 +20,14 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
 
-    const role = await Role.findAll({})
+    const role = await Role.findAll({order:['id']})
 
     res.send(role);
 })
 
 router.get('/:id', async (req, res) => {
 
-  const role = await Role.findOne({where: {id: req.params.id}})
+  const role = await Role.findOne({where: {id: req.params.id}, order:['id']})
 
   res.send(role);
 })

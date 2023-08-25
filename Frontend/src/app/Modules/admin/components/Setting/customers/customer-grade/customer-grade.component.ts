@@ -73,7 +73,6 @@ export class CustomerGradeComponent implements OnInit, OnDestroy {
 
   deleteBrand(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
-      width: '250px',
       data: {}
     });
 

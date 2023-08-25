@@ -90,7 +90,6 @@ export class TripDaysComponent implements OnInit {
 
   deleteDays(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
-      width: '250px',
       data: {}
     });
 

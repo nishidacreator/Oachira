@@ -42,7 +42,9 @@ router.get('/byrouteid/:id', authenticateToken,async(req,res)=>{
   try {
       const result = await DeliveryDays.findAll({
         where: { routeId : req.params.id},
-        include : Route});
+        include : Route,
+        order:['id']
+      });
       res.send(result);
       
   } catch (error) {
