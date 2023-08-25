@@ -43,18 +43,18 @@ export class CategoryManagementComponent implements OnDestroy{
       this.file = event.target.files[0];
 
       let fileType = this.file.type;
-      this.productCategoryForm.get('category_image')?.setValue(this.file)
+      // this.productCategoryForm.get('category_image')?.setValue(this.file)
   
-      if(fileType.match(/image\/*/)){
-        let reader = new FileReader();
-        reader.readAsDataURL(this.file)
-        reader.onload = (event: any) =>{
-          this.url = event.target.result;
-        }   
-      }
-      else {
-        window.alert('Please select correct image format');
-      } 
+      // if(fileType.match(/image\/*/)){
+      //   let reader = new FileReader();
+      //   reader.readAsDataURL(this.file)
+      //   reader.onload = (event: any) =>{
+      //     this.url = event.target.result;
+      //   }   
+      // }
+      // else {
+      //   window.alert('Please select correct image format');
+      // } 
     }
   }
 
@@ -126,7 +126,9 @@ export class CategoryManagementComponent implements OnDestroy{
       
     let categoryName = category.categoryName.toString();
     let taxable = category.taxable.toString();
-    let category_image = category.category_image;2
+    // let category_image = category.category_image;
+
+    // console.log(typeof category_image)
     
     // let reader: any = new FileReader();
     //     reader.readAsDataURL(category_image)
@@ -137,7 +139,7 @@ export class CategoryManagementComponent implements OnDestroy{
     this.productCategoryForm.patchValue({
       categoryName : categoryName,
       taxable : taxable,
-      // category_image : category_image
+      // category_image : reader
     })
     this.categoryId = id;
   }
