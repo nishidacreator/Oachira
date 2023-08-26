@@ -35,7 +35,7 @@ export class TestComponent implements OnInit {
     salesExecutiveId : ['', Validators.required]
   });
 
-  displayedColumns : string[] = ['id','routeName', 'vehicleId','vehicleDriverId','salesManId','manage']
+  displayedColumns : string[] = ['id','routeName', 'vehicleId','vehicleDriverId','salesManId', 'salesExecutiveId','manage']
 
   ngOnInit(): void {
     this.getVehicle()

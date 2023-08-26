@@ -80,7 +80,20 @@ export class AddUserComponent implements OnInit, OnDestroy {
   getUsers(){
     return this.adminService.getUser().subscribe((res)=>{
       this.users = res
+      this.filtered = this.users
     })
+  }
+
+  filterValue: any;
+  filtered!: any[];
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.filterValue = filterValue;
+    this.filtered = this.users.filter(element =>
+      element.name.toLowerCase().includes(filterValue) 
+      // && element.status.toLowerCase().includes(filterValue)
+      // && element.barCode.toLowerCase().includes(filterValue)
+    );
   }
 
   deleteUser(id: number){

@@ -92,8 +92,21 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
   getCustomers(){
     return this.adminService.getCustomer().subscribe((res)=>{
       this.customers = res
+      this.filtered = this.customers
     })
   }  
+
+  filterValue: any;
+  filtered!: any[];
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.filterValue = filterValue;
+    this.filtered = this.customers.filter(element =>
+      element.customerName.toLowerCase().includes(filterValue) 
+      // && element.code.toLowerCase().includes(filterValue)
+      // && element.barCode.toLowerCase().includes(filterValue)
+    );
+  }
 
   deleteBrand(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {

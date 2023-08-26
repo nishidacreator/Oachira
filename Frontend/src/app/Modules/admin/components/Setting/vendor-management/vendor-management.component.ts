@@ -53,7 +53,20 @@ export class VendorManagementComponent implements OnDestroy{
   getVendor(){
     return this.adminService.getVendor().subscribe((res)=>{
       this.vendors = res;
+      this.filtered = this.vendors
     })
+  }
+
+  filterValue: any;
+  filtered!: any[];
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.filterValue = filterValue;
+    this.filtered = this.vendors.filter(element =>
+      element.vendorName.toLowerCase().includes(filterValue) 
+      // && element.code.toLowerCase().includes(filterValue)
+      // && element.barCode.toLowerCase().includes(filterValue)
+    );
   }
 
   deleteVendor(id: number){
