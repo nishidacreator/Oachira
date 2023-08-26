@@ -83,7 +83,7 @@
 
                     <!-- Search in MAT SELECT -->
                     <mat-form-field class="full-width" appearance="fill">
-                      <mat-label>Select an option</mat-label>
+                      <mat-label>Add Product</mat-label>
                       <mat-select formControlName="productId">
                         <mat-form-field class="search-field">
                           <div class="row">
@@ -110,8 +110,17 @@
                       <input matInput placeholder="Quantity" formControlName="quantity">
                     </mat-form-field>
                   </td>
-                <!-- </tr> -->
-                <!-- <tr> -->
+                </tr>
+                <tr>
+                  <td>
+                    <mat-form-field class="full-width">
+                      <mat-select placeholder="Secondary Unit" formControlName="secondaryUnitId">
+                        <mat-option *ngFor="let item of unit$ | async" [value]="item.id">
+                          {{item.secondaryUnitName | titlecase}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </td>
                   <td>
                     <span class="material-icons" style="color: rgb(255, 0, 0); font-size: 25px; margin-top: 17px; margin-left: 75px;" (click)="removeProduct(i)">cancel</span>
                   </td>

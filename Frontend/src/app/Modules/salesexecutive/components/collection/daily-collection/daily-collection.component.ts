@@ -48,7 +48,7 @@ export class DailyCollectionComponent implements OnInit {
     );
 
     // this.brandSubscription = this.getBrands()
-    this.customerSubscription = this.getCustomer();
+    // this.customerSubscription = this.getCustomer();
     this.routeSubscription = this.getRoutes()
 
   }
@@ -67,13 +67,13 @@ export class DailyCollectionComponent implements OnInit {
     );
   }
 
-  customer: Customer[] = []
   customerSubscriptions!: Subscription;
   filteredCustomer$! : Observable<Customer[]>;
   customerSubscription! : Subscription;
-  getCustomer(){
-    return this.adminService.getCustomer().subscribe((res)=>{
-      this.customer = res;
+  customer: Customer[] = []
+  getCustomer(id : any){
+    return this.adminService.getRouteDetailsByRouteId(id).subscribe((res)=>{
+      this.customer = res.map(x=> x.customer)
     })
   }
 

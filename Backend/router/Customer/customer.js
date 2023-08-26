@@ -9,13 +9,13 @@ const CustomerGrade = require('../../models/Customer/customerGrade');
 
 router.post('/', async (req, res) => {
     try {
-        const { customerName, customerCategoryId, phoneNumber, address, location, gstNo, email, remarks, customerGradeId } = req.body;
+        const { customerName, customerCategoryId, phoneNumber, address, location, gstNo, email, remarks, customerGradeId, subledgerCode } = req.body;
 
         const customer = await Customer.findOne({where: {phoneNumber:phoneNumber}});
     if (customer) {
         return res.status(400).send({ message: 'Mobile Number already exists' })  
     }
-    const newCustomer = new Customer({ customerName, customerCategoryId, phoneNumber, address, location, gstNo, email, remarks, customerGradeId });
+    const newCustomer = new Customer({ customerName, customerCategoryId, phoneNumber, address, location, gstNo, email, remarks, customerGradeId, subledgerCode });
     await newCustomer.save();
 
     res.status(200).send({id: newCustomer.id, name:newCustomer.customerName, pohneNumber:newCustomer.phoneNumber});
@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
 
 router.get('/', async(req,res)=>{
     try {
-        const customer = await Customer.findAll({include : [CustomerCategory, CustomerGrade]});
+        const customer = await Customer.findAll({include : [CustomerCategory, CustomerGrade], order: ['id']});
         res.send(customer);
         
     } catch (error) {

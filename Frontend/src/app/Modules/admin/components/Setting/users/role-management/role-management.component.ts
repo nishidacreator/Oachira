@@ -65,8 +65,21 @@ export class RoleManagementComponent {
   getRoles(){
     return this.adminService.getRole().subscribe((res)=>{
       this.roles = res
+      this.filtered = this.roles
     })
   }   
+
+  filterValue: any;
+  filtered!: any[];
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.filterValue = filterValue;
+    this.filtered = this.roles.filter(element =>
+      element.roleName.toLowerCase().includes(filterValue) 
+      // && element.status.toLowerCase().includes(filterValue)
+      // && element.barCode.toLowerCase().includes(filterValue)
+    );
+  }
 
   deleteRole(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {

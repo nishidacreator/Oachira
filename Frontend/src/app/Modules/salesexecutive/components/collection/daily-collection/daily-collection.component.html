@@ -20,28 +20,33 @@
         <div class="row box">
           <div class="col box">
             <mat-form-field class="full-width">
-                <mat-label>Customer Name</mat-label>
-                <input matInput type="text"  formControlName="customerId" 
-                [matAutocomplete]="auto" placeholder="Search for customer" >                
-                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                  <mat-option *ngFor="let option of customer"  [value]="option.id">
-                    {{option.customerName}}
-                  </mat-option>                        
-                </mat-autocomplete>                       
-              </mat-form-field>
+              <mat-select #id (selectionChange)="getCustomer(id.value)" placeholder="Route Name" formControlName="routeId">
+                <mat-option *ngFor="let item of routes" [value]="item.id">
+                  {{item.routeName}}
+                </mat-option>
+                <!-- &nbsp;&nbsp; &nbsp;&nbsp;<span class="material-icons" style="font-size: 30px; color: rgb(0, 128, 55);" (click)="addVendor()">playlist_add</span> -->
+              </mat-select>
+              <mat-error *ngIf="dailyCollectionForm.controls['routeId'].hasError('required')">
+                route <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
           </div>
 
           <div class="col box">
             <mat-form-field class="full-width">
-                <mat-label>Route Name</mat-label>
-                <input matInput type="text"  formControlName="routeId" 
-                [matAutocomplete]="auto" placeholder="Search for customer" >                
-                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                  <mat-option *ngFor="let option of routes"  [value]="option.id">
-                    {{option.routeName}}
-                  </mat-option>                        
-                </mat-autocomplete>                       
-              </mat-form-field>
+              <mat-select placeholder="Customer" formControlName="customerId">
+                <!-- <span *ngIf="customer.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addCustomer()">playlist_add</span> -->
+                <mat-option *ngFor="let item of customer" [value]="item.id">
+                  {{item.customerName}}
+                </mat-option>
+                <!-- <mat-option *ngIf="customer.length === 0" [value]="'add'">
+                  <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addCustomer()">playlist_add</span>
+                </mat-option> -->
+              </mat-select>
+              <mat-error *ngIf="dailyCollectionForm.controls['customerId'].hasError('required')">
+                customer <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
           </div>
         </div>
 

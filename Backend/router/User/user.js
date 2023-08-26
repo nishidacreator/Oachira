@@ -60,8 +60,19 @@ router.delete('/:id', async(req,res)=>{
 })
 
 router.patch('/:id', async(req,res)=>{
+  const pass = await bcrypt.hash(req.body.password, 10);
+
     try {
-        User.update(req.body, {
+        const user = {
+          name : req.body.name,
+          phoneNumber : req.body.phoneNumber,
+          password : pass,
+          roleId : req.body.roleId,
+          status: req.body.status,
+         
+        }
+
+        User.update(user, {
             where: { id: req.params.id }
           })
             .then(num => {

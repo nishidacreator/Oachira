@@ -121,7 +121,8 @@ export class PickListComponent implements OnInit,OnDestroy {
   newProduct(): FormGroup {  
     return this.fb.group({ 
       productId: ['', Validators.required],  
-      quantity: ['', Validators.required]
+      quantity: ['', Validators.required],
+      secondaryUnitId: ['', Validators.required]
     })  
   }  
     

@@ -98,9 +98,21 @@ export class AddRouteComponent implements OnInit {
   getRoute(){
     return this.adminService.getRoute().subscribe((res)=>{
       this.routes = res
-      console.log("this.routes")
+      this.filtered = this.routes
     })
-  }  
+  } 
+  
+  filterValue: any;
+  filtered!: any[];
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.filterValue = filterValue;
+    this.filtered = this.routes.filter(element =>
+      element.routeName.toLowerCase().includes(filterValue) 
+      // && element.code.toLowerCase().includes(filterValue)
+      // && element.barCode.toLowerCase().includes(filterValue)
+    );
+  }
 
   private deleteSubscription : Subscription = new Subscription();
   deleteRoute(id : any){

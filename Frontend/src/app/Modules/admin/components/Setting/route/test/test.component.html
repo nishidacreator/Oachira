@@ -158,6 +158,11 @@
       <td mat-cell *matCellDef="let element"> {{element.salesman.name}} </td>
     </ng-container>
 
+    <ng-container matColumnDef="salesExecutiveId">
+      <th mat-header-cell *matHeaderCellDef>Sales Executive</th>
+      <td mat-cell *matCellDef="let element"> {{element.salesexecutive.name}} </td>
+    </ng-container>
+
     <ng-container matColumnDef="manage">
       <th mat-header-cell *matHeaderCellDef>Manage</th>
       <td mat-cell [style.background-color]="element.slotStatus == true ? 'lightgreen' : null" *matCellDef="let element">
