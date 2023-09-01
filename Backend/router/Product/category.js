@@ -2,9 +2,9 @@ const express = require('express');
 const Category = require('../../models/Products/category');
 const router = express.Router();
 const multer = require('../../utils/multer')
+const authenticateToken = require('../../middleware/authorization');
 
-
-router.post('/', multer.single('category_image'), async (req, res) => {
+router.post('/', authenticateToken, multer.single('category_image'), async (req, res) => {
     try {
             let category = {
               category_image : req.file?.path,
@@ -22,7 +22,7 @@ router.post('/', multer.single('category_image'), async (req, res) => {
 })
 
 
-router.get('/', async(req,res)=>{
+router.get('/', authenticateToken, async(req,res)=>{
     try {
         const category = await Category.findAll({order:['id']});
         res.send(category);
@@ -32,7 +32,7 @@ router.get('/', async(req,res)=>{
     }  
 })
 
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
 
         const result = await Category.destroy({
@@ -54,7 +54,7 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
         Category.update(req.body, {
             where: { id: req.params.id }

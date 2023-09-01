@@ -1,4 +1,4 @@
-import { Tax } from '../../../models/tax';
+import { Tax } from '../../../models/settings/tax';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';

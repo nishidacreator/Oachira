@@ -16,8 +16,13 @@ const brand = require('../router/Product/brand');
 const customer = require('../router/Customer/customer');
 const customerGrade = require('../router/Customer/customerGrade');
 const customerCategory = require('../router/Customer/customerCategory');
+const customerPhone = require('../router/Customer/customerPhone');
 const tax = require('../router/Product/tax');
 const vendor = require('../router/vendor');
+const bankAccount = require('../router/bankAccount');
+const branch = require('../router/branch');
+
+//purchases
 const purchaseEntry = require('../router/Purchases/purchaseEntry');
 const purchaseEntryDetails = require('../router/Purchases/purchaseEntryDetails');
 const purchaseOrder =  require('../router/Purchases/purchaseOrder');
@@ -67,8 +72,11 @@ app.use('/brand',brand);
 app.use('/customer',customer);
 app.use('/customergrade', customerGrade);
 app.use('/customercategory', customerCategory);
+app.use('/cutomerphone', customerPhone);
 app.use('/tax', tax);
 app.use('/vendor', vendor);
+app.use('/bankaccount', bankAccount);
+app.use('/branch', branch);
 
 app.use('/purchaseentry', purchaseEntry);
 app.use('/purchaseentrydetails', purchaseEntryDetails);

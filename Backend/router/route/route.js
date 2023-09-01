@@ -7,7 +7,7 @@ const User = require('../../models/User/user');
 const CollectionDays = require('../../models/route/collectionDays');
 const DeliveryDays = require('../../models/route/deliveryDays');
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
             const {routeName, vehicleId, driverId, salesManId, salesExecutiveId, deliveryDays, collectionDays} = req.body;
 
@@ -48,7 +48,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/',async(req,res)=>{
+router.get('/', authenticateToken,async(req,res)=>{
 
     try {
         const route = await Route.findAll({include: ['driver', 'salesman', 'salesexecutive' , Vehicle ], order:['id']});
@@ -59,7 +59,7 @@ router.get('/',async(req,res)=>{
     }  
 })
 
-router.get('/:id',async(req,res)=>{
+router.get('/:id', authenticateToken,async(req,res)=>{
 
   try {
       const route = await Route.findOne({
@@ -73,7 +73,7 @@ router.get('/:id',async(req,res)=>{
 })
 
 
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
 
         const result = await Route.destroy({
@@ -94,7 +94,7 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
         Route.update(req.body, {
             where: { id: req.params.id }

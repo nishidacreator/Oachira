@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { AuthService } from 'src/app/Modules/auth/auth.service';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
 import { AdminService } from '../../../../admin.service';
-import { User } from 'src/app/Modules/admin/models/user';
+import { User } from 'src/app/Modules/admin/models/settings/user';
 import { Vehicle } from '../../../../models/vehicle/vehicle';
 import { RouteManagementComponent } from '../route-management/route-management.component';
 import { Route } from '../../../../models/route/route';

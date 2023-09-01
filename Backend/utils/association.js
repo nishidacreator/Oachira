@@ -11,10 +11,11 @@ const CustomerGrade = require('../models/Customer/customerGrade');
 const Customer = require('../models/Customer/customer');
 const Tax = require('../models/Products/tax');
 const Vendor = require('../models/vendor');
+const Branch = require('../models/branch');
+const BankAccount = require('../models/bankAccount');
+
 const PurchaseEntry = require('../models/Purchases/purchaseEntry');
 const PurchaseEntryDetails = require('../models/Purchases/purchaseEntryDetails');
-// const Stock = require('../models/stock');
-// const Transaction = require('../models/transaction');
 const VehicleType = require('../models/route/vehicleType');
 const Vehicle = require('../models/route/vehicle');
 const Route = require('../models/route/route');
@@ -26,9 +27,18 @@ const DailyCollection = require('../models/route/dailyCollection');
 const Trip = require('../models/route/trip');
 const TripDetails = require('../models/route/tripDetails');
 const DeliveryDays = require('../models/route/deliveryDays');
-const brandData = require('./brandFirst.json');
-const productData = require('./productsOachiraFirst.json');
-const categoryData = require('./categoryFirst.json');
+const BranchAccount = require('../models/branchAccount');
+// BULK CREATE
+const userData = require('./dataSource/user.json');
+const brandData = require('./dataSource/brandFirst.json');
+const productData = require('./dataSource/productsOachiraFirst.json');
+const categoryData = require('./dataSource/categoryFirst.json');
+const vehicleTypeData = require('./dataSource/vehicleType.json');
+const branchData = require('./dataSource/branch.json');
+const vehilceData = require('./dataSource/vehicle.json');
+const bankAccountData = require('./dataSource/bankAccount.json');
+
+
 const bcrypt = require('bcrypt');
 
 const { JSON } = require('sequelize');
@@ -36,6 +46,7 @@ const PurchaseOrder = require('../models/Purchases/purchaseOrder');
 const PurchaseOrderDetails = require('../models/Purchases/purchaseOrderDetails');
 const Stock = require('../models/Stock/stock');
 const PurchaseTransaction = require('../models/Stock/purchaseTransaction');
+const CustomerPhone = require('../models/Customer/customerPhone');
 
 async function syncModel(){
 
@@ -44,6 +55,9 @@ async function syncModel(){
 
     CustomerCategory.hasMany(Customer, {foreignKey : 'customerCategoryId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     Customer.belongsTo(CustomerCategory)
+
+    Customer.hasMany(CustomerPhone, {foreignKey : 'customerId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    CustomerPhone.belongsTo(Customer)
 
     Category.hasMany(Product,{foreignKey : 'categoryId',  onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     Product.belongsTo(Category)
@@ -60,45 +74,19 @@ async function syncModel(){
     Role.hasMany(User,{foreignKey : 'roleId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     User.belongsTo(Role)
 
-    Vendor.hasMany(PurchaseEntry,{foreignKey : 'vendorId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    PurchaseEntry.belongsTo(Vendor)
-
-    User.hasMany(PurchaseEntry,{foreignKey : 'userId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    PurchaseEntry.belongsTo(User)
-
-    // Product.hasMany(Stock, {foreignKey : 'productId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    // Stock.belongsTo(Product)
-
-    // PrimaryUnit.hasMany(Stock, {foreignKey : 'primaryUnitId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    // Stock.belongsTo(PrimaryUnit)
-
-    // SecondaryUnit.hasMany(Stock, {foreignKey : 'secondaryUnitId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    // Stock.belongsTo(SecondaryUnit)
-
-    Product.hasMany(PurchaseEntryDetails, {foreignKey : 'productId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    PurchaseEntryDetails.belongsTo(Product)
-
-    PurchaseEntry.hasMany(PurchaseEntryDetails,{foreignKey : 'purchaseEntryId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    PurchaseEntryDetails.belongsTo(PurchaseEntry)
-
-    SecondaryUnit.hasMany(PurchaseEntryDetails, {foreignKey : 'secondaryUnitId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    PurchaseEntryDetails.belongsTo(SecondaryUnit)
-
-    Tax.hasMany(PurchaseEntryDetails, {foreignKey : 'taxId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    PurchaseEntryDetails.belongsTo(Tax)
-    
-    // Stock.hasMany(Transaction,{foreignKey : 'stockId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    // Transaction.belongsTo(Stock)
-    
-    // Customer.hasMany(Transaction, {foreignKey : 'customerId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    // Transaction.belongsTo(Customer)
-
-    // Product.hasMany(Transaction, {foreignKey : 'productId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    // Transaction.belongsTo(Product)
-
     VehicleType.hasMany(Vehicle, {foreignKey : 'vehicleTypeId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     Vehicle.belongsTo(VehicleType)
 
+    User.hasMany(Branch,{foreignKey : 'branchManagerId', onDelete : 'CASCADE', onUpdate : 'CASCADE'}) 
+    Branch.belongsTo(User, {as: 'branchManager', foreignKey : 'branchManagerId'})
+
+    BankAccount.hasMany(BranchAccount,{foreignKey : 'bankAccountId', onDelete : 'CASCADE', onUpdate : 'CASCADE'}) 
+    BranchAccount.belongsTo(BankAccount)
+
+    Branch.hasMany(BranchAccount,{foreignKey : 'branchId', onDelete : 'CASCADE', onUpdate : 'CASCADE'}) 
+    BranchAccount.belongsTo(Branch)
+
+    //ROUTE
     Vehicle.hasMany(Route, {foreignKey : 'vehicleId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     Route.belongsTo(Vehicle)
 
@@ -120,6 +108,7 @@ async function syncModel(){
     Customer.hasMany(RouteDetails, {foreignKey : 'customerId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     RouteDetails.belongsTo(Customer)
 
+    //SALES EXECUTIVE
     Route.hasOne(PickList, {foreignKey : 'routeId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     PickList.belongsTo(Route)
 
@@ -156,6 +145,7 @@ async function syncModel(){
     Route.hasMany(DeliveryDays, {foreignKey : 'routeId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     DeliveryDays.belongsTo(Route)
 
+    //PURCHASES
     Vendor.hasMany(PurchaseOrder,{foreignKey : 'vendorId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     PurchaseOrder.belongsTo(Vendor)
 
@@ -171,6 +161,24 @@ async function syncModel(){
     PurchaseOrder.hasOne(PurchaseEntry, {foreignKey : 'purchaseOrderId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     PurchaseEntry.belongsTo(PurchaseOrder)
 
+    Vendor.hasMany(PurchaseEntry,{foreignKey : 'vendorId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    PurchaseEntry.belongsTo(Vendor)
+
+    User.hasMany(PurchaseEntry,{foreignKey : 'userId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    PurchaseEntry.belongsTo(User)
+
+    Product.hasMany(PurchaseEntryDetails, {foreignKey : 'productId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    PurchaseEntryDetails.belongsTo(Product)
+
+    PurchaseEntry.hasMany(PurchaseEntryDetails,{foreignKey : 'purchaseEntryId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    PurchaseEntryDetails.belongsTo(PurchaseEntry)
+
+    SecondaryUnit.hasMany(PurchaseEntryDetails, {foreignKey : 'secondaryUnitId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    PurchaseEntryDetails.belongsTo(SecondaryUnit)
+
+    Tax.hasMany(PurchaseEntryDetails, {foreignKey : 'taxId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    PurchaseEntryDetails.belongsTo(Tax)
+
 
     // STOCK
     Product.hasMany(Stock,{foreignKey : 'productId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
@@ -182,9 +190,6 @@ async function syncModel(){
     PurchaseEntry.hasMany(PurchaseTransaction,{foreignKey: 'purchaseEntryId', onDelete : 'CASCADE'})
     PurchaseTransaction.belongsTo(PurchaseEntry)
 
-    
-
-
     await sequelize.sync({alter: true})
 
     const role = await Role.findAll({})
@@ -194,22 +199,19 @@ async function syncModel(){
             {roleName : 'Counter', status: true},
             {roleName : 'Salesman', status: true},
             {roleName : 'Driver', status: true},
-            {roleName : 'SalesExecutive', status: true}
+            {roleName : 'SalesExecutive', status: true},
+            {roleName : 'BranchManager', status: true}
         ])
     }
 
     const user = await User.findAll({})
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash('asdfgh', salt)
+    const hashedPassword = await bcrypt.hash('123456', salt)
     if(user.length === 0){
-        User.bulkCreate([
-            {"name": "Admin", "phoneNumber": "1111111111", "password": hashedPassword, "roleId": 1, "status": true},
-            {"name": "Manha", "phoneNumber": "2222222222", "password": hashedPassword, "roleId": 2, "status": true},
-            {"name": "Amina", "phoneNumber": "3333333333", "password": hashedPassword, "roleId": 3, "status": true},
-            {"name": "Anupama", "phoneNumber": "4444444444", "password": hashedPassword, "roleId": 4, "status": true},
-            {"name": "Nishida", "phoneNumber": "5555555555", "password": hashedPassword, "roleId": 5, "status": true},
-            {"name": "Rentu", "phoneNumber": "0123456789", "password": hashedPassword, "roleId": 1, "status": true}
-        ])
+        for(let i = 0; i < userData.length; i++){
+            userData[i].password = hashedPassword
+            User.bulkCreate([userData[i]])
+        }
     }
     
     const pUnit = await PrimaryUnit.findAll({})
@@ -243,13 +245,6 @@ async function syncModel(){
             {id : 100, grade : 'Fraud', gradeRemarks : 'bad debtors'}// bad debtors
         ])
     }
-
-    const customer = await Customer.findAll({})
-    if(customer.length === 0){
-        Customer.bulkCreate([
-            {"customerName" : "Nishida", "customerCategoryId" : 2, "customerGradeId" : 1, "phoneNumber" : "1234567890", "address" : "Kerala", "location" : "Thrissur","gstNo" : "84586","email" : "nishida@gmail.com", "remarks" : "remarks"}
-        ])
-    }
     
     const tax = await Tax.findAll({})
     if(tax.length == 0){
@@ -281,6 +276,34 @@ async function syncModel(){
     if (product.length === 0) {
         for(let i = 0; i < productData.length; i++){
             Product.bulkCreate([productData[i]])
+        }
+    }
+
+    const vehicleType = await VehicleType.findAll({})
+    if(vehicleType.length === 0){
+        for(let i = 0; i < vehicleTypeData.length; i++){
+            VehicleType.bulkCreate([vehicleTypeData[i]])
+        }
+    }
+
+    const branch = await Branch.findAll({})
+    if(branch.length === 0){
+        for(let i = 0; i < branchData.length; i++){
+            Branch.bulkCreate([branchData[i]])
+        }
+    }
+
+    const vehicle = await Vehicle.findAll({})
+    if(vehicle.length === 0){
+        for(let i = 0; i < vehilceData.length; i++){
+            Vehicle.bulkCreate([vehilceData[i]])
+        }
+    }
+
+    const bankAccount = await BankAccount.findAll({})
+    if(bankAccount.length === 0){
+        for(let i = 0; i < bankAccountData.length; i++){
+            BankAccount.bulkCreate([bankAccountData[i]])
         }
     }
 }

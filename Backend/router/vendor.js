@@ -1,10 +1,9 @@
 const express = require('express');
 const Vendor = require('../models/vendor');
 const router = express.Router();
-const authorization = require('../middleware/authorization')
+const authenticateToken = require('../middleware/authorization');
 
-
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
             const {vendorName, address1, address2, state, vendorPhoneNumber, gstNo} = req.body;
 
@@ -19,7 +18,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/', async(req,res)=>{
+router.get('/', authenticateToken, async(req,res)=>{
 
     try {
         const vendor = await Vendor.findAll({order:['id']});
@@ -31,7 +30,7 @@ router.get('/', async(req,res)=>{
 })
 
 
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
 
         const result = await Vendor.destroy({
@@ -53,7 +52,7 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
         Vendor.update(req.body, {
             where: { id: req.params.id }

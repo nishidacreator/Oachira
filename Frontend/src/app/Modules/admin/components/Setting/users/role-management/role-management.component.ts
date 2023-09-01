@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Inject, Optional } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
 import { AdminService } from '../../../../admin.service';
-import { Role } from '../../../../models/role';
+import { Role } from '../../../../models/settings/role';
 import { UserManagementComponent } from '../user-management/user-management.component';
 
 @Component({
@@ -16,7 +16,10 @@ import { UserManagementComponent } from '../user-management/user-management.comp
 export class RoleManagementComponent {
 
   constructor(private fb: FormBuilder,public adminService: AdminService, private _snackBar: MatSnackBar,
-    public dialog: MatDialog){}
+    public dialog: MatDialog,
+    @Optional() public dialogRef: MatDialogRef<RoleManagementComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: any
+    ){}
 
   ngOnDestroy() {
     this.roleSubscription?.unsubscribe()
@@ -29,8 +32,14 @@ export class RoleManagementComponent {
 
   displayedColumns : string[] = ['id','roleName','status','manage']
 
+  addStatus!: string
   ngOnInit(): void {
     this.roleSubscription = this.getRoles()
+
+    if (this.dialogRef) {
+      this.addStatus = this.dialogData?.status;
+    } 
+
   }
 
   homeClick(){
@@ -128,5 +137,9 @@ export class RoleManagementComponent {
     },(error=>{
           alert(error.message)
         }))
+  }
+
+  onCancelClick(): void {
+    this.dialogRef.close();
   }
 }

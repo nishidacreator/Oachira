@@ -7,7 +7,7 @@ const Customer = require('../../models/Customer/customer');
 const PickListDetails = require('../../models/route/pickListDetails');
 const User = require('../../models/User/user');
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
             const {routeId, customerId, date, status, pickListDetails, salesExecutiveId, deliveryDate} = req.body;
 
@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/',async(req,res)=>{
+router.get('/', authenticateToken,async(req,res)=>{
 
     try {
         const result = await PickList.findAll({include: [Route, Customer, 'salesexecutive'], order:['id']});
@@ -41,7 +41,7 @@ router.get('/',async(req,res)=>{
     }  
 })
 
-router.get('/routeid/:id',async(req,res)=>{
+router.get('/routeid/:id', authenticateToken, async(req,res)=>{
 
   try {
       const result = await PickList.findAll({
@@ -54,7 +54,7 @@ router.get('/routeid/:id',async(req,res)=>{
   }  
 })
 
-router.get('/:id',async(req,res)=>{
+router.get('/:id', authenticateToken,async(req,res)=>{
 
   try {
       const result = await PickList.findOne(
@@ -79,7 +79,7 @@ router.get('/:id',async(req,res)=>{
   }  
 })
 
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
 
         const result = await PickList.destroy({
@@ -100,7 +100,7 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
         Route.update(req.body, {
             where: { id: req.params.id }

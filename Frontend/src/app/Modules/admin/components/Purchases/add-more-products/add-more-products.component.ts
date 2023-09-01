@@ -7,10 +7,10 @@ import { PickList } from 'src/app/Modules/salesexecutive/models/pickList';
 import { PickListDetails } from 'src/app/Modules/salesexecutive/models/pickListDetails';
 import { SalesExecutiveService } from 'src/app/Modules/salesexecutive/sales-executive.service';
 import { AdminService } from '../../../admin.service';
-import { Product } from '../../../models/product';
-import { PurchaseEntry } from '../../../models/purchaseEntry';
-import { PurchaseEntryDetails } from '../../../models/purchaseEntryDetails';
-import { Tax } from '../../../models/tax';
+import { Product } from '../../../models/settings/product';
+import { PurchaseEntry } from '../../../models/purchase/purchaseEntry';
+import { PurchaseEntryDetails } from '../../../models/purchase/purchaseEntryDetails';
+import { Tax } from '../../../models/settings/tax';
 
 @Component({
   selector: 'app-add-more-products',

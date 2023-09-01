@@ -1,0 +1,20 @@
+[
+    {
+
+        "branchName" : "Plavara",
+        "address" : "",
+        "branchManagerId" : 1
+    },
+    {
+
+        "branchName" : "Palode",
+        "address" : "",
+        "branchManagerId" : 2
+    },
+    {
+
+        "branchName" : "Nedumangadu",
+        "address" : "",
+        "branchManagerId" : 2
+    }
+]

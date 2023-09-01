@@ -6,7 +6,7 @@ const Route = require('../../models/route/route');
 const User = require('../../models/User/user');
 const Customer = require('../../models/Customer/customer');
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
             const {customerId, amount, date, invoiceNo, salesExecutiveId, paymentMode, remarks, routeId} = req.body;
 
@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/',async(req,res)=>{
+router.get('/', authenticateToken,async(req,res)=>{
 
     try {
         const result = await DailyCollection.findAll({include: [Customer, 'salesexecutive', Route], order:['id']});
@@ -33,7 +33,7 @@ router.get('/',async(req,res)=>{
 })
 
 
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
 
         const result = await DailyCollection.destroy({
@@ -54,7 +54,7 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
         Route.update(req.body, {
             where: { id: req.params.id }

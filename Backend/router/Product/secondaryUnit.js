@@ -2,9 +2,9 @@ const express = require('express');
 const SecondaryUnit = require('../../models/Products/secondaryUnit');
 const router = express.Router();
 const PrimaryUnit = require('../../models/Products/primayUnit');
+const authenticateToken = require('../../middleware/authorization');
 
-
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
             const {secondaryUnitName, primaryUnitId, factor} = req.body;
 
@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/', async(req,res)=>{
+router.get('/', authenticateToken, async(req,res)=>{
     try {
         const secondaryUnit = await SecondaryUnit.findAll({include: [PrimaryUnit], order:['id']});
         res.send(secondaryUnit);
@@ -29,7 +29,7 @@ router.get('/', async(req,res)=>{
     }  
 })
 
-router.get('/byname/:name', async(req,res)=>{
+router.get('/byname/:name', authenticateToken, async(req,res)=>{
   try {
       const secondaryUnit = await SecondaryUnit.findOne({
         where: {secondaryUnitName: req.params.name}
@@ -41,7 +41,7 @@ router.get('/byname/:name', async(req,res)=>{
   }  
 })
 
-router.get('/byid/:id', async(req,res)=>{
+router.get('/byid/:id', authenticateToken, async(req,res)=>{
   try {
       const secondaryUnit = await SecondaryUnit.findOne({
         where: {id: req.params.id}
@@ -53,7 +53,7 @@ router.get('/byid/:id', async(req,res)=>{
   }  
 })
 
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
 
         const result = await SecondaryUnit.destroy({
@@ -75,7 +75,7 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
         SecondaryUnit.update(req.body, {
             where: { id: req.params.id }

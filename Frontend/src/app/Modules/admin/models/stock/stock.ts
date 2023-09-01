@@ -1,4 +1,4 @@
-import { Product } from "../product"
+import { Product } from "../settings/product"
 
 export interface Stock{
     id : number

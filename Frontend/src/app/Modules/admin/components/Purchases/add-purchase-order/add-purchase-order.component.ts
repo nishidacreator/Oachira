@@ -4,9 +4,9 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { Subscription, Observable } from "rxjs";
 import { AdminService } from "../../../admin.service";
-import { Product } from "../../../models/product";
-import { Vendor } from "../../../models/vendor";
-import { PurchaseOrder } from "../../../models/purchaseOrder";
+import { Product } from "../../../models/settings/product";
+import { Vendor } from "../../../models/settings/vendor";
+import { PurchaseOrder } from "../../../models/purchase/purchaseOrder";
 
 @Component({
   selector: "app-add-purchase-order",

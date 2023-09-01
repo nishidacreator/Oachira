@@ -1,34 +1,36 @@
 import { CustomerGrade } from './models/customer/customerGrade';
 import { CustomerCategory } from './models/customer/customerCategory';
-import { Tax } from './models/tax';
-import { Category } from './models/category';
-import { SecondaryUnit } from './models/secondaryUnit';
-import { Brand } from './models/brand';
-import { PrimaryUnit } from './models/primaryUnit';
+import { Tax } from './models/settings/tax';
+import { Category } from './models/settings/category';
+import { SecondaryUnit } from './models/settings/secondaryUnit';
+import { Brand } from './models/settings/brand';
+import { PrimaryUnit } from './models/settings/primaryUnit';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Product } from './models/product';
+import { Product } from './models/settings/product';
 import { Customer } from './models/customer/customer';
-import { Vendor } from './models/vendor';
+import { Vendor } from './models/settings/vendor';
 import { Vehicle } from './models/vehicle/vehicle';
 import { Route } from './models/route/route';
 import { CollectionDays } from './models/route/collectionDays';
 import { RouteDetails } from './models/route/routeDetails';
-import { Role } from './models/role';
-import { User } from './models/user';
+import { Role } from './models/settings/role';
+import { User } from './models/settings/user';
 import { Trip } from './models/route/trip';
 import { TripDetails } from './models/route/tripDetails';
 import { DeliveryDays } from './models/route/deliveryDays';
-import { PurchaseEntry } from './models/purchaseEntry';
-import { PurchaseEntryDetails } from './models/purchaseEntryDetails';
-import { PurchaseOrder } from './models/purchaseOrder';
-import { PurchaseOrderDetails } from './models/purchaseOrderDetails';
+import { PurchaseEntry } from './models/purchase/purchaseEntry';
+import { PurchaseEntryDetails } from './models/purchase/purchaseEntryDetails';
+import { PurchaseOrder } from './models/purchase/purchaseOrder';
+import { PurchaseOrderDetails } from './models/purchase/purchaseOrderDetails';
 import { Stock } from './models/stock/stock';
 import { PurchaseTransaction } from './models/stock/purchaseTransaction';
-import { PurchaseInvoiceDetails } from './models/purchaseInvoiceDetails';
+import { PurchaseInvoiceDetails } from './models/purchase/purchaseInvoiceDetails';
 import { environment } from 'src/environments/environment';
 import { VehicleType } from './models/vehicle/vehicle-type';
+import { BankAccount } from './models/settings/bankAccount';
+import { CustomerPhone } from './models/customer/customerPhone';
 // import * as puppeteer from 'puppeteer';
 
 @Injectable({
@@ -189,12 +191,20 @@ export class AdminService {
     return this._http.get<Customer[]>(this.url + '/customer');
   }
 
+  getCustomerById(id: string): Observable<Customer>{
+    return this._http.get<Customer>(this.url + '/customer/'+ id);
+  }
+
   updateCustomer(id:Number, data:any){
     return this._http.patch<Customer>(this.url+'/customer/'+id, data);
   }
 
   deleteCustomer(id:Number){
     return this._http.delete(this.url+'/customer/'+id);
+  }
+
+  getCustomerPhoneByCustomerId(id:Number): Observable<CustomerPhone[]>{
+    return this._http.get<CustomerPhone[]>(this.url+'/cutomerphone/customerid/'+ id);
   }
 
   //VENDOR
@@ -456,6 +466,16 @@ export class AdminService {
 
   getPurchaseTransactionByStockId(id: number): Observable<PurchaseTransaction>{
     return this._http.get<PurchaseTransaction>(this.url +'/purchasetransaction/stockid/'+ id);
+  }
+
+  // BANK ACCOUNT
+  getBankAccount(): Observable<BankAccount[]> {
+    return this._http.get<BankAccount[]>(this.url +'/bankaccount');
+  }
+
+  // BRANCH
+  addBranch(data: any){
+    return this._http.post(this.url + '/branch', data);
   }
   
 }

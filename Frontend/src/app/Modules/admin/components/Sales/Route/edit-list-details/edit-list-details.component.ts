@@ -7,7 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, startWith, map, Subscription } from 'rxjs';
 import { SalesExecutiveService } from 'src/app/Modules/salesexecutive/sales-executive.service';
 import { AdminService } from '../../../../admin.service';
-import { Product } from '../../../../models/product';
+import { Product } from '../../../../models/settings/product';
 
 @Component({
   selector: 'app-edit-list-details',

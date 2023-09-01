@@ -1,7 +1,7 @@
 import { CustomerCategory } from '../../../../models/customer/customerCategory';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, Optional } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
 import { AdminService } from '../../../../admin.service';
@@ -16,7 +16,10 @@ import { CustomerManagementComponent } from '../customer-management/customer-man
 export class CustomerCategoryComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,public adminService: AdminService, private _snackBar: MatSnackBar,
-    public dialog: MatDialog){}
+    public dialog: MatDialog,
+    @Optional() public dialogRef: MatDialogRef<CustomerCategoryComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: any
+    ){}
 
   ngOnDestroy(){
     this.categorySubscription?.unsubscribe()
@@ -30,8 +33,13 @@ export class CustomerCategoryComponent implements OnInit, OnDestroy {
 
   displayedColumns : string[] = ['id','categoryName', 'manage']
 
+  addStatus!: string
   ngOnInit(): void {
     this.categorySubscription = this.getCategory()
+
+    if (this.dialogRef) {
+      this.addStatus = this.dialogData?.status;
+    }
   }
 
   homeClick(){
@@ -114,5 +122,9 @@ export class CustomerCategoryComponent implements OnInit, OnDestroy {
     },(error=>{
           alert(error.message)
         }))
+  }
+
+  onCancelClick(): void {
+    this.dialogRef.close();
   }
 }

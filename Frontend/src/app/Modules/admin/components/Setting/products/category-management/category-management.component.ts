@@ -1,10 +1,10 @@
 import { Subscription } from 'rxjs';
 import { AdminService } from '../../../../admin.service';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, Inject, OnDestroy, Optional } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Category } from '../../../../models/category';
+import { Category } from '../../../../models/settings/category';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
 import { ProductManagementComponent } from '../product-management/product-management.component';
 
@@ -16,7 +16,10 @@ import { ProductManagementComponent } from '../product-management/product-manage
 export class CategoryManagementComponent implements OnDestroy{
 
   constructor(private fb: FormBuilder,public adminService: AdminService, private _snackBar: MatSnackBar,
-    public dialog: MatDialog){}
+    public dialog: MatDialog,
+    @Optional() public dialogRef: MatDialogRef<CategoryManagementComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: any
+    ){}
 
   ngOnDestroy(){
     this.categorySubscription?.unsubscribe()
@@ -30,8 +33,13 @@ export class CategoryManagementComponent implements OnDestroy{
 
   });
 
+  addStatus!: string
   ngOnInit(): void {
     this.categorySubscription = this.getCategory();
+
+    if (this.dialogRef) {
+      this.addStatus = this.dialogData?.status;
+    }
   }
 
   displayedColumns : string[] = ['categoryName', 'taxable', 'manage']
@@ -187,5 +195,9 @@ export class CategoryManagementComponent implements OnDestroy{
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     })
+  }
+
+  onCancelClick(): void {
+    this.dialogRef.close();
   }
 }

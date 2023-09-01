@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs";
 import { AdminService } from "../../../admin.service";
-import { PurchaseInvoiceDetails } from "../../../models/purchaseInvoiceDetails";
+import { PurchaseInvoiceDetails } from "../../../models/purchase/purchaseInvoiceDetails";
 
 @Component({
   selector: "app-view-invoice",

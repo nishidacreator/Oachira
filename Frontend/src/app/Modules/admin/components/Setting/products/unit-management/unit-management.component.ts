@@ -1,13 +1,14 @@
-import { SecondaryUnit } from '../../../../models/secondaryUnit';
-import { PrimaryUnit } from '../../../../models/primaryUnit';
+import { SecondaryUnit } from '../../../../models/settings/secondaryUnit';
+import { PrimaryUnit } from '../../../../models/settings/primaryUnit';
 import { AdminService } from '../../../../admin.service';
-import { Component, Inject, OnDestroy } from '@angular/core';
+import { Component, Inject, OnDestroy, Optional } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
 import { Subscription } from 'rxjs';
 import { ProductManagementComponent } from '../product-management/product-management.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-unit-management',
@@ -16,8 +17,11 @@ import { ProductManagementComponent } from '../product-management/product-manage
 })
 export class UnitManagementComponent implements OnDestroy {
 
+  addStatus!: string | null;
   constructor(private fb: FormBuilder,public adminService: AdminService, private _snackBar: MatSnackBar,
-    public dialog: MatDialog){}
+    public dialog: MatDialog,
+    @Optional() public dialogRef: MatDialogRef<UnitManagementComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: any){}
 
   ngOnDestroy() {
     this.unitSubscription?.unsubscribe();
@@ -51,6 +55,11 @@ export class UnitManagementComponent implements OnDestroy {
     this.pUnitSubscription = this.getSecondaryUnits();
     this.sUnitSubscription = this.getPrimaryUnits();
 
+    if (this.dialogRef) {
+      this.addStatus = this.dialogData?.status;
+    } else {
+      // this.addStatus = this.route.snapshot.params['status'] === 'true';
+    }
   }
 
   units: any;
@@ -254,5 +263,9 @@ editPUnitFunction(){
       dialogRef.afterClosed().subscribe(result => {
         console.log(`Dialog result: ${result}`);
       })
+    }
+
+    onCancelClick(): void {
+      this.dialogRef.close();
     }
 }

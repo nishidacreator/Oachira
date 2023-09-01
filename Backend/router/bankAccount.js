@@ -1,28 +1,28 @@
 const express = require('express');
-const Auto = require('../../models/Purchases/autoGenerateInvoice');
+const BankAccount = require('../models/bankAccount');
 const router = express.Router();
-const authenticateToken = require('../../middleware/authorization');
+const authenticateToken = require('../middleware/authorization');
 
 router.post('/', authenticateToken, async (req, res) => {
     try {
-            const {prefix, lastNumber, date, purchaseInvoice} = req.body;
+            const {accountNo, ifscCode, bankName, branchName, openingBalance} = req.body;
 
-            const res = new Auto({prefix, lastNumber, date, purchaseInvoice});
+            const bankaccount = new BankAccount({accountNo, ifscCode, bankName, branchName, openingBalance});
 
-            await res.save();
+            await bankaccount.save();
 
-            res.send(res);
+            res.send(bankaccount);
 
     } catch (error) {
         res.send(error);
     }
 })
 
-router.get('/', authenticateToken, async(req,res)=>{
+router.get('/', authenticateToken,async(req,res)=>{
 
     try {
-        const brand = await Auto.findAll({order:['id']});
-        res.send(brand);
+        const bankaccount = await BankAccount.findAll({order:['id']});
+        res.send(bankaccount);
         
     } catch (error) {
         res.send(error.message);
@@ -30,10 +30,10 @@ router.get('/', authenticateToken, async(req,res)=>{
 })
 
 
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
 
-        const result = await Brand.destroy({
+        const result = await BankAccount.destroy({
             where: { id: req.params.id },
             force: true,
         });
@@ -41,7 +41,7 @@ router.delete('/:id', async(req,res)=>{
         if (result === 0) {
             return res.status(404).json({
               status: "fail",
-              message: "Brand with that ID not found",
+              message: "BankAccount with that ID not found",
             });
           }
       
@@ -52,19 +52,19 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
-        Brand.update(req.body, {
+        BankAccount.update(req.body, {
             where: { id: req.params.id }
           })
             .then(num => {
               if (num == 1) {
                 res.send({
-                  message: "Brand was updated successfully."
+                  message: "BankAccount was updated successfully."
                 });
               } else {
                 res.send({
-                  message: `Cannot update Brand with id=${id}. Maybe Brand was not found or req.body is empty!`
+                  message: `Cannot update BankAccount with id=${id}. Maybe BankAccount was not found or req.body is empty!`
                 });
               }
             })

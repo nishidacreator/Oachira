@@ -7,7 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { SalesExecutiveService } from 'src/app/Modules/salesexecutive/sales-executive.service';
 import { AdminService } from '../../../../admin.service';
-import { Product } from '../../../../models/product';
+import { Product } from '../../../../models/settings/product';
 import { Customer } from '../../../../models/customer/customer';
 
 @Component({

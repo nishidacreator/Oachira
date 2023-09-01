@@ -1,4 +1,4 @@
-import { User } from "../user";
+import { User } from "../settings/user";
 import { Vehicle } from "../vehicle/vehicle";
 
 export interface Route{

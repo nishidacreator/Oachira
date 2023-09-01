@@ -1,30 +1,37 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
-const Customer = require('../../models/Customer/customer');
 const router = express.Router();
+
 const authenticateToken = require('../../middleware/authorization');
+const bcrypt = require('bcrypt');
+
+const Customer = require('../../models/Customer/customer');
 const CustomerCategory = require('../../models/Customer/customerCategory');
 const CustomerGrade = require('../../models/Customer/customerGrade');
-
+const CustomerPhone = require('../../models/Customer/customerPhone');
 
 router.post('/', async (req, res) => {
     try {
-        const { customerName, customerCategoryId, phoneNumber, address, location, gstNo, email, remarks, customerGradeId, subledgerCode } = req.body;
+        const data = req.body;
 
-        const customer = await Customer.findOne({where: {phoneNumber:phoneNumber}});
-    if (customer) {
-        return res.status(400).send({ message: 'Mobile Number already exists' })  
-    }
-    const newCustomer = new Customer({ customerName, customerCategoryId, phoneNumber, address, location, gstNo, email, remarks, customerGradeId, subledgerCode });
-    await newCustomer.save();
+        const { customerName, customerCategoryId, address, location, gstNo, email, remarks, customerGradeId, subledgerCode, numbers } = data;
 
-    res.status(200).send({id: newCustomer.id, name:newCustomer.customerName, pohneNumber:newCustomer.phoneNumber});
+        const newCustomer = await Customer.create( {customerName, customerCategoryId, address, location, gstNo, email, remarks, customerGradeId, subledgerCode} );
+
+        const custId = newCustomer.id
+
+        for(let i = 0; i < numbers.length; i++){
+          numbers[i].customerId = custId;
+        }
+
+        let custPhone = await CustomerPhone.bulkCreate(numbers)
+
+        res.status(200).send(custPhone);
     } catch (error) {
         res.send({error : error.message});
     }   
 })
 
-router.get('/', async(req,res)=>{
+router.get('/', authenticateToken, async(req,res)=>{
     try {
         const customer = await Customer.findAll({include : [CustomerCategory, CustomerGrade], order: ['id']});
         res.send(customer);
@@ -34,9 +41,12 @@ router.get('/', async(req,res)=>{
     }  
 })
 
-router.get('/', async(req,res)=>{
+router.get('/:id', authenticateToken, async(req,res)=>{
   try {
-      const customer = await Customer.findAll({include : [CustomerCategory, CustomerGrade]});
+      const customer = await Customer.findOne({
+        where : {id: req.params.id},
+        include : [CustomerCategory, CustomerGrade]
+        });
       res.send(customer);
       
   } catch (error) {
@@ -44,7 +54,7 @@ router.get('/', async(req,res)=>{
   }  
 })
 
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
 
         const result = await Customer.destroy({
@@ -66,7 +76,7 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
         Customer.update(req.body, {
             where: { id: req.params.id }
