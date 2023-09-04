@@ -1,4 +1,7 @@
 const sequelize = require('./db');
+const bcrypt = require('bcrypt');
+const { JSON } = require('sequelize');
+
 const Category = require('../models/Products/category');
 const Product = require('../models/Products/product');
 const PrimaryUnit = require('../models/Products/primayUnit');
@@ -28,6 +31,13 @@ const Trip = require('../models/route/trip');
 const TripDetails = require('../models/route/tripDetails');
 const DeliveryDays = require('../models/route/deliveryDays');
 const BranchAccount = require('../models/branchAccount');
+
+const PurchaseOrder = require('../models/Purchases/purchaseOrder');
+const PurchaseOrderDetails = require('../models/Purchases/purchaseOrderDetails');
+const Stock = require('../models/Stock/stock');
+const PurchaseTransaction = require('../models/Stock/purchaseTransaction');
+const CustomerPhone = require('../models/Customer/customerPhone');
+
 // BULK CREATE
 const userData = require('./dataSource/user.json');
 const brandData = require('./dataSource/brandFirst.json');
@@ -38,15 +48,6 @@ const branchData = require('./dataSource/branch.json');
 const vehilceData = require('./dataSource/vehicle.json');
 const bankAccountData = require('./dataSource/bankAccount.json');
 
-
-const bcrypt = require('bcrypt');
-
-const { JSON } = require('sequelize');
-const PurchaseOrder = require('../models/Purchases/purchaseOrder');
-const PurchaseOrderDetails = require('../models/Purchases/purchaseOrderDetails');
-const Stock = require('../models/Stock/stock');
-const PurchaseTransaction = require('../models/Stock/purchaseTransaction');
-const CustomerPhone = require('../models/Customer/customerPhone');
 
 async function syncModel(){
 
@@ -73,6 +74,9 @@ async function syncModel(){
 
     Role.hasMany(User,{foreignKey : 'roleId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     User.belongsTo(Role)
+  
+    // Branch.hasMany(User,{foreignKey : 'branchId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    // User.belongsTo(Branch)
 
     VehicleType.hasMany(Vehicle, {foreignKey : 'vehicleTypeId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     Vehicle.belongsTo(VehicleType)
@@ -152,6 +156,9 @@ async function syncModel(){
     User.hasMany(PurchaseOrder,{foreignKey : 'userId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     PurchaseOrder.belongsTo(User)
 
+    Branch.hasMany(PurchaseOrder,{foreignKey : 'branchId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    PurchaseOrder.belongsTo(Branch)
+
     Product.hasMany(PurchaseOrderDetails, {foreignKey : 'productId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     PurchaseOrderDetails.belongsTo(Product)
 
@@ -166,6 +173,9 @@ async function syncModel(){
 
     User.hasMany(PurchaseEntry,{foreignKey : 'userId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     PurchaseEntry.belongsTo(User)
+
+    Branch.hasMany(PurchaseEntry,{foreignKey : 'branchId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    PurchaseEntry.belongsTo(Branch)
 
     Product.hasMany(PurchaseEntryDetails, {foreignKey : 'productId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     PurchaseEntryDetails.belongsTo(Product)
@@ -213,6 +223,14 @@ async function syncModel(){
             User.bulkCreate([userData[i]])
         }
     }
+
+    const branch = await Branch.findAll({})
+    if(branch.length === 0){
+        for(let i = 0; i < branchData.length; i++){
+            Branch.bulkCreate([branchData[i]])
+        }
+    }
+
     
     const pUnit = await PrimaryUnit.findAll({})
     if(pUnit.length === 0){
@@ -283,13 +301,6 @@ async function syncModel(){
     if(vehicleType.length === 0){
         for(let i = 0; i < vehicleTypeData.length; i++){
             VehicleType.bulkCreate([vehicleTypeData[i]])
-        }
-    }
-
-    const branch = await Branch.findAll({})
-    if(branch.length === 0){
-        for(let i = 0; i < branchData.length; i++){
-            Branch.bulkCreate([branchData[i]])
         }
     }
 
