@@ -5,22 +5,36 @@ const PrimaryUnit = require('../../models/Products/primayUnit');
 const Category = require('../../models/Products/category');
 const Brand = require('../../models/Products/brand');
 const {Op} = require('sequelize');
+const multer = require('../../utils/multer');
+const cloudinary = require('../../utils/cloudinary');
 
 
-router.post('/', async (req, res) => {
-    try {
-            const { productName, code, barCode, primaryUnitId, categoryId, brandId, reorderQuantity, loyaltyPoint} = req.body;
-
-            const product = new Product({productName, code, barCode, primaryUnitId, categoryId, brandId, reorderQuantity, loyaltyPoint});
-
-            await product.save();
-
-            res.send(product);
-
-    } catch (error) {
-        res.send(error);
+router.post("/", multer.single("category_image"), async (req, res) => {
+  try {
+    let product = {
+      productName: req.body.productName,
+      code: req.body.code,
+      barCode: req.body.barCode,
+      primaryUnitId: req.body.primaryUnitId,
+      categoryId: req.body.categoryId,
+      brandId: req.body.brandId,
+      reorderQuantity: req.body.reorderQuantity,
+      loyaltyPoint: req.body.loyaltyPoint,
+      product_image: req.file?.path,
+    };
+    if (req.file) {
+      const image = await cloudinary.uploader.upload(req.file.path, {
+        public_id: product.productName,
+      });
+      product.product_image = image.secure_url;
     }
-})
+
+    const result = await Product.create(product);
+    res.send(result);
+  } catch (error) {
+    res.send(error);
+  }
+});
 
 router.get('/', async(req,res)=>{
   try {
