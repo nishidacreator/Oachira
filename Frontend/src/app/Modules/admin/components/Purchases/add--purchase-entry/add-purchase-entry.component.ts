@@ -1,18 +1,18 @@
-import { SecondaryUnit } from '../../../models/secondaryUnit';
+import { SecondaryUnit } from '../../../models/settings/secondaryUnit';
 import { ChangeDetectorRef, Component, OnInit, Renderer2 } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, startWith, map, Subscription, findIndex, filter } from 'rxjs';
 import { AdminService } from '../../../admin.service';
-import { Product } from '../../../models/product';
-import { Vendor } from '../../../models/vendor';
-import { Tax } from '../../../models/tax';
-import { User } from '../../../models/user';
+import { Product } from '../../../models/settings/product';
+import { Vendor } from '../../../models/settings/vendor';
+import { Tax } from '../../../models/settings/tax';
+import { User } from '../../../models/settings/user';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BoldReportComponents } from '@boldreports/angular-reporting-components';
 import { InvoiceNumberComponent } from '../../Setting/prefixes/invoice-number/invoice-number.component';
-import { PurchaseEntry } from '../../../models/purchaseEntry';
+import { PurchaseEntry } from '../../../models/purchase/purchaseEntry';
 import { VendorManagementComponent } from '../../Setting/vendor-management/vendor-management.component';
 
 @Component({

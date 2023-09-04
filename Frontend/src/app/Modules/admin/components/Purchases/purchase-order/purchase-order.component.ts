@@ -3,7 +3,7 @@ import { Subscription } from "rxjs";
 import { AdminService } from "../../../admin.service";
 import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import { PurchaseOrder } from "../../../models/purchaseOrder";
+import { PurchaseOrder } from "../../../models/purchase/purchaseOrder";
 
 @Component({
   selector: "app-purchase-order",

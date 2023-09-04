@@ -6,7 +6,7 @@ const VehicleType = require('../../models/route/vehicleType');
 const multer = require('../../utils/multer');
 const cloudinary = require('../../utils/cloudinary');    
 
-router.post("/", multer.single("category_image"), async (req, res) => {
+router.post("/", multer.single("category_image"), authenticateToken, async (req, res) => {
   try {
     let vehicle = {
       registrationNumber: req.body.registrationNumber,
@@ -32,7 +32,7 @@ router.post("/", multer.single("category_image"), async (req, res) => {
   }
 });
 
-router.get('/', async(req,res)=>{
+router.get('/', authenticateToken, async(req,res)=>{
 
     try {
         const vehicle = await Vehicle.findAll({include: [VehicleType]});
@@ -43,7 +43,7 @@ router.get('/', async(req,res)=>{
 })
 
 
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
 
         const result = await Vehicle.destroy({
@@ -65,7 +65,7 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
         Vehicle.update(req.body, {
             where: { id: req.params.id }

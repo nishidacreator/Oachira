@@ -6,6 +6,8 @@ const PurchaseTransaction = require('../../models/Stock/purchaseTransaction');
 const Stock = require('../../models/Stock/stock');
 const PurchaseEntry = require('../../models/Purchases/purchaseEntry');
 const Vendor = require('../../models/vendor');
+
+
 router.get('/', authenticateToken, async (req, res) => {
     const purchaseTransaction = await PurchaseTransaction.findAll({include: [Stock, PurchaseEntry]})
 

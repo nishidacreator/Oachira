@@ -8,7 +8,7 @@ const TripDetails = require('../../models/route/tripDetails');
 const Trip = require('../../models/route/trip');
 const Customer = require('../../models/Customer/customer');
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
             const {customers} = req.body;
 
@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/:id',async(req,res)=>{
+router.get('/:id', authenticateToken,async(req,res)=>{
 
     try {
         const route = await TripDetails.findAll({
@@ -38,7 +38,7 @@ router.get('/:id',async(req,res)=>{
 })
 
 
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
 
         const result = await Route.destroy({
@@ -59,7 +59,7 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
         Route.update(req.body, {
             where: { id: req.params.id }

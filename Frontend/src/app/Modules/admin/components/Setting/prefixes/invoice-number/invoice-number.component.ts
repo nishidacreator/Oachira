@@ -4,9 +4,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { AdminService } from 'src/app/Modules/admin/admin.service';
-import { Brand } from 'src/app/Modules/admin/models/brand';
+import { Brand } from 'src/app/Modules/admin/models/settings/brand';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
-import { PurchaseEntry } from 'src/app/Modules/admin/models/purchaseEntry';
+import { PurchaseEntry } from 'src/app/Modules/admin/models/purchase/purchaseEntry';
 
 @Component({
   selector: 'app-invoice-number',

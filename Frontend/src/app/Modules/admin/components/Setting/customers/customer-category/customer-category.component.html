@@ -11,7 +11,7 @@
             <mat-card-title>CUSTOMER CATEGORY</mat-card-title>
           </mat-card-header>
         </div>
-        <div class="col">
+        <div class="col" *ngIf="addStatus != 'true'">
           <mat-card-header>
             <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" (click)="homeClick()">
               <mat-icon>home</mat-icon>
@@ -43,6 +43,8 @@
         <button *ngIf="isEdit == true" mat-raised-button  type="button" [disabled]="!customerCategoryForm.valid" (click)="editFunction()">
           <span class="material-icons" style="font-size: 30px;">edit_note</span>
         </button>&nbsp;&nbsp;
+
+        <button *ngIf="addStatus === 'true'" type="button" class="cancel-button" (click)="onCancelClick()">Cancel</button>
       </mat-card-actions>
     </mat-card>
   </form>
@@ -50,7 +52,7 @@
   
   <!-- --------------------------------------------------------------------------------------------------------------------------- -->
   
-  <br><mat-card>
+  <br><mat-card *ngIf="addStatus != 'true'">
     <mat-card-header>
       <mat-card-title style="color: green;">CUSTOMER CATEGORY</mat-card-title>
     </mat-card-header>

@@ -1,4 +1,4 @@
-import { Product } from '../../admin/models/product';
+import { Product } from '../../admin/models/settings/product';
 import { PickList } from './pickList';
 export interface PickListDetails{
     id : number

@@ -8,7 +8,8 @@ const PurchaseEntry = sequelize.define('purchaseEntry',{
     userId : {type : DataTypes.INTEGER, allowNull : false},
     purchaseOrderId : {type : DataTypes.INTEGER, allowNull : true},
     eWayBillNo : {type : DataTypes.STRING},
-    purachseDate : {type : DataTypes.DATEONLY, defaultValue: new Date()}
+    purachseDate : {type : DataTypes.DATEONLY, defaultValue: new Date()},
+    branchId: {type : DataTypes.INTEGER}
 },
 {
     freezeTableName: true,

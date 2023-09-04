@@ -1,9 +1,9 @@
-import { Brand } from '../../../../models/brand';
+import { Brand } from '../../../../models/settings/brand';
 import { DeleteDialogueComponent } from '../../../../../shared-components/delete-dialogue/delete-dialogue.component';
 import { AdminService } from '../../../../admin.service';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, Inject, OnDestroy, Optional } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { ProductManagementComponent } from '../product-management/product-management.component';
@@ -17,7 +17,10 @@ import { MatTableDataSource } from '@angular/material/table';
 export class BrandManagementComponent implements OnDestroy {
 
   constructor(private fb: FormBuilder,public adminService: AdminService, private _snackBar: MatSnackBar,
-    public dialog: MatDialog){}
+    public dialog: MatDialog,
+    @Optional() public dialogRef: MatDialogRef<BrandManagementComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: any
+    ){}
 
   ngOnDestroy() {
     this.brandSubscription?.unsubscribe()
@@ -30,7 +33,12 @@ export class BrandManagementComponent implements OnDestroy {
 
   displayedColumns : string[] = ['id','brandName', 'manage']
 
+  addStatus!: string
   ngOnInit(): void {
+    if (this.dialogRef) {
+      this.addStatus = this.dialogData?.status;
+    } 
+
     this.brandSubscription = this.getBrands()
   }
 
@@ -127,5 +135,9 @@ export class BrandManagementComponent implements OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     })
+  }
+
+  onCancelClick(): void {
+    this.dialogRef.close();
   }
 }

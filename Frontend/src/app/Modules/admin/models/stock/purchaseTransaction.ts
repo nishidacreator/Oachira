@@ -1,4 +1,4 @@
-import { PurchaseEntry } from "../purchaseEntry"
+import { PurchaseEntry } from "../purchase/purchaseEntry"
 import { Stock } from "./stock"
 
 export interface PurchaseTransaction{

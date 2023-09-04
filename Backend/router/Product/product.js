@@ -7,27 +7,12 @@ const Brand = require('../../models/Products/brand');
 const {Op} = require('sequelize');
 const multer = require('../../utils/multer');
 const cloudinary = require('../../utils/cloudinary');
+const authenticateToken = require('../../middleware/authorization');
 
 
-router.post("/", multer.single("category_image"), async (req, res) => {
-  try {
-    let product = {
-      productName: req.body.productName,
-      code: req.body.code,
-      barCode: req.body.barCode,
-      primaryUnitId: req.body.primaryUnitId,
-      categoryId: req.body.categoryId,
-      brandId: req.body.brandId,
-      reorderQuantity: req.body.reorderQuantity,
-      loyaltyPoint: req.body.loyaltyPoint,
-      product_image: req.file?.path,
-    };
-    if (req.file) {
-      const image = await cloudinary.uploader.upload(req.file.path, {
-        public_id: product.productName,
-      });
-      product.product_image = image.secure_url;
-    }
+router.post('/', async (req, res) => {
+    try {
+            const { productName, code, barCode, primaryUnitId, categoryId, brandId, reorderQuantity, loyaltyPoint} = req.body;
 
     const result = await Product.create(product);
     res.send(result);
@@ -36,7 +21,7 @@ router.post("/", multer.single("category_image"), async (req, res) => {
   }
 });
 
-router.get('/', async(req,res)=>{
+router.get('/', authenticateToken, async(req,res)=>{
   try {
       const product = await Product.findAll({include: [PrimaryUnit, Category, Brand], order:['id']});
       res.send(product);
@@ -58,7 +43,7 @@ router.get('/filter', async(req,res)=>{
     }  
 })
 
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
 
         const result = await Product.destroy({
@@ -80,7 +65,7 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
         Product.update(req.body, {
             where: { id: req.params.id }

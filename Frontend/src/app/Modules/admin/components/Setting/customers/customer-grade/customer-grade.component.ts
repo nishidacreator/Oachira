@@ -1,7 +1,7 @@
 import { CustomerGrade } from '../../../../models/customer/customerGrade';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, Optional } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
 import { AdminService } from '../../../../admin.service';
@@ -16,7 +16,8 @@ import { CustomerManagementComponent } from '../customer-management/customer-man
 export class CustomerGradeComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,public adminService: AdminService, private _snackBar: MatSnackBar,
-    public dialog: MatDialog){}
+    public dialog: MatDialog, @Optional() public dialogRef: MatDialogRef<CustomerGradeComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: any){}
 
   ngOnDestroy() {
     this.gradeSubscription?.unsubscribe()
@@ -24,15 +25,19 @@ export class CustomerGradeComponent implements OnInit, OnDestroy {
   }
 
   customerGradeForm = this.fb.group({
-
     grade: ['', Validators.required],
     gradeRemarks : ['']
   });
 
   displayedColumns : string[] = ['id','grade', 'gradeRemarks', 'manage']
 
+  addStatus!: string
   ngOnInit(): void {
     this.gradeSubscription = this.getGrade()
+
+    if (this.dialogRef) {
+      this.addStatus = this.dialogData?.status;
+    }
   }
 
   homeClick(){
@@ -120,6 +125,10 @@ export class CustomerGradeComponent implements OnInit, OnDestroy {
     },(error=>{
           alert(error.message)
         }))
+  }
+
+  onCancelClick(): void {
+    this.dialogRef.close();
   }
 }
 

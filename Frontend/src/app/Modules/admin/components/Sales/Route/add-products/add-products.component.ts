@@ -7,7 +7,7 @@ import { PickList } from 'src/app/Modules/salesexecutive/models/pickList';
 import { PickListDetails } from 'src/app/Modules/salesexecutive/models/pickListDetails';
 import { SalesExecutiveService } from 'src/app/Modules/salesexecutive/sales-executive.service';
 import { AdminService } from '../../../../admin.service';
-import { Product } from '../../../../models/product';
+import { Product } from '../../../../models/settings/product';
 
 @Component({
   selector: 'app-add-products',

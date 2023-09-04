@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription, map, Observable, startWith } from 'rxjs';
 import { AdminService } from 'src/app/Modules/admin/admin.service';
-import { Brand } from 'src/app/Modules/admin/models/brand';
+import { Brand } from 'src/app/Modules/admin/models/settings/brand';
 import { Customer } from 'src/app/Modules/admin/models/customer/customer';
 import { Route } from 'src/app/Modules/admin/models/route/route';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';

@@ -7,7 +7,7 @@ import { AdminService } from '../../../../admin.service';
 import { Observable, Subscription, map, startWith } from 'rxjs';
 import { Route } from '../../../../models/route/route';
 import { Customer } from '../../../../models/customer/customer';
-import { Product } from '../../../../models/product';
+import { Product } from '../../../../models/settings/product';
 import { SalesExecutiveService } from 'src/app/Modules/salesexecutive/sales-executive.service';
 import { PickList } from 'src/app/Modules/salesexecutive/models/pickList';
 

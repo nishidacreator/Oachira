@@ -4,7 +4,7 @@ const router = express.Router();
 const authenticateToken = require('../../middleware/authorization');
 const Route = require('../../models/route/route');
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
             const {routeId, weekDays} = req.body;
 
@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/', authenticateToken,async(req,res)=>{
+router.get('/', authenticateToken,  async(req,res)=>{
 
     try {
         const result = await CollectionDays.findAll({include : Route, order:['id']});
@@ -52,7 +52,7 @@ router.get('/:id', authenticateToken,async(req,res)=>{
   }  
 })
 
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
 
         const result = await CollectionDays.destroy({
@@ -74,7 +74,7 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
       CollectionDays.update(req.body, {where: { id: req.params.id }})
             .then(num => {

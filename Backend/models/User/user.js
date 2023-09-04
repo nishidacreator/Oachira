@@ -7,7 +7,8 @@ const User = sequelize.define('user', {
   phoneNumber: {type: DataTypes.STRING, allowNull : false},
   password: {type: DataTypes.STRING, allowNull : false},
   roleId: {type: DataTypes.INTEGER, allowNull : false},
-  status: {type: DataTypes.BOOLEAN, allowNull : false}
+  status: {type: DataTypes.BOOLEAN, allowNull : false},
+  branchId: {type: DataTypes.INTEGER, allowNull : false},
 // },{
 //   defaultScope: {
 //     attributes: { exclude: ['password'] }

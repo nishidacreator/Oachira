@@ -1,7 +1,7 @@
-import { Product } from "./product"
+import { Product } from "../settings/product"
 import { PurchaseEntry } from "./purchaseEntry"
-import { SecondaryUnit } from "./secondaryUnit"
-import { Tax } from "./tax"
+import { SecondaryUnit } from "../settings/secondaryUnit"
+import { Tax } from "../settings/tax"
 
 export interface PurchaseEntryDetails{
     id : number

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PurchaseEntry } from '../../../models/purchaseEntry';
+import { PurchaseEntry } from '../../../models/purchase/purchaseEntry';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from '../../../admin.service';

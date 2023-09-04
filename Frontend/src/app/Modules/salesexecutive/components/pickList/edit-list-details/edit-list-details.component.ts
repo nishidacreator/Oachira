@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { AdminService } from 'src/app/Modules/admin/admin.service';
-import { Product } from 'src/app/Modules/admin/models/product';
+import { Product } from 'src/app/Modules/admin/models/settings/product';
 import { startWith, map } from 'rxjs/operators';
 import { MatSelectChange } from '@angular/material/select';
 import { SalesExecutiveService } from '../../../sales-executive.service';

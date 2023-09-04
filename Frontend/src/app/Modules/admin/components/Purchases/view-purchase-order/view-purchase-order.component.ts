@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AdminService } from '../../../admin.service';
-import { PurchaseOrderDetails } from '../../../models/purchaseOrderDetails';
+import { PurchaseOrderDetails } from '../../../models/purchase/purchaseOrderDetails';
 
 @Component({
   selector: "app-view-purchase-order",

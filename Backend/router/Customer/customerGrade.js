@@ -1,9 +1,9 @@
 const express = require('express');
 const CustomerGrade = require('../../models/Customer/customerGrade');
 const router = express.Router();
+const authenticateToken = require('../../middleware/authorization');
 
-
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
             const { grade, gradeRemarks } = req.body;
 
@@ -18,14 +18,14 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
 
     const customerGrade = await CustomerGrade.findAll({})
 
     res.send(customerGrade);
 })
 
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
 
         const result = await CustomerGrade.destroy({
@@ -47,7 +47,7 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
         CustomerGrade.update(req.body, {
             where: { id: req.params.id }

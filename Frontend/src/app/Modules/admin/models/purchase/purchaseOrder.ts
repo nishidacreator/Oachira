@@ -1,6 +1,6 @@
 import { PurchaseEntry } from "./purchaseEntry";
-import { User } from "./user";
-import { Vendor } from "./vendor";
+import { User } from "../settings/user";
+import { Vendor } from "../settings/vendor";
 
 export interface PurchaseOrder{
     id: number;

@@ -5,13 +5,13 @@ const Vendor = require('../../models/vendor')
 const User = require('../../models/User/user');
 const PurchaseOrderDetails = require('../../models/Purchases/purchaseOrderDetails');
 const PurchaseEntry = require('../../models/Purchases/purchaseEntry');
+const authenticateToken = require('../../middleware/authorization');
 
-
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
-            const {purchaseOrderNo, vendorId, userId,  purchaseOrderDetails, requestedPurchaseDate} = req.body;
+            const {purchaseOrderNo, vendorId, userId,  purchaseOrderDetails, requestedPurchaseDate, branchId} = req.body;
 
-            const purchaseOrder = new PurchaseOrder({purchaseOrderNo, vendorId,  userId,  requestedPurchaseDate});
+            const purchaseOrder = new PurchaseOrder({purchaseOrderNo, vendorId,  userId,  requestedPurchaseDate, branchId});
 
             await purchaseOrder.save();
 
@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/', async(req,res)=>{
+router.get('/', authenticateToken, async(req,res)=>{
 
     try {
         const purchaseOrder = await PurchaseOrder.findAll({include : [Vendor, User, PurchaseEntry], order:['id']});
@@ -39,7 +39,7 @@ router.get('/', async(req,res)=>{
     }  
 })
 
-router.get('/:id', async(req,res)=>{
+router.get('/:id', authenticateToken, async(req,res)=>{
 
     try {
         const purchaseOrder = await PurchaseOrder.findOne({
@@ -55,7 +55,7 @@ router.get('/:id', async(req,res)=>{
 
 
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
         PurchaseOrder.update(req.body, {
             where: { id: req.params.id }
