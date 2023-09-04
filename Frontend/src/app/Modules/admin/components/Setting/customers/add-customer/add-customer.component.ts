@@ -1,7 +1,8 @@
-import { Role } from '../../../../models/role';
+import { CustomerCategoryComponent } from './../customer-category/customer-category.component';
+import { Role } from '../../../../models/settings/role';
 import { CustomerGrade } from '../../../../models/customer/customerGrade';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
@@ -11,6 +12,9 @@ import { Customer } from '../../../../models/customer/customer';
 import { Observable, Subscription, map } from 'rxjs';
 import { CustomerManagementComponent } from '../customer-management/customer-management.component';
 import { Router } from '@angular/router';
+import { CategoryManagementComponent } from '../../products/category-management/category-management.component';
+import { CustomerGradeComponent } from '../customer-grade/customer-grade.component';
+import { ViewContactsComponent } from '../view-contacts/view-contacts.component';
 
 @Component({
   selector: 'app-add-customer',
@@ -42,13 +46,37 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
     customerName: ['', Validators.required],
     customerCategoryId : ['', Validators.required],
     customerGradeId : ['', Validators.required],
-    phoneNumber :['',[Validators.required, Validators.pattern("^[0-9 +]*$"),Validators.minLength(10),Validators.maxLength(14)]],
     address : [''],
     location : [''],
     gstNo : [''],
     email : ['', Validators.email],
-    remarks : ['']
+    remarks : [''],
+    subledgerCode : ['']
   });
+
+  phoneForm = this.fb.group({
+    numbers: this.fb.array([]),
+  });
+
+  numbers(): FormArray {
+    return this.phoneForm.get("numbers") as FormArray;
+  }
+
+  newNumber(): FormGroup {
+    return this.fb.group({
+      phoneNumber : ['', Validators.required]
+    })
+  }
+
+  status: boolean = false;
+  addNumber() {
+    this.status = true;
+    this.numbers().push(this.newNumber());
+  }
+
+  removeProduct(i: number) {
+    this.numbers().removeAt(i);
+  }
 
   displayedColumns : string[] = ['id','customerName', 'customerCategoryId','customerGradeId','phoneNumber','address','location','gstNo','email','remarks', 'manage']
 
@@ -61,18 +89,34 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
     this.salesExecutive()
   }
 
-  category$! : Observable<CustomerCategory[]> ;
+  category: CustomerCategory[] = [] ;
   getCategory(){
-    this.category$ = this.adminService.getCustomerCategory()
+    this.adminService.getCustomerCategory().subscribe(c => {
+      this.category = c
+    })
   } 
 
-  units$!: Observable<CustomerGrade[]>;
+  grade: CustomerGrade[] = [] ;
   getGrade(){
-    this.units$ = this.adminService.getCustomerGrade()
+    this.adminService.getCustomerGrade().subscribe(c => {
+      this.grade = c
+    })
   }
 
   onSubmit(){
-    this.adminService.addCustomer(this.customerForm.getRawValue()).subscribe((res)=>{
+    let data = {
+      customerName: this.customerForm.getRawValue().customerName,
+      customerCategoryId : this.customerForm.getRawValue().customerCategoryId,
+      customerGradeId : this.customerForm.getRawValue().customerGradeId,
+      address : this.customerForm.getRawValue().address,
+      location : this.customerForm.getRawValue().location,
+      gstNo : this.customerForm.getRawValue().gstNo,
+      email : this.customerForm.getRawValue().email,
+      remarks : this.customerForm.getRawValue().remarks,
+      numbers : this.phoneForm.getRawValue().numbers
+    }
+    console.log(data);
+    this.adminService.addCustomer(data).subscribe((res)=>{
       this._snackBar.open("Customer added successfully...","" ,{duration:3000})
       this.clearControls()
     },(error=>{
@@ -85,6 +129,10 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
     this.customerForm.reset()
     this.customerForm.setErrors(null)
     Object.keys(this.customerForm.controls).forEach(key=>{this.customerForm.get(key)?.setErrors(null)})
+
+    this.phoneForm.reset()
+    this.phoneForm.setErrors(null)
+    Object.keys(this.phoneForm.controls).forEach(key=>{this.phoneForm.get(key)?.setErrors(null)})
   }
 
   customers : Customer[] = [];
@@ -95,6 +143,14 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
       this.filtered = this.customers
     })
   }  
+
+  openContacts(id: number){
+    const dialogRef = this.dialog.open(ViewContactsComponent, {
+      data: {id: id}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {})
+  }
 
   filterValue: any;
   filtered!: any[];
@@ -125,35 +181,48 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
     })
   }
 
+  getPhoneNumber(){
+    
+  }
+
   isEdit = false;
   customerId : any;
+  phoneNumbers!: any
   editBrand(id : any){
     this.isEdit = true;
+    this.phoneNumbers = [];
     //Get the product based on the ID
     let customer: any = this.customers.find(x =>x.id == id)
-    
 
-    //Populate the object by the ID
-    let customerName = customer.customerName.toString();
-    let customerCategoryId = customer.customerCategoryId;
-    let customerGradeId = customer.customerGradeId;
-    let phoneNumber = customer.phoneNumber.toString();
-    let address = customer.address.toString();
-    let location = customer.location.toString();
-    let gstNo = customer.gstNo.toString();
-    let email = customer.email.toString();
-    let remarks = customer.remarks.toString();
-    console.log( customerCategoryId)
-    this.customerForm.patchValue({
-      customerName : customerName,
-      customerCategoryId : customerCategoryId,
-      customerGradeId : customerGradeId,
-      phoneNumber : phoneNumber,
-      address : address,
-      location : location,
-      gstNo : gstNo,
-      email : email,
-      remarks : remarks
+    this.adminService.getCustomerPhoneByCustomerId(id).subscribe(res=>{
+      let number = res
+      for(let i=0; i<number.length; i++){
+        this.phoneNumbers.push(number[i].phoneNumber)
+
+        this.numbers().push(number[i].phoneNumber)
+      }
+
+       //Populate the object by the ID
+      let customerName = customer.customerName.toString();
+      let customerCategoryId = customer.customerCategoryId;
+      let customerGradeId = customer.customerGradeId;
+      let address = customer.address.toString();
+      let location = customer.location.toString();
+      let gstNo = customer.gstNo.toString();
+      let email = customer.email.toString();
+      let remarks = customer.remarks.toString()
+
+
+      this.customerForm.patchValue({
+        customerName : customerName,
+        customerCategoryId : customerCategoryId,
+        customerGradeId : customerGradeId,
+        address : address,
+        location : location,
+        gstNo : gstNo,
+        email : email,
+        remarks : remarks
+      })
     })
     this.customerId = id;
   }
@@ -182,11 +251,23 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
   }
 
   addCategory(){
-    this.router.navigateByUrl('admin/settings/customer/customercategory')
+    const dialogRef = this.dialog.open(CustomerCategoryComponent, {
+      data: {status : 'true'}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getCategory()
+    })
   }
 
   addGrade(){
-    this.router.navigateByUrl('admin/settings/customer/customergrade')
+    const dialogRef = this.dialog.open(CustomerGradeComponent, {
+      data: {status : 'true'}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getGrade()
+    })
   }
 
   id : any;
@@ -201,16 +282,12 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
 
       if(role === 'salesexecutive'){
         console.log(this.id)
-        
-        this.category$.pipe(map(x=> x.filter(x=> x.categoryName.toLowerCase()=== 'route')))
-        .subscribe((res)=>{
-          let id: any = res[0].id
-
-          this.customerForm.patchValue({
+      
+        let id: any = this.category.find(c => c.categoryName.toLowerCase() === 'route')?.id
+        console.log(id)
+        this.customerForm.patchValue({
             customerCategoryId : id
           })
-        })
-        
       }
     })
   }

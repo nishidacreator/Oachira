@@ -4,10 +4,10 @@ const User = require('../../models/User/user');
 const router = express.Router();
 const authenticateToken = require('../../middleware/authorization');
 const Role = require('../../models/User/role')
-
+const Branch = require('../../models/branch')
 router.post('/', async (req, res) => {
     try {
-        const { name, phoneNumber, password, roleId, status = true } = req.body;
+        const { name, phoneNumber, password, roleId, status, branchId } = req.body;
         const user = await User.findOne({where: {phoneNumber:phoneNumber}});
     if (user) {
         return res.status(400).send({ message: 'User already exists in this phone number' })  
@@ -18,7 +18,8 @@ router.post('/', async (req, res) => {
         phoneNumber : phoneNumber, 
         password : pass, 
         roleId : roleId, 
-        status : status
+        status : status,
+        branchId : branchId
     });
     await newUser.save();
     res.status(200).send({id:newUser.id, name:newUser.name, pohneNumber:newUser.phoneNumber});
@@ -29,7 +30,7 @@ router.post('/', async (req, res) => {
 
 router.get('/', async(req,res)=>{
     try {
-        const user = await User.findAll({include : Role, order:['id']});
+        const user = await User.findAll({include : [Role, Branch], order:['id']});
         res.send(user);
         
     } catch (error) {

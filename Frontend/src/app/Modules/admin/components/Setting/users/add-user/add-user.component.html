@@ -7,7 +7,7 @@
             <mat-card-title> USERS </mat-card-title>
           </mat-card-header>
         </div>
-        <div class="col">
+        <div class="col" *ngIf="addStatus != 'true'">
           <mat-card-header>
             <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" (click)="homeClick()">
               <mat-icon>home</mat-icon>
@@ -57,16 +57,20 @@
   
         <div class="row">
           <div class="col">
+
             <mat-form-field class="full-width">
-            <mat-select placeholder="User Role" formControlName="roleId">
-              <mat-option *ngFor="let item of  roles$ | async" [value]="item.id">
-                {{item.roleName | titlecase}}
-              </mat-option>
-              &nbsp;&nbsp; &nbsp;&nbsp;<span class="material-icons" style="font-size: 30px; color: rgb(0, 128, 55);" (click)="addRole()">playlist_add</span>
-            </mat-select>
-            <mat-error *ngIf="userForm.controls['roleId'].hasError('required')">
-             User Role is <strong>required</strong>
-            </mat-error>
+              <mat-select placeholder="User Role" formControlName="roleId">
+                <span *ngIf="roles.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addRole()">playlist_add</span>
+                <mat-option *ngFor="let item of roles" [value]="item.id">
+                  {{item.roleName}}
+                </mat-option>
+                <mat-option *ngIf="roles.length === 0" [value]="'add'">
+                  <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addRole()">playlist_add</span>
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="userForm.controls['roleId'].hasError('required')">
+                Unit <strong>required</strong>
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -79,6 +83,8 @@
       <mat-card-actions>
         <button mat-raised-button type="submit" *ngIf="isEdit == false" [disabled]="userForm.pristine || !userForm.valid">ADD</button>
         <button  mat-raised-button (click)="editFunction()" *ngIf="isEdit == true" [disabled]="!userForm.valid">UPDATE</button>&nbsp;&nbsp;
+        <button *ngIf="addStatus === 'true'" type="button" class="cancel-button" (click)="onCancelClick()">Cancel</button>
+
       </mat-card-actions>
     </mat-card>  
   </form>
@@ -86,7 +92,7 @@
 
 
 
-  <br><mat-card>
+  <br><mat-card  *ngIf="addStatus != 'true'">
     <mat-card-header>
       <mat-card-title style="color: green;"> USERS </mat-card-title>
     </mat-card-header>

@@ -23,7 +23,7 @@ router.post('/', async(req, res)=> {
             return res.status(401).send({ message: 'incorrect password' });
         }
         
-        let userToken = {id:user.id, name:user.name, phoneNumber: user.phoneNumber, role: user.role};
+        let userToken = {id:user.id, name:user.name, phoneNumber: user.phoneNumber, role: user.role, branch: user.branch};
 
         let token = jwtTokens(userToken);
 

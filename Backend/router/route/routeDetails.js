@@ -5,7 +5,7 @@ const authenticateToken = require('../../middleware/authorization');
 const Route = require('../../models/route/route');
 const Customer = require('../../models/Customer/customer');
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
             const {routeId, customerId, routeIndex} = req.body;
 
@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/', authenticateToken,async(req,res)=>{
+router.get('/', authenticateToken, authenticateToken,async(req,res)=>{
 
     try {
         const routeDetails = await RouteDetails.findAll({include: [Route, Customer], order:['id']});
@@ -30,7 +30,7 @@ router.get('/', authenticateToken,async(req,res)=>{
     }  
 })
 
-router.get('/byrouteid/:id',async(req,res)=>{
+router.get('/byrouteid/:id', authenticateToken, async(req,res)=>{
 
   try {
       const routeDetails = await RouteDetails.findAll({
@@ -44,7 +44,7 @@ router.get('/byrouteid/:id',async(req,res)=>{
 })
 
 
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
 
         const result = await RouteDetails.destroy({
@@ -66,7 +66,7 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
         RouteDetails.update(req.body, {
             where: { id: req.params.id }

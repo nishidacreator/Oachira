@@ -1,25 +1,16 @@
 const express = require('express');
 const Category = require('../../models/Products/category');
 const router = express.Router();
-const multer = require('../../utils/multer');
-const cloudinary = require('../../utils/cloudinary');
-
+const multer = require('../../utils/multer')
+const authenticateToken = require('../../middleware/authorization');
 
 router.post('/', multer.single('category_image'), async (req, res) => {
-  try {
-      let category = {
-          categoryName: req.body.categoryName,
-          taxable: req.body.taxable,
-          category_image: req.file?.path,
-      };
-
-      if (req.file) {
-          const image = await cloudinary.uploader.upload(
-              req.file.path,
-              { public_id: category.categoryName }
-          );
-          category.category_image = image.secure_url;
-      }
+    try {
+            let category = {
+              category_image : req.file?.path,
+              categoryName : req.body.categoryName,
+              taxable : req.body.taxable
+            }
 
       const result = await Category.create(category);
       res.send(result);
@@ -59,23 +50,17 @@ router.get("/", async (req, res) => {
 });
 
 
-router.get('/:path(*)', (req, res) => {
-  try {
-  //   const imagePath = path.join(req.params.path);
-  //   console.log(imagePath)
-  // console.log(path)
-    // Construct an absolute path to the image file
-    const absoluteImagePath = path.resolve(req.params.path);
-    console.log(absoluteImagePath)
-    res.sendFile(absoluteImagePath);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+router.get('/', async(req,res)=>{
+    try {
+        const category = await Category.findAll({order:['id']});
+        res.send(category);
+        
+    } catch (error) {
+        res.send(error.message);
+    }  
+})
 
-
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
 
         const result = await Category.destroy({
@@ -97,7 +82,7 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
         Category.update(req.body, {
             where: { id: req.params.id }

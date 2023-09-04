@@ -6,13 +6,16 @@ import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
 import { AdminService } from '../../../../admin.service';
-import { Category } from '../../../../models/category';
-import { Product } from '../../../../models/product';
-import { SecondaryUnit } from '../../../../models/secondaryUnit';
-import { PrimaryUnit } from 'src/app/Modules/admin/models/primaryUnit';
+import { Category } from '../../../../models/settings/category';
+import { Product } from '../../../../models/settings/product';
+import { SecondaryUnit } from '../../../../models/settings/secondaryUnit';
+import { PrimaryUnit } from 'src/app/Modules/admin/models/settings/primaryUnit';
 import { ProductManagementComponent } from '../product-management/product-management.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { UnitManagementComponent } from '../unit-management/unit-management.component';
+import { CategoryManagementComponent } from '../category-management/category-management.component';
+import { BrandManagementComponent } from '../brand-management/brand-management.component';
 
 @Component({
   selector: 'app-add-product',
@@ -29,6 +32,8 @@ export class AddProductComponent implements OnInit {
     this.brandSubscription?.unsubscribe()
     this.productSubscription?.unsubscribe()
     this.submitSubscription.unsubscribe()
+    this.unitSub.unsubscribe()
+    this.catSub.unsubscribe()
   }
 
   productForm = this.fb.group({
@@ -55,14 +60,20 @@ export class AddProductComponent implements OnInit {
     this.productSubscription = this.getProducts()  
   }
 
-  units$!: Observable<PrimaryUnit[]>;
+  units: PrimaryUnit[] = [];
+  unitSub!: Subscription
   getUnits(){
-    this.units$ = this.adminService.getPrimaryUnit()
+    this.unitSub = this.adminService.getPrimaryUnit().subscribe((res)=>{
+      this.units = res
+    })
   }
 
-  categories$!: Observable<Category[]>;
+  categories: Category[] = [];
+  catSub!: Subscription
   getCategories(){
-    this.categories$ = this.adminService.getCategory()
+    this.catSub = this.adminService.getCategory().subscribe((res)=>{
+    this.categories = res
+    })
   }
 
   brands: any;
@@ -120,11 +131,16 @@ export class AddProductComponent implements OnInit {
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.filterValue = filterValue;
-    this.filtered = this.products.filter(element =>
-      element.productName.toLowerCase().includes(filterValue) 
-      // && element.code.toLowerCase().includes(filterValue)
-      // && element.barCode.toLowerCase().includes(filterValue)
-    );
+    if(this.filterValue){
+      this.filtered = this.products.filter(element =>
+        element.productName.toLowerCase().includes(filterValue) 
+        // && element.code.toLowerCase().includes(filterValue)
+        // && element.barCode.toLowerCase().includes(filterValue)
+      );
+    }
+    else{
+      this.getProducts()
+    } 
   }
 
 
@@ -193,15 +209,33 @@ export class AddProductComponent implements OnInit {
   }
 
   addCatrgory(){
-    this.router.navigateByUrl('admin/category')
+    const dialogRef = this.dialog.open(CategoryManagementComponent, {
+      data: {status : 'true'}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getCategories()
+    })
   }
 
   addBrand(){
-    this.router.navigateByUrl('admin/brand')
+    const dialogRef = this.dialog.open(BrandManagementComponent, {
+      data: {status : 'true'}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getBrands()
+    })
   }
 
   addUnit(){
-    this.router.navigateByUrl('admin/unit')
+    const dialogRef = this.dialog.open(UnitManagementComponent, {
+      data: {status : 'true'}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getUnits()
+    }) 
   }
 
   homeClick(){

@@ -7,10 +7,10 @@ export interface Customer{
     customerCategory : CustomerCategory
     customerGradeId : number
     customerGrade : CustomerGrade
-    phoneNumber : string,
     address : string,
     location : string,
     gstNo : string,
     email : string,
-    remarks : string
+    remarks : string,
+    subledgerCode : string
 }

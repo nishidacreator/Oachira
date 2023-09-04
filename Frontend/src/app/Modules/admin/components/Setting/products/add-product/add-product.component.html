@@ -37,13 +37,16 @@
           <div class="col">
             <mat-form-field class="full-width">
               <mat-select placeholder="Primary Unit" formControlName="primaryUnitId">
-                <mat-option *ngFor="let item of units$ | async" [value]="item.id">
+                <span *ngIf="units.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addUnit()">playlist_add</span>
+                <mat-option *ngFor="let item of units" [value]="item.id">
                   {{item.primaryUnitName}}
                 </mat-option>
-                &nbsp;&nbsp; &nbsp;&nbsp;<span class="material-icons" style="font-size: 30px; color: rgb(0, 128, 55);" (click)="addUnit()">playlist_add</span>
+                <mat-option *ngIf="units.length === 0" [value]="'add'">
+                  <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addUnit()">playlist_add</span>
+                </mat-option>
               </mat-select>
               <mat-error *ngIf="productForm.controls['primaryUnitId'].hasError('required')">
-                Primary Unit is <strong>required</strong>
+                Unit <strong>required</strong>
               </mat-error>
             </mat-form-field>
           </div>
@@ -65,29 +68,36 @@
   
         <div class="row">
           <div class="col">
+
             <mat-form-field class="full-width">
               <mat-select placeholder="Category" formControlName="categoryId">
-                <mat-option *ngFor="let item of  categories$ | async" [value]="item.id">
+                <span *ngIf="categories.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addCatrgory()">playlist_add</span>
+                <mat-option *ngFor="let item of categories" [value]="item.id">
                   {{item.categoryName}}
                 </mat-option>
-                  &nbsp;&nbsp; &nbsp;&nbsp;<span class="material-icons" style="font-size: 30px; color: rgb(0, 128, 55);" (click)="addCatrgory()">playlist_add</span>
+                <mat-option *ngIf="categories.length === 0" [value]="'add'">
+                  <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addCatrgory()">playlist_add</span>
+                </mat-option>
               </mat-select>
               <mat-error *ngIf="productForm.controls['categoryId'].hasError('required')">
-                Category is <strong>required</strong>
+                Category<strong>required</strong>
               </mat-error>
             </mat-form-field>
           </div>
   
           <div class="col">
-            <mat-form-field class="full-width">
+            <mat-form-field class="full-width" *ngIf="brands">
               <mat-select placeholder="Brand" formControlName="brandId">
-                <mat-option *ngFor="let item of  brands" [value]="item.id">
+                <span *ngIf="brands.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addBrand()">playlist_add</span>
+                <mat-option *ngFor="let item of brands" [value]="item.id">
                   {{item.brandName}}
                 </mat-option>
-                &nbsp;&nbsp; &nbsp;&nbsp;<span class="material-icons" style="font-size: 30px; color: rgb(0, 128, 55);" (click)="addBrand()">playlist_add</span>
+                <mat-option *ngIf="brands.length === 0" [value]="'add'">
+                  <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addBrand()">playlist_add</span>
+                </mat-option>
               </mat-select>
               <mat-error *ngIf="productForm.controls['brandId'].hasError('required')">
-                Brand is <strong>required</strong>
+                Brand<strong>required</strong>
               </mat-error>
             </mat-form-field>
           </div>

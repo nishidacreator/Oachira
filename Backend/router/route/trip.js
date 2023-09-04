@@ -6,7 +6,7 @@ const Route = require('../../models/route/route');
 const TripDetails = require('../../models/route/tripDetails');
 const User = require('../../models/User/user');  
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
             const {routeId, date, driver, salesMan, status, tripDetails} = req.body;
 
@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/',async(req,res)=>{
+router.get('/', authenticateToken,async(req,res)=>{
     try {
         const route = await Trip.findAll({include: Route});
         res.send(route);
@@ -39,7 +39,7 @@ router.get('/',async(req,res)=>{
     }  
 })
 
-router.get('/:id',async(req,res)=>{
+router.get('/:id', authenticateToken,async(req,res)=>{
   try {
       const result = await Trip.findOne(
         {where: {id: req.params.id},
@@ -54,7 +54,7 @@ router.get('/:id',async(req,res)=>{
 
 
 
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
 
         const result = await Trip.destroy({
@@ -75,7 +75,7 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
         Trip.update(req.body, {
             where: { id: req.params.id }

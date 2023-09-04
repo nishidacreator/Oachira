@@ -241,11 +241,11 @@
       <input matInput placeholder="Purchase Amount"  formControlName="purchaseAmount">{{getPurchaseAmount()}}
     </mat-form-field>
   </div>
-  <mat-card-actions>
+    <mat-card-actions>
     <button mat-raised-button type="submit" class="btn btn-success" [disabled]="!purchaseEntryForm.valid || !productForm.valid">
       <span class="material-icons" style="font-size: 25px;">save</span>
     </button>  
-   </mat-card-actions>
+    </mat-card-actions>
   </mat-card><br>
   </form>
 

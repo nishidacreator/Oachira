@@ -44,41 +44,46 @@
 
       <div class="row">
           <div class="col">
-          <mat-form-field class="full-width">
+
+            <mat-form-field class="full-width">
               <mat-select placeholder="Customer Category" formControlName="customerCategoryId">
-                <mat-option *ngFor="let item of  category$ | async" [value]="item.id">
-                    {{item.categoryName}}
+                <span *ngIf="category.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addCategory()">playlist_add</span>
+                <mat-option *ngFor="let item of category" [value]="item.id">
+                  {{item.categoryName}}
                 </mat-option>
-                &nbsp;&nbsp; &nbsp;&nbsp;<span class="material-icons" style="font-size: 30px; color: rgb(0, 128, 55);" (click)="addCategory()">playlist_add</span>
+                <mat-option *ngIf="category.length === 0" [value]="'add'">
+                  <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addCategory()">playlist_add</span>
+                </mat-option>
               </mat-select>
               <mat-error *ngIf="customerForm.controls['customerCategoryId'].hasError('required')">
-                Category Name is <strong>required</strong>
+                 <strong>required</strong>
               </mat-error>
-          </mat-form-field>
+            </mat-form-field>
           </div>
       
           <div class="col">
             <mat-form-field class="full-width">
               <mat-select placeholder="Customer Grade" formControlName="customerGradeId">
-                <mat-option *ngFor="let item of  units$ | async" [value]="item.id">
+                <span *ngIf="grade.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addGrade()">playlist_add</span>
+                <mat-option *ngFor="let item of grade" [value]="item.id">
                   {{item.grade}}
                 </mat-option>
-                &nbsp;&nbsp; &nbsp;&nbsp;<span class="material-icons" style="font-size: 30px; color: rgb(0, 128, 55);" (click)="addGrade()">playlist_add</span>
+                <mat-option *ngIf="grade.length === 0" [value]="'add'">
+                  <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addGrade()">playlist_add</span>
+                </mat-option>
               </mat-select>
               <mat-error *ngIf="customerForm.controls['customerGradeId'].hasError('required')">
-                Customer Grade is <strong>required</strong>
+                 <strong>required</strong>
               </mat-error>
             </mat-form-field>
+
           </div>
         </div>
 
       <div class="row">
         <div class="col">
           <mat-form-field class="full-width">
-            <input matInput placeholder="Phone Number" formControlName="phoneNumber">
-            <mat-error *ngIf="customerForm.controls['phoneNumber'].hasError('required')">
-              Number <strong>required</strong>
-            </mat-error>
+            <input matInput placeholder="Subledger Code" formControlName="subledgerCode">
           </mat-form-field>
         </div>
      
@@ -112,11 +117,51 @@
       </div>
     </mat-card-content>
 
+    <form [formGroup]="phoneForm">  
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title> PhoneNumber </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div>
+            <ul formArrayName="numbers">
+              
+            <div class="container">
+              <table class="responsive-table">
+
+                <tbody>
+                  <tr *ngFor="let quantity of numbers().controls; let i=index" [formGroupName]="i">
+                    <td scope="row">
+                      <mat-form-field class="full-width">
+                        <mat-label>Phone Number</mat-label>
+                        <input matInput formControlName="phoneNumber">
+                      </mat-form-field>
+                    </td>
+
+                    <td>
+                      <span class="material-icons" style="color: rgb(255, 0, 0); font-size: 25px; margin-top: 17px;" (click)="removeProduct(i)">cancel</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            
+              <div>
+                <span class="material-icons" style="font-size: 40px; color: green;"(click)="addNumber()">add_box</span>
+              </div>
+            </ul>
+          </div>
+      </mat-card-content>
+      </mat-card>
+    </form> 
+
     <mat-card-actions>
-      <button *ngIf="isEdit == false" mat-raised-button  type="submit" [disabled]="!customerForm.valid">
+      <button *ngIf="isEdit == false" mat-raised-button  type="submit" [disabled]="!customerForm.valid || !phoneForm.valid">
         <span class="material-icons" style="font-size: 25px;">save</span>
       </button>&nbsp;&nbsp;
-      <button *ngIf="isEdit == true" mat-raised-button  type="button" [disabled]="!customerForm.valid" (click)="editFunction()">
+      <button *ngIf="isEdit == true" mat-raised-button  type="button" [disabled]="!customerForm.valid && !phoneForm.valid" (click)="editFunction()">
         <span class="material-icons" style="font-size: 30px;">edit_note</span>
       </button>&nbsp;&nbsp;
     </mat-card-actions>
@@ -144,11 +189,10 @@
                 <th>Subledger</th>
                 <th>Category</th>
                 <th>Grade</th>
-                <th>Phone 1</th>
-                <th>Phone 2</th>
                 <th>Address</th>
                 <th>Location</th>
                 <th>Tin</th>
+                <th>Contact</th>
                 <th>Manage</th>
             </tr>
         </thead>
@@ -156,14 +200,13 @@
             <tr *ngFor="let element of filtered">
                 <td>{{element.id}}</td>
                 <td>{{element.customerName}}</td>
-                <td>subledgercode</td>
+                <td>{{element.subledgerCode}}</td>
                 <td>{{element.customerCategory.categoryName}}</td>
                 <td>{{element.customerGrade.grade}}</td>
-                <td>{{element.phoneNumber}}</td>
-                <td>{{element.phoneNumber}}</td>
                 <td>{{element.address}}</td>
                 <td>{{element.location}}</td>
                 <td>{{element.gstNo}}</td>
+                <td><span class="material-icons" (click)="openContacts(element.id)">contacts</span></td>
                 <td>
                   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
                   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -178,3 +221,4 @@
   </mat-card>
   
 
+  

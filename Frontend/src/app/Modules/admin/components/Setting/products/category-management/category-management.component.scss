@@ -231,3 +231,22 @@ i:hover{
   width: 100px; /* Set the initial image size */
   height: auto;
 }
+.cancel-button,
+.confirm-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+.cancel-button {
+  margin-right: 8px;
+  background-color: #e57373;
+  color: #fff;
+  border: none;
+}
+
+.cancel-button:hover{
+  cursor: pointer;
+  transform: scale(1.2);
+}

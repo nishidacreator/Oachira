@@ -4,7 +4,7 @@ import { DailyCollection } from './models/dailyCollection';
 import { Observable } from 'rxjs';
 import { PickList } from './models/pickList';
 import { PickListDetails } from './models/pickListDetails';
-import { SecondaryUnit } from '../admin/models/secondaryUnit';
+import { SecondaryUnit } from '../admin/models/settings/secondaryUnit';
 import { environment } from 'src/environments/environment';
 
 @Injectable({

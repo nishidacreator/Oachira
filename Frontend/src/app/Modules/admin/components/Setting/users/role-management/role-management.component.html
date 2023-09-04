@@ -5,7 +5,7 @@
 
 <form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
   <mat-card class="background">
-    <div class="row">
+    <div class="row" *ngIf="addStatus != 'true'">
       <div class="col">
         <mat-card-header>
           <mat-card-title> ROLE </mat-card-title>
@@ -47,6 +47,7 @@
       <button *ngIf="isEdit == true" mat-raised-button  type="button" [disabled]="!roleForm.valid" (click)="editFunction()">
         <span class="material-icons" style="font-size: 30px;">edit_note</span>
       </button>&nbsp;&nbsp;
+      <button *ngIf="addStatus === 'true'" type="button" class="cancel-button" (click)="onCancelClick()">Cancel</button>
     </mat-card-actions>
   </mat-card>
 </form>
@@ -54,9 +55,9 @@
 
 <!-- --------------------------------------------------------------------------------------------------------------------------- -->
 
-<br><mat-card>
+<br><mat-card *ngIf="addStatus != 'true'">
   <mat-card-header>
-    <mat-card-title style="color: green;"> BRANDS</mat-card-title>
+    <mat-card-title style="color: green;"> ROLES</mat-card-title>
   </mat-card-header>
 
   <mat-form-field>

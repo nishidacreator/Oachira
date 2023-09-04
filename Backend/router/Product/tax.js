@@ -2,9 +2,9 @@ const express = require('express');
 const Tax = require('../../models/Products/tax');
 const router = express.Router();
 const authorization = require('../../middleware/authorization')
+const authenticateToken = require('../../middleware/authorization');
 
-
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
             const {taxName, igst, cgst, sgst} = req.body;
 
@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/', async(req,res)=>{
+router.get('/', authenticateToken, async(req,res)=>{
 
     try {
         const tax = await Tax.findAll({});
@@ -30,7 +30,7 @@ router.get('/', async(req,res)=>{
     }  
 })
 
-router.get('/:id', async(req,res)=>{
+router.get('/:id', authenticateToken, async(req,res)=>{
 
   try {
       const tax = await Tax.findOne({where: {id: req.params.id}, order:['id']});
@@ -42,7 +42,7 @@ router.get('/:id', async(req,res)=>{
 })
 
 
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
 
         const result = await Tax.destroy({
@@ -64,7 +64,7 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
-router.patch('/:id', async(req,res)=>{
+router.patch('/:id', authenticateToken, async(req,res)=>{
     try {
         Tax.update(req.body, {
             where: { id: req.params.id }

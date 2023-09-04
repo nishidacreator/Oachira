@@ -2,7 +2,7 @@
 <form [formGroup]="unitForm">
   <mat-card class="background">
 
-    <div class="row">
+    <div class="row" *ngIf="addStatus != 'true'">
       <div class="col">
         <mat-card-header>
           <mat-card-title> UNITS </mat-card-title>
@@ -122,12 +122,14 @@
         </mat-card>
       </form>
     </mat-card-content>
+
+    <button *ngIf="addStatus === 'true'" class="cancel-button" (click)="onCancelClick()">Cancel</button>
   </mat-card>
 </form>
 
 
 <!-- ------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
-<br><mat-card>
+<br><mat-card *ngIf="addStatus != 'true'">
   <mat-card-header>
     <mat-card-title style="color: green;">PRIMARY UNITS</mat-card-title>
   </mat-card-header>
@@ -162,7 +164,7 @@
   </table><br>
 </mat-card>
 
-<br><mat-card *ngIf="sUnits.length != 0">
+<br><mat-card *ngIf="sUnits.length != 0 && addStatus != 'true'">
   <mat-card-header>
     <mat-card-title style="color: green;">SECONDARY UNITS</mat-card-title>
   </mat-card-header>

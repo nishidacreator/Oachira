@@ -4,7 +4,7 @@
 
 <form [formGroup]="productCategoryForm" (ngSubmit)="onSubmit()">
   <mat-card class="background">
-    <div class="row">
+    <div class="row" *ngIf="addStatus != 'true'">
       <div class="col">
         <mat-card-header>
           <mat-card-title> PRODUCT CATEGORY</mat-card-title>
@@ -62,13 +62,15 @@
       <button *ngIf="isEdit == true" mat-raised-button  type="button" [disabled]="!productCategoryForm.valid" (click)="editFunction()">
         <span class="material-icons" style="font-size: 30px;">edit_note</span>
       </button>&nbsp;&nbsp;
+
+      <button *ngIf="addStatus === 'true'" type="button" class="cancel-button" (click)="onCancelClick()">Cancel</button>
     </mat-card-actions>
 
   </mat-card>
 </form>
 
 <!-- ------------------------------------------------------------------------------------------------- -->
-<br><mat-card>
+<br><mat-card *ngIf="addStatus != 'true'">
   <mat-card-header>
     <mat-card-title style="color: green;"> PRODUCT CATEGORY</mat-card-title>
   </mat-card-header>

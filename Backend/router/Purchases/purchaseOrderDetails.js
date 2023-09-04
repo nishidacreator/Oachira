@@ -7,8 +7,9 @@ const Product = require('../../models/Products/product');
 const SecondaryUnit = require('../../models/Products/secondaryUnit');
 const PrimaryUnit = require('../../models/Products/primayUnit')
 const Tax = require('../../models/Products/tax')
+const authenticateToken = require('../../middleware/authorization');
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
             const {products} = req.body;
             
@@ -25,7 +26,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/:id', async(req,res)=>{
+router.get('/:id', authenticateToken, async(req,res)=>{
     try {
         const purchaseOrderDetails = await PurchaseOrderDetails.findAll({
             where:{purchaseOrderId: req.params.id}, 
@@ -37,7 +38,7 @@ router.get('/:id', async(req,res)=>{
     }  
 })
 
-router.get('/', async(req,res)=>{
+router.get('/', authenticateToken, async(req,res)=>{
 
     try {
         const purchaseOrderDetails = await PurchaseOrderDetails.findAll({include : [PurchaseOrder, Product, SecondaryUnit, Tax], order:['id']});
@@ -49,7 +50,7 @@ router.get('/', async(req,res)=>{
 })
 
 
-// router.delete('/:id', async(req,res)=>{
+// router.delete('/:id', authenticateToken, async(req,res)=>{
 //     try {
 
 //         const result = await PurchaseEntryDetails.destroy({
@@ -71,7 +72,7 @@ router.get('/', async(req,res)=>{
     
 // })
 
-// router.patch('/:id', async(req,res)=>{
+// router.patch('/:id', authenticateToken, async(req,res)=>{
 //     try {
 //         PurchaseEntryDetails.update(req.body, {
 //             where: { id: req.params.id }

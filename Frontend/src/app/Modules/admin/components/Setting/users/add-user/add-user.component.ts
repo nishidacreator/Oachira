@@ -1,14 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, Optional } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UserManagementComponent } from '../user-management/user-management.component';
-import { Role } from '../../../../models/role';
+import { Role } from '../../../../models/settings/role';
 import { AdminService } from '../../../../admin.service';
 import { Observable, Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { User } from '../../../../models/user';
+import { User } from '../../../../models/settings/user';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
 import { Router } from '@angular/router';
+import { RoleManagementComponent } from '../role-management/role-management.component';
 
 @Component({
   selector: 'app-add-user',
@@ -18,11 +19,14 @@ import { Router } from '@angular/router';
 export class AddUserComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,public dialog: MatDialog, private adminService: AdminService,
-    private _snackBar: MatSnackBar, private router: Router){}
+    private _snackBar: MatSnackBar, private router: Router,
+    @Optional() public dialogRef: MatDialogRef<AddUserComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: any
+    ){}
 
   userForm = this.fb.group({
     name: ['', Validators.required],
-    phoneNumber: ['',[Validators.required]],
+    phoneNumber: ['',[Validators.required, Validators.pattern("^[0-9 +]*$"),Validators.minLength(10),Validators.maxLength(14)]],
     password:['',Validators.required],
     roleId: ['', Validators.required],
     status: [false, Validators.required]
@@ -32,16 +36,37 @@ export class AddUserComponent implements OnInit, OnDestroy {
     this.userSubscriptions.unsubscribe()
   }
   
+  addStatus!: string
+  type!: string
   ngOnInit() {
     this.getRole()
 
     this.userSubscriptions = this.getUsers()
+
+    if (this.dialogRef) {
+      this.addStatus = this.dialogData?.status;
+      this.type = this.dialogData?.type;
+
+      this.adminService.getRole().subscribe(res => {
+        let roleId: any = res.find(role => role.roleName.toLowerCase() === 'branchmanager')?.id
+
+        if (this.type === 'branch'){
+          this.userForm.patchValue({
+            roleId: roleId
+          })
+        }
+      })
+
+     
+    }
   }
 
-  roles$!: Observable<Role[]>
+  roles: Role[] = [];
   roleSubscription?: Subscription;
   getRole(){
-    return this.roles$ = this.adminService.getRole()
+    return this.adminService.getRole().subscribe(role => {
+      this.roles = role
+    })
   }
 
   homeClick(){
@@ -158,6 +183,16 @@ export class AddUserComponent implements OnInit, OnDestroy {
   }
 
   addRole(){
-    this.router.navigateByUrl('admin/settings/user/addrole')
+    const dialogRef = this.dialog.open(RoleManagementComponent, {
+      data: {status : 'true'}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getRole()
+    })
+  }
+
+  onCancelClick(): void {
+    this.dialogRef.close();
   }
 }
