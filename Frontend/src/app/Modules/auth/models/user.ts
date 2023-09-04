@@ -1,3 +1,4 @@
+import { Branch } from '../../admin/models/settings/branch';
 import { Role } from './role';
 import { Token } from './token';
 export interface User{
@@ -9,4 +10,6 @@ export interface User{
   role: Role
   status: boolean
   token : string
+  branchId : number
+  branch : Branch
 }

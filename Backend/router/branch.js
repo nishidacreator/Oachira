@@ -41,6 +41,20 @@ router.get('/', authenticateToken, async(req,res)=>{
     }  
 })
 
+router.get('/:id', authenticateToken, async(req,res)=>{
+
+  try {
+      const branch = await Branch.findOne({
+        where: {id: req.params.id},
+        order:['id']
+      });
+      res.send(branch);
+      
+  } catch (error) {
+      res.send(error.message);
+  }  
+})
+
 
 router.delete('/:id', authenticateToken, async(req,res)=>{
     try {

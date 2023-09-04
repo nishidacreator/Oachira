@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
+import { AdminService } from '../admin.service';
 
 @Component({
   selector: 'app-navbar',
@@ -21,11 +22,19 @@ export class NavbarComponent {
   isExpanded : boolean = false;
 
   userName: any
-  constructor(private breakpointObserver: BreakpointObserver, private authService: AuthService, private router: Router) {
+  branchName!: string;
+  constructor(private breakpointObserver: BreakpointObserver, private authService: AuthService, private router: Router,
+    private adminService: AdminService) {
     const token: any = localStorage.getItem('token')
     let user = JSON.parse(token)
     console.log(user)
     this.userName = user.name
+
+    let branchId = user.branch
+    adminService.getBranchById(branchId).subscribe(data => {
+      this.branchName = data.branchName
+    })
+    
   }
 
   logout(){
