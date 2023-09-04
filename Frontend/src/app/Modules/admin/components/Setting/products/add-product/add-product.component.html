@@ -116,6 +116,13 @@
             </mat-form-field>
           </div>
         </div>
+        <div class="row">
+          <div class="container" appearance="fill">
+            <img [src]="url" title="Image" height="150px" width="150px"/>
+            <input type="file" accept="image/*" (change)="onFileSelected($event)" formControlName="product_image"> 
+            <br>
+          </div>
+        </div>
       </mat-card-content>
   
       <mat-card-actions>

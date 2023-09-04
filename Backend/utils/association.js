@@ -75,14 +75,14 @@ async function syncModel(){
     Role.hasMany(User,{foreignKey : 'roleId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     User.belongsTo(Role)
   
-    // Branch.hasMany(User,{foreignKey : 'branchId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
-    // User.belongsTo(Branch)
+    Branch.hasMany(User,{foreignKey : 'branchId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    User.belongsTo(Branch)
 
     VehicleType.hasMany(Vehicle, {foreignKey : 'vehicleTypeId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     Vehicle.belongsTo(VehicleType)
 
-    User.hasMany(Branch,{foreignKey : 'branchManagerId', onDelete : 'CASCADE', onUpdate : 'CASCADE'}) 
-    Branch.belongsTo(User, {as: 'branchManager', foreignKey : 'branchManagerId'})
+    // User.hasMany(Branch,{foreignKey : 'branchManagerId', onDelete : 'CASCADE', onUpdate : 'CASCADE'}) 
+    // Branch.belongsTo(User, {as: 'branchManager', foreignKey : 'branchManagerId'})
 
     BankAccount.hasMany(BranchAccount,{foreignKey : 'bankAccountId', onDelete : 'CASCADE', onUpdate : 'CASCADE'}) 
     BranchAccount.belongsTo(BankAccount)
@@ -214,6 +214,13 @@ async function syncModel(){
         ])
     }
 
+    const branch = await Branch.findAll({})
+    if(branch.length === 0){
+        for(let i = 0; i < branchData.length; i++){
+            Branch.bulkCreate([branchData[i]])
+        }
+    }
+
     const user = await User.findAll({})
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash('123456', salt)
@@ -221,13 +228,6 @@ async function syncModel(){
         for(let i = 0; i < userData.length; i++){
             userData[i].password = hashedPassword
             User.bulkCreate([userData[i]])
-        }
-    }
-
-    const branch = await Branch.findAll({})
-    if(branch.length === 0){
-        for(let i = 0; i < branchData.length; i++){
-            Branch.bulkCreate([branchData[i]])
         }
     }
 

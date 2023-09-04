@@ -14,6 +14,9 @@ import { ProductManagementComponent } from '../product-management/product-manage
   styleUrls: ['./category-management.component.scss']
 })
 export class CategoryManagementComponent implements OnDestroy{
+  categoryList: any[] = []; // Assuming you have the category data here
+  // showImagePopup = false;
+  selectedImageUrl = '';
 
   constructor(private fb: FormBuilder,public adminService: AdminService, private _snackBar: MatSnackBar,
     public dialog: MatDialog,
@@ -27,7 +30,7 @@ export class CategoryManagementComponent implements OnDestroy{
   }
     
   productCategoryForm = this.fb.group({
-    category_image: [''],
+    category_image: [null],
     categoryName: ['', Validators.required],
     taxable: [false],
 
@@ -41,21 +44,31 @@ export class CategoryManagementComponent implements OnDestroy{
       this.addStatus = this.dialogData?.status;
     }
   }
+  // openImagePopup(imageUrl: string): void {
+  //   this.selectedImageUrl = imageUrl;
+  //   this.showImagePopup = true;
+  // }
 
-  displayedColumns : string[] = ['categoryName', 'taxable', 'manage']
+  // closeImagePopup(): void {
+  //   this.showImagePopup = false;
+  // }
 
-  file!: any;
+
+  displayedColumns : string[] = ['categoryImage','categoryName', 'taxable', 'manage']
+
+  file:File | null = null;
   url!: any;
   onFileSelected(event: any){
     if(event.target.files.length > 0){
-      this.file = event.target.files[0];
+      this.file = event.target.files[0] as File;
+      console.log(this.file)
 
-      let fileType = this.file.type;
+      let fileType = this.file? this.file.type : '';
       // this.productCategoryForm.get('category_image')?.setValue(this.file)
   
       // if(fileType.match(/image\/*/)){
       //   let reader = new FileReader();
-      //   reader.readAsDataURL(this.file)
+      //   // reader.readAsDataURL(this.file)
       //   reader.onload = (event: any) =>{
       //     this.url = event.target.result;
       //   }   
@@ -66,24 +79,28 @@ export class CategoryManagementComponent implements OnDestroy{
     }
   }
 
-  formData = new FormData();
-  onUpload(){  
-    if(!this.file){
-      this._snackBar.open("Please choose an image first","" ,{duration:3000})
-    }
+  // formData = new FormData();
+  // onUpload(){  
+  //   if(!this.file){
+  //     this._snackBar.open("Please choose an image first","" ,{duration:3000})
+  //   }
 
-    else{
-      this.formData.append("category_image", this.file, this.file.name)
-      this._snackBar.open("Image Uploaded","" ,{duration:3000})
-    } 
-  }
+  //   else{
+  //     this.formData.append("category_image", this.file, this.file.name)
+  //     this._snackBar.open("Image Uploaded","" ,{duration:3000})
+  //   } 
+  // }
 
   private submitSubscription : Subscription = new Subscription();
   onSubmit(){
-    this.formData.append('categoryName', this.productCategoryForm.get(['categoryName'])?.value)
-    this.formData.append('taxable', this.productCategoryForm.get(['taxable'])?.value)
+    const formData = new FormData();
+    formData.append("category_image", this.file as Blob, this.file?.name)
+    this._snackBar.open("Image Uploaded","" ,{duration:3000})
+    formData.append('categoryName', this.productCategoryForm.get(['categoryName'])?.value)
+    formData.append('taxable', this.productCategoryForm.get(['taxable'])?.value);
+    console.log(formData)
 
-    this.submitSubscription = this.adminService.addCategory(this.formData).subscribe((res)=>{
+    this.submitSubscription = this.adminService.addCategory(formData).subscribe((res)=>{
       this._snackBar.open("Category added successfully...","" ,{duration:3000})
       this.clearControls()
     },(error=>{
@@ -119,6 +136,7 @@ export class CategoryManagementComponent implements OnDestroy{
 
   deleteCategory(id:any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
+      width: '250px',
       data: {}
     });
 
@@ -141,38 +159,62 @@ export class CategoryManagementComponent implements OnDestroy{
 
     let category: any= this.category.find(x =>x.id == id)
     console.log(category)
+    debugger;
       
     let categoryName = category.categoryName.toString();
     let taxable = category.taxable.toString();
-    // let category_image = category.category_image;
-
-    // console.log(typeof category_image)
+    let category_image = category.category_image;
     
     // let reader: any = new FileReader();
     //     reader.readAsDataURL(category_image)
     //     reader.onload = (event: any) =>{
     //       this.url = event.target.result;
     //     }   
+    console.log(category_image)
     
     this.productCategoryForm.patchValue({
       categoryName : categoryName,
-      taxable : taxable,
-      // category_image : reader
+      taxable : taxable
     })
     this.categoryId = id;
+    this.productCategoryForm.get('category_image')?.setValue(category_image);
   }
   
   editFunction(){
     let data={
-      categoryImage : this.file.name,
       categoryName  : this.productCategoryForm.get('categoryName')?.value,
-      taxable : this.productCategoryForm.get('taxable')?.value
+      taxable : this.productCategoryForm.get('taxable')?.value,
+      category_image : this.productCategoryForm.get('category_image')?.value
     }
-    this.adminService.updateCategory(this.categoryId,data).subscribe((res)=>{
-      this.clearControls();
-    },(error=>{
-          alert(error.message)
-        }))
+    if (this.selectedImageUrl) {
+      this.uploadImageAndSubmit(data);
+    } else {
+      this.submitCategoryData(data);
+    }
+    // this.adminService.updateCategory(this.categoryId,data).subscribe((res)=>{
+    //   this.clearControls();
+    // },(error=>{
+    //       alert(error.message)
+    //     }))
+  }
+  uploadImageAndSubmit(data: any) {
+    // Upload the new image using your image upload service (e.g., Cloudinary)
+    // After successful upload, update the data object with the new image URL
+    // data.categoryImage = uploadedImageUrl;
+  
+    this.submitCategoryData(data);
+  }
+  
+  // Submit the category data
+  submitCategoryData(data: any) {
+    this.adminService.updateCategory(this.categoryId, data).subscribe(
+      (res) => {
+        this.clearControls();
+      },
+      (error) => {
+        alert(error.message);
+      }
+    );
   }
 
   
@@ -196,6 +238,18 @@ export class CategoryManagementComponent implements OnDestroy{
       console.log(`Dialog result: ${result}`);
     })
   }
+
+
+  showImagePopup= false;
+
+  showPopup() {
+    this.showImagePopup = true;
+  }
+
+  hidePopup() {
+    this.showImagePopup = false;
+  }
+
 
   onCancelClick(): void {
     this.dialogRef.close();

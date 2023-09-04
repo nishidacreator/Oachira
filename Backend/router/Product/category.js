@@ -4,7 +4,7 @@ const router = express.Router();
 const multer = require('../../utils/multer')
 const authenticateToken = require('../../middleware/authorization');
 
-router.post('/', authenticateToken, multer.single('category_image'), async (req, res) => {
+router.post('/', multer.single('category_image'), async (req, res) => {
     try {
             let category = {
               category_image : req.file?.path,
@@ -12,17 +12,45 @@ router.post('/', authenticateToken, multer.single('category_image'), async (req,
               taxable : req.body.taxable
             }
 
-            const result = await Category.create(category)
+      const result = await Category.create(category);
+      res.send(result);
+  } catch (error) {
+      console.error(error); // Log the error for debugging purposes
+      res.status(500).send('An error occurred while processing the request.');
+  }
+});
 
-            res.send(result);
+router.get("/", async (req, res) => {
+  try {
+    const categories = await Category.findAll({ order: ["id"] });
 
-    } catch (error) {
-        res.send(error.message);
-    }
-})
+    // Add the image URL to each category
+    const categoriesWithImageURLs = categories.map((category) => {
+      if (category.category_image) {
+        return {
+          id: category.id,
+          categoryName: category.categoryName,
+          taxable: category.taxable,
+          category_image: `${category.category_image}`,
+        };
+      } else {
+        return {
+          id: category.id,
+          categoryName: category.categoryName,
+          taxable: category.taxable,
+          category_image: "",
+        };
+      }
+    });
+
+    res.json(categoriesWithImageURLs);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 
-router.get('/', authenticateToken, async(req,res)=>{
+router.get('/', async(req,res)=>{
     try {
         const category = await Category.findAll({order:['id']});
         res.send(category);

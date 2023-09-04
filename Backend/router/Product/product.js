@@ -5,22 +5,21 @@ const PrimaryUnit = require('../../models/Products/primayUnit');
 const Category = require('../../models/Products/category');
 const Brand = require('../../models/Products/brand');
 const {Op} = require('sequelize');
+const multer = require('../../utils/multer');
+const cloudinary = require('../../utils/cloudinary');
 const authenticateToken = require('../../middleware/authorization');
 
-router.post('/', authenticateToken, async (req, res) => {
+
+router.post('/', async (req, res) => {
     try {
             const { productName, code, barCode, primaryUnitId, categoryId, brandId, reorderQuantity, loyaltyPoint} = req.body;
 
-            const product = new Product({productName, code, barCode, primaryUnitId, categoryId, brandId, reorderQuantity, loyaltyPoint});
-
-            await product.save();
-
-            res.send(product);
-
-    } catch (error) {
-        res.send(error);
-    }
-})
+    const result = await Product.create(product);
+    res.send(result);
+  } catch (error) {
+    res.send(error);
+  }
+});
 
 router.get('/', authenticateToken, async(req,res)=>{
   try {

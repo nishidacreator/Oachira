@@ -3,21 +3,34 @@ const Vehicle = require('../../models/route/vehicle');
 const router = express.Router();
 const authenticateToken = require('../../middleware/authorization');
 const VehicleType = require('../../models/route/vehicleType');
+const multer = require('../../utils/multer');
+const cloudinary = require('../../utils/cloudinary');    
 
-router.post('/', authenticateToken, async (req, res) => {
-    try {
-            const {registrationNumber, vehicleTypeId, taxExpiry, insuranceExpiry, polutionExpiry, capacity, permitExpiry, fitnessExpiry} = req.body;
-
-            const vehicle = new Vehicle({registrationNumber, vehicleTypeId, taxExpiry, insuranceExpiry, polutionExpiry, capacity, permitExpiry, fitnessExpiry});
-
-            await vehicle.save();
-
-            res.send(vehicle);
-
-    } catch (error) {
-        res.send(error);
+router.post("/", multer.single("category_image"), authenticateToken, async (req, res) => {
+  try {
+    let vehicle = {
+      registrationNumber: req.body.registrationNumber,
+      vehicleTypeId: req.body.vehicleTypeId,
+      taxExpiry: req.body.taxExpiry,
+      insuranceExpiry: req.body.insuranceExpiry,
+      polutionExpiry: req.body.polutionExpiry,
+      capacity: req.body.capacity,
+      permitExpiry: req.body.permitExpiry,
+      fitnessExpiry: req.body.fitnessExpiry,
+      vehicle_image: req.file?.path,
+    };
+    if (req.file) {
+      const image = await cloudinary.uploader.upload(req.file.path, {
+        public_id: vehicle.registrationNumber,
+      });
+      vehicle.vehicle_image = image.secure_url;
     }
-})
+    const result = await Vehicle.create(vehicle);
+    res.send(result);
+  } catch (error) {
+    res.send(error);
+  }
+});
 
 router.get('/', authenticateToken, async(req,res)=>{
 

@@ -6,7 +6,7 @@ const Branch = sequelize.define('branch',{
     address : {type : DataTypes.STRING},
     phone : {type : DataTypes.STRING},
     email : {type : DataTypes.STRING},
-    branchManagerId : {type : DataTypes.INTEGER, allowNull : false}
+    // branchManagerId : {type : DataTypes.INTEGER, allowNull : false}
 },
 {
     freezeTableName: true,

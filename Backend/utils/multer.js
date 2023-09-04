@@ -3,12 +3,8 @@ const path = require('path');
 
   module.exports = multer({
     storage : multer.diskStorage({
-        destination : (req, file, cb)=>{
-          cb(null, path.join(__dirname, '../images'))
-        },
-
         filename: (req, file, cb)=>{
-          cb(null, Date.now() + path.extname(file.originalname))
+          cb(null, file.originalname)
         }
       }),
 

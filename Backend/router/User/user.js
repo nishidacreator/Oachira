@@ -4,7 +4,7 @@ const User = require('../../models/User/user');
 const router = express.Router();
 const authenticateToken = require('../../middleware/authorization');
 const Role = require('../../models/User/role')
-
+const Branch = require('../../models/branch')
 router.post('/', async (req, res) => {
     try {
         const { name, phoneNumber, password, roleId, status, branchId } = req.body;
@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
 
 router.get('/', async(req,res)=>{
     try {
-        const user = await User.findAll({include : Role, order:['id']});
+        const user = await User.findAll({include : [Role, Branch], order:['id']});
         res.send(user);
         
     } catch (error) {

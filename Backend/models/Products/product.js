@@ -9,7 +9,8 @@ const Product = sequelize.define('product',{
     categoryId : {type : DataTypes.INTEGER, allowNull : false},
     brandId : {type : DataTypes.INTEGER, allowNull : false},
     reorderQuantity : {type : DataTypes.FLOAT},
-    loyaltyPoint : {type : DataTypes.FLOAT}     
+    loyaltyPoint : {type : DataTypes.FLOAT},
+    product_image: {type : DataTypes.STRING}
 },
 {
     freezeTableName: true
