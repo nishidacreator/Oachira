@@ -52,7 +52,7 @@ app.use(cors({orgin:'*'}))
 app.use(express.json());
 
 //static Images Folder
-app.use('/images', express.static('../images'))
+app.use('/images', express.static('../images'));
 
 syncModel()
 

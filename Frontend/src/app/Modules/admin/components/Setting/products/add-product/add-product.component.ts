@@ -39,7 +39,8 @@ export class AddProductComponent implements OnInit {
     categoryId: ['', Validators.required],
     brandId: ['', Validators.required],
     reorderQuantity: [],
-    loyaltyPoint: []
+    loyaltyPoint: [],
+    product_image: [null],
   });
 
   displayedColumns : String[] = ['id','productName','code','barCode','primaryUnitId','categoryId','brandId','manage']
@@ -73,6 +74,9 @@ export class AddProductComponent implements OnInit {
 
   private submitSubscription : Subscription = new Subscription();
   onSubmit(){
+    const formData = new FormData();
+    formData.append("product_image", this.file as Blob, this.file?.name)
+    this._snackBar.open("Image Uploaded","" ,{duration:3000})
     console.log(this.productForm.getRawValue())
     this.submitSubscription = this.adminService.addProduct(this.productForm.getRawValue()).subscribe((res)=>{
       console.log(res)
@@ -209,6 +213,29 @@ export class AddProductComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     })
+  }
+
+  file:File | null = null;
+  url!: any;
+  onFileSelected(event: any){
+    if(event.target.files.length > 0){
+      this.file = event.target.files[0] as File;
+      console.log(this.file)
+
+      let fileType = this.file? this.file.type : '';
+      // this.productCategoryForm.get('category_image')?.setValue(this.file)
+  
+      // if(fileType.match(/image\/*/)){
+      //   let reader = new FileReader();
+      //   // reader.readAsDataURL(this.file)
+      //   reader.onload = (event: any) =>{
+      //     this.url = event.target.result;
+      //   }   
+      // }
+      // else {
+      //   window.alert('Please select correct image format');
+      // } 
+    }
   }
 
 }

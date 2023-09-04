@@ -30,7 +30,8 @@ export class VehicleManagementComponent {
     polutionExpiry : ['', Validators.required],
     capacity : ['', Validators.required],
     fitnessExpiry : ['', Validators.required],
-    permitExpiry : ['', Validators.required]
+    permitExpiry : ['', Validators.required],
+    vehicle_image : [null]
   });
 
   displayedColumns : string[] = ['id','registrationNumber','vehicleType','taxExpiry','insuranceExpiry','polutionExpiry', 'fitnessExpiry', 'permitExpiry' ,'capacity','manage']
@@ -51,6 +52,9 @@ export class VehicleManagementComponent {
   }
 
   onSubmit(){
+    const formData = new FormData();
+    formData.append("vehicle_image", this.file as Blob, this.file?.name)
+    this._snackBar.open("Image Uploaded","" ,{duration:3000})
     this.adminService.addVehicle(this.vehicleForm.getRawValue()).subscribe((res)=>{
       console.log(res);
       this._snackBar.open("Vehicle added successfully...","" ,{duration:3000})
@@ -138,6 +142,39 @@ export class VehicleManagementComponent {
     },(error=>{
           alert(error.message)
         }))
+  }
+
+  file:File | null = null;
+  url!: any;
+  imageUrl!: string;
+  onFileSelected(event: any){
+    if(event.target.files.length > 0){
+      this.file = event.target.files[0] as File;
+      if (this.file) {
+        const reader = new FileReader();
+  
+        reader.onload = (e: any) => {
+          this.imageUrl = e.target.result;
+        };
+  
+        reader.readAsDataURL(this.file);
+      }
+      console.log(this.file)
+
+      let fileType = this.file? this.file.type : '';
+      // this.productCategoryForm.get('category_image')?.setValue(this.file)
+  
+      // if(fileType.match(/image\/*/)){
+      //   let reader = new FileReader();
+      //   // reader.readAsDataURL(this.file)
+      //   reader.onload = (event: any) =>{
+      //     this.url = event.target.result;
+      //   }   
+      // }
+      // else {
+      //   window.alert('Please select correct image format');
+      // } 
+    }
   }
 
 }

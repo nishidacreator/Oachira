@@ -165,3 +165,69 @@ i:hover{
 .col:last-child {
   margin-right: 0;
 }
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  max-width: 80%;
+  max-height: 80%;
+  overflow: auto;
+}
+
+.popup img {
+  width:-webkit-fill-available;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.popup button {
+  display: block;
+  margin: 10px auto 0;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.popup button:hover {
+  background-color: #0056b3;
+}
+
+// .imageView{
+//   width:150px;
+// }
+
+.iconColor { 
+  color:gray;
+}
+
+.image-container {
+  position: relative;
+}
+
+.popup {
+  position: absolute;
+  display: none;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 1;
+  width:100%;
+}
+
+.image-container:hover .popup {
+  display: block;
+}
+
+.imageView {
+  width: 100px; /* Set the initial image size */
+  height: auto;
+}
