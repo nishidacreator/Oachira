@@ -145,6 +145,7 @@
               <th>Primary Unit</th>
               <th>Category</th>
               <th>Brand</th>
+              <th>Image Uploaded</th>
               <th>Manage</th>
           </tr>
       </thead>
@@ -157,6 +158,17 @@
               <td>{{element.primaryUnit.primaryUnitName}}</td>
               <td>{{element.category.categoryName}}</td>
               <td>{{element.brand.brandName}}</td>
+              <td *ngIf="element.product_image; else noImage">
+                <div class="image-container">
+                  <div class="popup" *ngIf="showImagePopup">
+                    <img [src]="element.product_image" alt="Product Image">
+                  </div>
+                  <img class="imageView" [src]="element.product_image" alt="Product Image" (mouseenter)="showPopup()" (mouseleave)="hidePopup()">
+                </div>
+              </td>
+              <ng-template #noImage>
+                <td><span class="material-icons iconColor">image_not_supported</span></td>
+              </ng-template>
               <td>
                 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
                 <i  (click)="editProduct(element.id)"  class="fa fa-edit" style="font-size: 20px; color:green"></i>

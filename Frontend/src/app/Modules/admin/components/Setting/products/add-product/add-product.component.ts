@@ -43,7 +43,7 @@ export class AddProductComponent implements OnInit {
     product_image: [null],
   });
 
-  displayedColumns : String[] = ['id','productName','code','barCode','primaryUnitId','categoryId','brandId','manage']
+  displayedColumns : String[] = ['id','productName','code','barCode','primaryUnitId','categoryId','brandId','image','manage']
 
   brandSubscription? : Subscription;
   productSubscription? : Subscription;
@@ -236,6 +236,17 @@ export class AddProductComponent implements OnInit {
       //   window.alert('Please select correct image format');
       // } 
     }
+  }
+
+
+  showImagePopup= false;
+
+  showPopup() {
+    this.showImagePopup = true;
+  }
+
+  hidePopup() {
+    this.showImagePopup = false;
   }
 
 }

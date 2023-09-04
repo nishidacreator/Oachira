@@ -34,7 +34,7 @@ export class VehicleManagementComponent {
     vehicle_image : [null]
   });
 
-  displayedColumns : string[] = ['id','registrationNumber','vehicleType','taxExpiry','insuranceExpiry','polutionExpiry', 'fitnessExpiry', 'permitExpiry' ,'capacity','manage']
+  displayedColumns : string[] = ['id','registrationNumber','vehicleType','taxExpiry','insuranceExpiry','polutionExpiry', 'fitnessExpiry', 'permitExpiry' ,'capacity','vehicleImage','manage']
 
   ngOnInit(): void {
     this.vehicleSubscription = this.getVehicle()
@@ -175,6 +175,16 @@ export class VehicleManagementComponent {
       //   window.alert('Please select correct image format');
       // } 
     }
+  }
+
+  showImagePopup= false;
+
+  showPopup() {
+    this.showImagePopup = true;
+  }
+
+  hidePopup() {
+    this.showImagePopup = false;
   }
 
 }
