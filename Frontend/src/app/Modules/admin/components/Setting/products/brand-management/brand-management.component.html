@@ -81,5 +81,5 @@
         </tr>
     </tbody>
   </table>
-
+  <mat-paginator [length]="brands.length" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
 </mat-card>

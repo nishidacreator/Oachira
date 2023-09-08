@@ -168,6 +168,22 @@
         <th mat-header-cell *matHeaderCellDef>Capacity</th>
         <td mat-cell *matCellDef="let element"> {{element.capacity}} </td>
       </ng-container>
+
+      <ng-container matColumnDef="vehicleImage">
+        <th mat-header-cell *matHeaderCellDef>Image Uploaded</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="image-container" *ngIf="element.vehicle_image; else noImage">
+            <div class="popup" *ngIf="showImagePopup">
+              <img [src]="element.vehicle_image" alt="Vehicle Image">
+            </div>
+            <img class="imageView" [src]="element.vehicle_image" alt="Vehicle Image" (mouseenter)="showPopup()" (mouseleave)="hidePopup()">
+          </div>
+        </td>
+        <ng-template #noImage>
+          <td><span class="material-icons iconColor">image_not_supported</span></td>
+        </ng-template>
+        <td>
+      </ng-container>
   
       <ng-container matColumnDef="manage">
         <th mat-header-cell *matHeaderCellDef>Manage</th>

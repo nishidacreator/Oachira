@@ -83,6 +83,7 @@
     <thead>
         <tr>
             <th>id</th>
+            <th>Image Uploaded</th>
             <th>Category</th>
             <th>Taxable</th>
             <th>Manage</th>
@@ -114,4 +115,5 @@
         </tr>
     </tbody>
   </table>
+  <mat-paginator [length]="category.length" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
   </mat-card>
