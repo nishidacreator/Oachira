@@ -10,11 +10,9 @@ import { User } from '../../../../models/settings/user';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
 import { Router } from '@angular/router';
 import { RoleManagementComponent } from '../role-management/role-management.component';
-<<<<<<< HEAD
 import { Branch } from 'src/app/Modules/admin/models/settings/branch';
-=======
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
->>>>>>> 6c91dc2a4320e0dcc7b8da6906eae7dae3918b6b
+
 
 @Component({
   selector: 'app-add-user',
@@ -128,7 +126,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   getUsers(){
     this.userSubscriptions = this.adminService.getUser().subscribe((res)=>{
       this.users = res
-      this.filtered = this.users.slice(0, this.pageSize);
+      // this.filtered = this.users.slice(0, this.pageSize);
     })
   }
 
@@ -137,20 +135,18 @@ export class AddUserComponent implements OnInit, OnDestroy {
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.filterValue = filterValue;
-    if(this.filterValue){    this.filtered = this.users.filter(element =>
+    if(this.filterValue){    
+      this.filtered = this.users.filter(element =>
       element.name.toLowerCase().includes(filterValue) 
-<<<<<<< HEAD
       || element.phoneNumber.includes(filterValue)
       || element.id.toString().includes(filterValue)
-    );
-=======
+    )}
       // && element.status.toLowerCase().includes(filterValue)
       // && element.barCode.toLowerCase().includes(filterValue)
-    );}
+    
     else{
       this.getUsers();
     }
->>>>>>> 6c91dc2a4320e0dcc7b8da6906eae7dae3918b6b
   }
 
   delete!: Subscription;
