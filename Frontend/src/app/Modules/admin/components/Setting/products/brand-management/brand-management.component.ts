@@ -74,26 +74,10 @@ export class BrandManagementComponent implements OnDestroy {
   getBrands(){
     this.brandSubscription = this.adminService.getBrand().subscribe((res)=>{
       this.brands = res
-<<<<<<< HEAD
-      this.filteredBrands = this.brands.slice(0, this.pageSize);
-      // this.filteredBrands = this.paginatedData
-=======
       this.filteredBrands = this.brands;
       this.filteredBrands = this.brands.slice(0, this.pageSize);
->>>>>>> 6c91dc2a4320e0dcc7b8da6906eae7dae3918b6b
     })
   } 
-
-  pageSize = 10;
-  pageIndex = 0;
-  paginatedData: any[] = [];
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  onPageChange(event: PageEvent): void {
-    const startIndex = event.pageIndex * event.pageSize;
-    this.filteredBrands = this.filteredBrands.slice(startIndex, startIndex + event.pageSize);
-  }
   
   filterValue: any;
   filteredBrands!: any[];
