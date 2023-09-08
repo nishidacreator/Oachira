@@ -35,7 +35,7 @@ export class RouteManagementComponent {
   }
 
   addRoute(){
-    this.router.navigateByUrl('admin/settings/test')
+    this.router.navigateByUrl('admin/settings/route/addroute')
     this.dialogRef.close();
   }
 

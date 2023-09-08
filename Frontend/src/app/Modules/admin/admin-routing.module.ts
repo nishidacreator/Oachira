@@ -74,8 +74,8 @@ const routes: Routes = [
   {path: 'settings/user/adduser', component: AddUserComponent},
   {path: 'settings/branch', component: BranchManagementComponent},
 
-  {path:'test', component: TestReportComponent},
-  {path:'test/print', component: TestPrintComponent},
+  // {path:'test', component: TestReportComponent},
+  // {path:'test/print', component: TestPrintComponent},
 
   //customer
   {path: 'settings/customer/customercategory', component: CustomerCategoryComponent},
@@ -84,13 +84,16 @@ const routes: Routes = [
 
   //route
   {path: 'settings/route/collectiondays', component: AddRouteDaysComponent},
+  {path: 'settings/route/collectiondays/:id', component: AddRouteDaysComponent},
   {path: 'settings/route/routedetails', component: AddRouteDetailsComponent},
+  {path: 'settings/route/routedetails/:id', component: AddRouteDetailsComponent},
   {path: 'settings/route/addroute', component: AddRouteComponent},
 
   {path: 'settings/trip/addtrip', component: AddTripComponent},
   {path: 'settings/route/addtrip/tripdetails/:id', component: ViewTripDetailsComponent},
   {path: 'settings/route/addtrip/tripdetails/addmore/:id', component: AddMoreTripDetailsComponent},
   {path: 'settings/trip/deliverydays', component: TripDaysComponent},
+  {path: 'settings/trip/deliverydays/:id', component: TripDaysComponent},
   {path: 'settings/trip/vehicle', component: VehicleManagementComponent},
   {path: 'settings/trip/addVehicle', component: AddVehicleComponent},
 
@@ -125,7 +128,7 @@ const routes: Routes = [
   {path :'inventory/viewstock', component: StockComponent},
   {path :'inventrory/viewstock/detail/:id', component: StockDetailsComponent},
 
-  {path: 'settings/test', component: TestComponent}
+  // {path: 'settings/test', component: TestComponent}
  ]
 }
 ];

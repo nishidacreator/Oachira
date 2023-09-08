@@ -5,7 +5,7 @@
     <div class="row" *ngIf="addStatus != 'true'">
       <div class="col">
         <mat-card-header>
-          <mat-card-title> UNITS </mat-card-title>
+          <mat-card-title> UNIT </mat-card-title>
         </mat-card-header>
       </div>
       <div class="col">
@@ -18,10 +18,10 @@
           </button>
         </mat-card-header>
       </div>
-    </div>
+    </div><br>
     
-    <mat-card-content >
-
+    <!-- <mat-card-content > -->
+<!-- 
       <div class="col">
         <section class="example-section" >
           <mat-radio-group class="example-radio-group" aria-label="Unit Type" formControlName="unitType"><h4>Unit Type :</h4>
@@ -29,10 +29,10 @@
             <mat-radio-button class="example-radio-button" value="secondary">Secondary Unit</mat-radio-button>
           </mat-radio-group>     
         </section>
-      </div> 
+      </div>  -->
 
 
-      <form [formGroup]="primaryUnitForm" (ngSubmit)="onPrimarySubmit()"  *ngIf="unitForm.controls['unitType'].value ==='primary'">
+      <form [formGroup]="primaryUnitForm" (ngSubmit)="onPrimarySubmit()" >
         <mat-card>
           <mat-card-content>
             <div class="row">
@@ -70,7 +70,7 @@
         </mat-card>
       </form>
 
-      <form [formGroup]="secondaryUnitForm" (ngSubmit)="onSecondarySubmit()" *ngIf="unitForm.controls['unitType'].value ==='secondary'">
+      <!-- <form [formGroup]="secondaryUnitForm" (ngSubmit)="onSecondarySubmit()" *ngIf="unitForm.controls['unitType'].value ==='secondary'">
         <mat-card>
           <mat-card-content>
             <div class="row">
@@ -120,8 +120,8 @@
             </button>&nbsp;&nbsp;
           </mat-card-actions>
         </mat-card>
-      </form>
-    </mat-card-content>
+      </form> -->
+    <!-- </mat-card-content> -->
 
     <button *ngIf="addStatus === 'true'" class="cancel-button" (click)="onCancelClick()">Cancel</button>
   </mat-card>
@@ -131,7 +131,7 @@
 <!-- ------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 <br><mat-card *ngIf="addStatus != 'true'">
   <mat-card-header>
-    <mat-card-title style="color: green;">PRIMARY UNITS</mat-card-title>
+    <mat-card-title style="color: green;"> UNITS</mat-card-title>
   </mat-card-header>
 
   <mat-form-field>
@@ -164,7 +164,7 @@
   </table><br>
 </mat-card>
 
-<br><mat-card *ngIf="sUnits.length != 0 && addStatus != 'true'">
+<!-- <br><mat-card *ngIf="sUnits.length != 0 && addStatus != 'true'">
   <mat-card-header>
     <mat-card-title style="color: green;">SECONDARY UNITS</mat-card-title>
   </mat-card-header>
@@ -192,12 +192,12 @@
             <td>{{element.factor}}</td>
             <td>
               <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-              <i  (click)="editPUnit(element.id)"  class="fa fa-edit" style="font-size: 20px; color:green"></i>
+              <i  (click)="editSUnit(element.id)"  class="fa fa-edit" style="font-size: 20px; color:green"></i>
               &nbsp;&nbsp;
-              <i  (click)="deletePUnit(element.id)" class="fa fa-trash" style="font-size: 20px; color:red"></i>
+              <i  (click)="deleteSUnit(element.id)" class="fa fa-trash" style="font-size: 20px; color:red"></i>
               </td>
         </tr>
     </tbody>
   </table><br>
 
-</mat-card>
+</mat-card> -->

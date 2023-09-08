@@ -8,7 +8,7 @@ import { AdminService } from '../../../../../admin.service';
 import { Route } from '../../../../../models/route/route';
 import { CollectionDays } from '../../../../../models/route/collectionDays';
 import { RouteManagementComponent } from '../../route-management/route-management.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-route-days',
@@ -17,8 +17,11 @@ import { Router } from '@angular/router';
 })
 export class AddRouteDaysComponent implements OnInit {
 
+  id: number = 0;
   constructor(private fb: FormBuilder,public adminService: AdminService, private _snackBar: MatSnackBar,
-    public dialog: MatDialog, private router: Router){}
+    public dialog: MatDialog, private router: Router, private route: ActivatedRoute){
+      this.id = route.snapshot.params['id'];
+    }
 
   ngOnDestroy(){
     this.daysSubscription?.unsubscribe()
@@ -29,7 +32,6 @@ export class AddRouteDaysComponent implements OnInit {
   }
 
   routeDaysForm = this.fb.group({
-
     routeId: ['', Validators.required],
     weekDays : ['', Validators.required],
   });
@@ -37,6 +39,9 @@ export class AddRouteDaysComponent implements OnInit {
   displayedColumns : string[] = ['id','routeId', 'weekDay','manage']
 
   ngOnInit(): void {
+    if(this.id != undefined){
+      this.getRouteById()
+    }
     this.getRoute()
 
     this.daysSubscription = this.getRouteDays()
@@ -66,6 +71,16 @@ export class AddRouteDaysComponent implements OnInit {
 
     this.homeSubscription = dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
+    })
+  }
+
+  getRouteById(){
+    this.adminService.getRouteById(this.id).subscribe(result => {
+      let routeName: any = result.id;
+
+      this.routeDaysForm.patchValue({
+        routeId: routeName
+      })
     })
   }
 

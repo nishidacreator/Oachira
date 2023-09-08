@@ -27,6 +27,24 @@ export class UnitManagementComponent implements OnDestroy {
     this.unitSubscription?.unsubscribe();
     this.pUnitSubscription?.unsubscribe();
     this.sUnitSubscription?.unsubscribe();
+    if(this.pSubmit){
+      this.pSubmit.unsubscribe();
+    }
+    if(this.pDelete){
+      this.pDelete.unsubscribe();
+    }
+    if(this.pEdit){
+      this.pEdit.unsubscribe();
+    }
+    if(this.sSubmit){
+      this.sSubmit.unsubscribe();
+    }
+    if(this.sDelete){
+      this.sDelete.unsubscribe();
+    }
+    if(this.sEdit){
+      this.sEdit.unsubscribe();
+    }
   }
 
   unitForm = this.fb.group({
@@ -51,27 +69,26 @@ export class UnitManagementComponent implements OnDestroy {
   status : Boolean = true;
 
   ngOnInit(): void {
-    this.unitSubscription = this.getPrimaryUnit();
-    this.pUnitSubscription = this.getSecondaryUnits();
-    this.sUnitSubscription = this.getPrimaryUnits();
+    this.getPrimaryUnit();
+    this.getSecondaryUnits();
+    this.getPrimaryUnits();
 
     if (this.dialogRef) {
       this.addStatus = this.dialogData?.status;
-    } else {
-      // this.addStatus = this.route.snapshot.params['status'] === 'true';
-    }
+    } 
   }
 
   units: any;
   unitSubscription? : Subscription;
   getPrimaryUnit(){
-    return this.adminService.getPrimaryUnit().subscribe((res)=>{
-      this.units = res ;
+    this.unitSubscription = this.adminService.getPrimaryUnit().subscribe((res)=>{
+      this.units = res;
     })
   }
 
+  pSubmit!: Subscription;
   onPrimarySubmit(){
-      this.adminService.addPrimaryUnit(this.primaryUnitForm.getRawValue()).subscribe((res)=>{
+      this.pSubmit = this.adminService.addPrimaryUnit(this.primaryUnitForm.getRawValue()).subscribe((res)=>{
         this._snackBar.open("Primary Unit added successfully...","" ,{duration:3000})
         this.clearControls()
       },(error=>{
@@ -79,8 +96,9 @@ export class UnitManagementComponent implements OnDestroy {
       }))
   }
 
+  sSubmit!: Subscription;
   onSecondarySubmit(){
-    this.adminService.addSecondaryUnit(this.secondaryUnitForm.getRawValue()).subscribe((res)=>{
+    this.sSubmit = this.adminService.addSecondaryUnit(this.secondaryUnitForm.getRawValue()).subscribe((res)=>{
       this._snackBar.open("Secondary Unit added successfully...","" ,{duration:3000})
       this.clearControls()
     },(error=>{
@@ -91,18 +109,24 @@ export class UnitManagementComponent implements OnDestroy {
   clearControls(){
     this.unitForm.reset()
     this.unitForm.setErrors(null)
-    this.getPrimaryUnit()
-    this.getPrimaryUnits();
-    this.getSecondaryUnits()
     Object.keys(this.unitForm.controls).forEach(key=>{this.unitForm.get(key)?.setErrors(null)})
+
+    this.primaryUnitForm.reset()
+    this.primaryUnitForm.setErrors(null)
     Object.keys(this.primaryUnitForm.controls).forEach(key=>{this.primaryUnitForm.get(key)?.setErrors(null)})
+
+    this.secondaryUnitForm.reset()
+    this.secondaryUnitForm.setErrors(null)
     Object.keys(this.secondaryUnitForm.controls).forEach(key=>{this.secondaryUnitForm.get(key)?.setErrors(null)})
+    this.getPrimaryUnits()
+    this.getSecondaryUnits()
+    
   }
 
   pUnits : PrimaryUnit[] = [];
   pUnitSubscription? : Subscription;
   getPrimaryUnits(){
-    return this.adminService.getPrimaryUnit().subscribe((res)=>{
+    this.pUnitSubscription = this.adminService.getPrimaryUnit().subscribe((res)=>{
       this.pUnits = res
       this.filtered = this.pUnits
     })
@@ -115,13 +139,14 @@ export class UnitManagementComponent implements OnDestroy {
     this.filterValue = filterValue;
     this.filtered = this.pUnits.filter(element =>
       element.primaryUnitName.toLowerCase().includes(filterValue) 
+      || element.id.toString().includes(filterValue) 
     );
   }
 
   sUnits : SecondaryUnit[] = [];
   sUnitSubscription? : Subscription;
   getSecondaryUnits(){
-    return this.adminService.getSecondaryUnit().subscribe((res)=>{
+    this.sUnitSubscription = this.adminService.getSecondaryUnit().subscribe((res)=>{
       this.sUnits = res
       this.secFiltered = this.sUnits
     })
@@ -130,14 +155,17 @@ export class UnitManagementComponent implements OnDestroy {
   secFilterValue: any;
   secFiltered!: any[];
   applySecFilter(event: Event): void {
+    console.log(this.sUnits)
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.filterValue = filterValue;
-    this.filtered = this.sUnits.filter(element =>
-      element.secondaryUnitName.toLowerCase().includes(filterValue) &&
-      element.primaryUnitId.primaryUnitName.toLowerCase().includes(filterValue)
+    this.secFilterValue = filterValue;
+    this.secFiltered = this.sUnits.filter(element =>
+      element.secondaryUnitName.toLowerCase().includes(filterValue) 
+      || element.primaryUnit.primaryUnitName.toLowerCase().includes(filterValue)
+      || element.id.toString().toLowerCase().includes(filterValue)
     );
   }
 
+  pDelete!: Subscription;
   deletePUnit(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
       data: {}
@@ -145,7 +173,7 @@ export class UnitManagementComponent implements OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.adminService.deletePUnit(id).subscribe((res)=>{
+        this.pDelete = this.adminService.deletePUnit(id).subscribe((res)=>{
           this.clearControls()
           this._snackBar.open("Primary Unit deleted successfully...","" ,{duration:3000})
         },(error=>{
@@ -155,7 +183,7 @@ export class UnitManagementComponent implements OnDestroy {
     })
 }
 
-
+sDelete!: Subscription;
 deleteSUnit(id : any){
   const dialogRef = this.dialog.open(DeleteDialogueComponent, {
     data: {}
@@ -163,7 +191,7 @@ deleteSUnit(id : any){
 
   dialogRef.afterClosed().subscribe(result => {
     if (result === true) {
-      this.adminService.deleteSUnit(id).subscribe((res)=>{
+      this.sDelete = this.adminService.deleteSUnit(id).subscribe((res)=>{
         this.clearControls()
         this._snackBar.open("Secondary Unit deleted successfully...","" ,{duration:3000})
       },(error=>{
@@ -197,6 +225,7 @@ editPUnit(id : any){
   this.pUnitId = id;
 }
 
+pEdit!: Subscription;
 editPUnitFunction(){
   this.isEdit = false;
   this.pUnitStatus = false;
@@ -205,7 +234,7 @@ editPUnitFunction(){
     value : this.primaryUnitForm.get('value')?.value
   }
   
-  this.adminService.updatePUnit(this.pUnitId, data).subscribe((res)=>{
+  this.pEdit = this.adminService.updatePUnit(this.pUnitId, data).subscribe((res)=>{
     this._snackBar.open("Primary Unit updated successfully...","" ,{duration:3000})
     this.clearControls();
   },(error=>{
@@ -237,6 +266,7 @@ editPUnitFunction(){
     this.sUnitId = id;
   }
   
+  sEdit!: Subscription;
   editSUnitFunction(){
     this.isEdit = false;
   
@@ -246,7 +276,7 @@ editPUnitFunction(){
       factor : this.secondaryUnitForm.get('factor')?.value
     }
     
-    this.adminService.updateSUnit(this.sUnitId, data).subscribe((res)=>{
+    this.sEdit = this.adminService.updateSUnit(this.sUnitId, data).subscribe((res)=>{
       this._snackBar.open("Secondary Unit updated successfully...","" ,{duration:3000})
       this.clearControls();
     },(error=>{

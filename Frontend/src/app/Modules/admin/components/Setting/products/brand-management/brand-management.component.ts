@@ -1,13 +1,14 @@
 import { Brand } from '../../../../models/settings/brand';
 import { DeleteDialogueComponent } from '../../../../../shared-components/delete-dialogue/delete-dialogue.component';
 import { AdminService } from '../../../../admin.service';
-import { Component, Inject, OnDestroy, Optional } from '@angular/core';
+import { Component, Inject, OnDestroy, Optional, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { ProductManagementComponent } from '../product-management/product-management.component';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-brand-management',
@@ -24,7 +25,15 @@ export class BrandManagementComponent implements OnDestroy {
 
   ngOnDestroy() {
     this.brandSubscription?.unsubscribe()
-    this.submitSubscription?.unsubscribe()
+    if(this.submit){
+      this.submit.unsubscribe();
+    }
+    if(this.edit){
+      this.edit.unsubscribe();
+    }
+    if(this.delete){
+      this.delete.unsubscribe();
+    }
   }
 
   brandForm = this.fb.group({
@@ -39,12 +48,12 @@ export class BrandManagementComponent implements OnDestroy {
       this.addStatus = this.dialogData?.status;
     } 
 
-    this.brandSubscription = this.getBrands()
+    this.getBrands()
   }
 
-  private submitSubscription : Subscription = new Subscription();
+  submit!: Subscription
   onSubmit(){
-    this.submitSubscription = this.adminService.addBrand(this.brandForm.getRawValue()).subscribe((res)=>{
+    this.submit = this.adminService.addBrand(this.brandForm.getRawValue()).subscribe((res)=>{
       this._snackBar.open("Brand added successfully...","" ,{duration:3000})
       this.getBrands()
       this.clearControls()
@@ -63,11 +72,23 @@ export class BrandManagementComponent implements OnDestroy {
   brandSubscription? : Subscription
   dataSource! : MatTableDataSource<Brand>
   getBrands(){
-    return this.adminService.getBrand().subscribe((res)=>{
+    this.brandSubscription = this.adminService.getBrand().subscribe((res)=>{
       this.brands = res
-      this.filteredBrands = this.brands
+      this.filteredBrands = this.brands.slice(0, this.pageSize);
+      // this.filteredBrands = this.paginatedData
     })
   } 
+
+  pageSize = 10;
+  pageIndex = 0;
+  paginatedData: any[] = [];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  onPageChange(event: PageEvent): void {
+    const startIndex = event.pageIndex * event.pageSize;
+    this.filteredBrands = this.filteredBrands.slice(startIndex, startIndex + event.pageSize);
+  }
   
   filterValue: any;
   filteredBrands!: any[];
@@ -79,6 +100,7 @@ export class BrandManagementComponent implements OnDestroy {
     );
   }
 
+  delete!: Subscription;
   deleteBrand(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
       data: {}
@@ -86,7 +108,7 @@ export class BrandManagementComponent implements OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.adminService.deleteBrand(id).subscribe((res)=>{
+        this.delete = this.adminService.deleteBrand(id).subscribe((res)=>{
           this.getBrands()
           this._snackBar.open("Brand deleted successfully...","" ,{duration:3000})
         },(error=>{
@@ -110,6 +132,7 @@ export class BrandManagementComponent implements OnDestroy {
     this.brandId = id;
   }
 
+  edit!:Subscription;
   editFunction(){
     this.isEdit = false;
 
@@ -117,7 +140,7 @@ export class BrandManagementComponent implements OnDestroy {
       brandName : this.brandForm.get('brandName')?.value
     }
     
-    this.adminService.updateBrand(this.brandId, data).subscribe((res)=>{
+    this.edit = this.adminService.updateBrand(this.brandId, data).subscribe((res)=>{
       this._snackBar.open("Brand updated successfully...","" ,{duration:3000})
       this.getBrands();
       this.clearControls();

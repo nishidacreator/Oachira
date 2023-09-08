@@ -30,7 +30,7 @@ export class CategoryManagementComponent implements OnDestroy{
   }
     
   productCategoryForm = this.fb.group({
-    category_image: [null],
+    category_image: [''],
     categoryName: ['', Validators.required],
     taxable: [false],
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
 import { AdminService } from '../../../../admin.service';
@@ -17,8 +17,11 @@ import { DeliveryDays } from 'src/app/Modules/admin/models/route/deliveryDays';
 })
 export class TripDaysComponent implements OnInit {
 
+  id: number = 0;
   constructor(private fb: FormBuilder,public adminService: AdminService, private _snackBar: MatSnackBar,
-    public dialog: MatDialog, private router: Router){}
+    public dialog: MatDialog, private router: Router, private route: ActivatedRoute){
+      this.id = route.snapshot.params['id'];
+    }
 
   ngOnDestroy(){
     this.daysSubscription?.unsubscribe()
@@ -34,8 +37,21 @@ export class TripDaysComponent implements OnInit {
 
   ngOnInit(): void {
     this.getRoute()
+    if(this.id != undefined){
+      this.getRouteById()
+    }
 
     this.daysSubscription = this.getTripDays()
+  }
+
+  getRouteById(){
+    this.adminService.getRouteById(this.id).subscribe(result => {
+      let routeName: any = result.id;
+
+      this.deliveryDaysForm.patchValue({
+        routeId: routeName
+      })
+    })
   }
 
   route$! : Observable<Route[]> ;

@@ -23,6 +23,15 @@ export class RoleManagementComponent {
 
   ngOnDestroy() {
     this.roleSubscription?.unsubscribe()
+    if(this.submit){
+      this.submit.unsubscribe()
+    }this.edit
+    if(this.submit){
+      this.edit.unsubscribe()
+    }
+    if(this.delete){
+      this.delete.unsubscribe()
+    }
   }
 
   roleForm = this.fb.group({
@@ -53,8 +62,9 @@ export class RoleManagementComponent {
     })
   }
 
+  submit!: Subscription;
   onSubmit(){
-    this.adminService.addRole(this.roleForm.getRawValue()).subscribe((res)=>{
+    this.submit = this.adminService.addRole(this.roleForm.getRawValue()).subscribe((res)=>{
       this._snackBar.open("Role added successfully...","" ,{duration:3000})
       this.getRoles()
       this.clearControls()
@@ -85,11 +95,12 @@ export class RoleManagementComponent {
     this.filterValue = filterValue;
     this.filtered = this.roles.filter(element =>
       element.roleName.toLowerCase().includes(filterValue) 
-      // && element.status.toLowerCase().includes(filterValue)
-      // && element.barCode.toLowerCase().includes(filterValue)
+      || element.id.toString().includes(filterValue)
+      || element.status.toString().includes(filterValue)
     );
   }
 
+  delete!: Subscription;
   deleteRole(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
       data: {}
@@ -97,7 +108,7 @@ export class RoleManagementComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.adminService.deleteRole(id).subscribe((res)=>{
+        this.delete = this.adminService.deleteRole(id).subscribe((res)=>{
           this.getRoles()
           this._snackBar.open("Role deleted successfully...","" ,{duration:3000})
         },(error=>{
@@ -122,6 +133,7 @@ export class RoleManagementComponent {
     this.roleId = id;
   }
 
+  edit!: Subscription;
   editFunction(){
     this.isEdit = false;
 
@@ -130,7 +142,7 @@ export class RoleManagementComponent {
       status : this.roleForm.get('status')?.value
     }
     
-    this.adminService.updateRole(this.roleId, data).subscribe((res)=>{
+    this.edit = this.adminService.updateRole(this.roleId, data).subscribe((res)=>{
       this._snackBar.open("Role updated successfully...","" ,{duration:3000})
       this.getRoles();
       this.clearControls();

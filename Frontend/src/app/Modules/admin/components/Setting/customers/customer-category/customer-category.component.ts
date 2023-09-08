@@ -23,7 +23,15 @@ export class CustomerCategoryComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(){
     this.categorySubscription?.unsubscribe()
-    this.submitSubscription.unsubscribe()
+    if(this.submit){
+      this.submit.unsubscribe()
+    }
+    if(this.edit){
+      this.edit.unsubscribe()
+    }
+    if(this.delete){
+      this.delete.unsubscribe()
+    }
   }
 
   customerCategoryForm = this.fb.group({
@@ -35,7 +43,7 @@ export class CustomerCategoryComponent implements OnInit, OnDestroy {
 
   addStatus!: string
   ngOnInit(): void {
-    this.categorySubscription = this.getCategory()
+    this.getCategory()
 
     if (this.dialogRef) {
       this.addStatus = this.dialogData?.status;
@@ -53,9 +61,9 @@ export class CustomerCategoryComponent implements OnInit, OnDestroy {
     })
   }
 
-  private submitSubscription : Subscription = new Subscription();
+  submit!: Subscription;
   onSubmit(){
-    this.submitSubscription = this.adminService.addCustomerCategory(this.customerCategoryForm.getRawValue()).subscribe((res)=>{
+    this.submit = this.adminService.addCustomerCategory(this.customerCategoryForm.getRawValue()).subscribe((res)=>{
       this._snackBar.open("Customer category added successfully...","" ,{duration:3000})
       this.clearControls()
     },(error=>{
@@ -73,11 +81,12 @@ export class CustomerCategoryComponent implements OnInit, OnDestroy {
   category: CustomerCategory[] = [];
   categorySubscription? : Subscription;
   getCategory(){
-    return this.adminService.getCustomerCategory().subscribe((res)=>{
+    this.categorySubscription = this.adminService.getCustomerCategory().subscribe((res)=>{
       this.category = res
     })
   }   
 
+  delete!: Subscription;
   deleteBrand(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
       data: {}
@@ -85,7 +94,7 @@ export class CustomerCategoryComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.adminService.deleteCustomerCategory(id).subscribe((res)=>{
+        this.delete = this.adminService.deleteCustomerCategory(id).subscribe((res)=>{
           this.getCategory()
           this._snackBar.open("Category deleted successfully...","" ,{duration:3000})
         },(error=>{
@@ -97,6 +106,7 @@ export class CustomerCategoryComponent implements OnInit, OnDestroy {
 
   isEdit = false;
   catId : any;
+  edit!: Subscription;
   editBrand(id : any){
     this.isEdit = true;
     //Get the product based on the ID
@@ -116,7 +126,7 @@ export class CustomerCategoryComponent implements OnInit, OnDestroy {
       categoryName : this.customerCategoryForm.get('categoryName')?.value
     }
     
-    this.adminService.updateCustomerCategory(this.catId, data).subscribe((res)=>{
+    this.edit = this.adminService.updateCustomerCategory(this.catId, data).subscribe((res)=>{
       this._snackBar.open("Category updated successfully...","" ,{duration:3000})
       this.clearControls();
     },(error=>{
