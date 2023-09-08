@@ -28,6 +28,18 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(){
     this.customerSubscription?.unsubscribe()
+    this.gradeSub.unsubscribe();
+    this.categorySub.unsubscribe();
+    this.saleExec.unsubscribe();
+    if(this.submit){
+      this.submit.unsubscribe();
+    }
+    if(this.edit){
+      this.edit.unsubscribe();
+    }
+    if(this.delete){
+      this.delete.unsubscribe();
+    }
   }
 
   homeClick(){
@@ -83,26 +95,27 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getCategory()
     this.getGrade()
-
-    this.customerSubscription = this.getCustomers()
-
+    this.getCustomers()
     this.salesExecutive()
   }
 
-  category: CustomerCategory[] = [] ;
+  category: CustomerCategory[] = [];
+  categorySub!: Subscription;
   getCategory(){
-    this.adminService.getCustomerCategory().subscribe(c => {
+    this.categorySub = this.adminService.getCustomerCategory().subscribe(c => {
       this.category = c
     })
   } 
 
-  grade: CustomerGrade[] = [] ;
+  grade: CustomerGrade[] = [];
+  gradeSub!: Subscription
   getGrade(){
-    this.adminService.getCustomerGrade().subscribe(c => {
+    this.gradeSub = this.adminService.getCustomerGrade().subscribe(c => {
       this.grade = c
     })
   }
 
+  submit!: Subscription;
   onSubmit(){
     let data = {
       customerName: this.customerForm.getRawValue().customerName,
@@ -113,10 +126,10 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
       gstNo : this.customerForm.getRawValue().gstNo,
       email : this.customerForm.getRawValue().email,
       remarks : this.customerForm.getRawValue().remarks,
-      numbers : this.phoneForm.getRawValue().numbers
+      numbers : this.phoneForm.getRawValue().numbers,
+      subledgerCode : this.customerForm.getRawValue().subledgerCode
     }
-    console.log(data);
-    this.adminService.addCustomer(data).subscribe((res)=>{
+    this.submit = this.adminService.addCustomer(data).subscribe((res)=>{
       this._snackBar.open("Customer added successfully...","" ,{duration:3000})
       this.clearControls()
     },(error=>{
@@ -138,7 +151,7 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
   customers : Customer[] = [];
   customerSubscription? : Subscription
   getCustomers(){
-    return this.adminService.getCustomer().subscribe((res)=>{
+    this.customerSubscription = this.adminService.getCustomer().subscribe((res)=>{
       this.customers = res
       this.filtered = this.customers
     })
@@ -159,11 +172,15 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
     this.filterValue = filterValue;
     this.filtered = this.customers.filter(element =>
       element.customerName.toLowerCase().includes(filterValue) 
-      // && element.code.toLowerCase().includes(filterValue)
-      // && element.barCode.toLowerCase().includes(filterValue)
+      || element.id.toString().includes(filterValue)
+      || element.customerCategory.categoryName.toLowerCase().includes(filterValue)
+      || element.customerGrade.grade.toLowerCase().includes(filterValue)
+      // || element.subledgerCode.toLowerCase().includes(filterValue)
+      || element.location.toLowerCase().includes(filterValue)
     );
   }
 
+  delete!: Subscription;
   deleteBrand(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
       data: {}
@@ -171,7 +188,7 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.adminService.deleteCustomer(id).subscribe((res)=>{
+        this.delete = this.adminService.deleteCustomer(id).subscribe((res)=>{
           this.getCustomers()
           this._snackBar.open("Customer deleted successfully...","" ,{duration:3000})
         },(error=>{
@@ -227,6 +244,7 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
     this.customerId = id;
   }
 
+  edit!: Subscription;
   editFunction(){
     this.isEdit = false;
 
@@ -242,7 +260,7 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
       remarks : this.customerForm.get('remarks')?.value
     }
     
-    this.adminService.updateCustomer(this.customerId, data).subscribe((res)=>{
+    this.edit = this.adminService.updateCustomer(this.customerId, data).subscribe((res)=>{
       this._snackBar.open("Customer updated successfully...","" ,{duration:3000})
       this.clearControls();
     },(error=>{
@@ -271,20 +289,19 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
   }
 
   id : any;
+  saleExec!: Subscription;
   salesExecutive(){
     //SALES EXECUTIVE
     const token: any = localStorage.getItem('token')
     let user = JSON.parse(token) 
     this.id = user.role
-    console.log(this.id) 
-    this.adminService.getRoleById(this.id).subscribe((res)=>{
+
+    this.saleExec = this.adminService.getRoleById(this.id).subscribe((res)=>{
       let role = res.roleName.toLowerCase();
 
       if(role === 'salesexecutive'){
-        console.log(this.id)
-      
         let id: any = this.category.find(c => c.categoryName.toLowerCase() === 'route')?.id
-        console.log(id)
+
         this.customerForm.patchValue({
             customerCategoryId : id
           })

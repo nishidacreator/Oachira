@@ -25,9 +25,15 @@ export class AddRouteComponent implements OnInit {
   ngOnDestroy(){
     this.routeSubscription?.unsubscribe()
     this.userSubscription.unsubscribe()
-    this.submitSubscription.unsubscribe()
-    this.deleteSubscription.unsubscribe()
-    this.updateSubscription.unsubscribe()
+    if(this.submit){
+      this.submit.unsubscribe();
+    }
+    if(this.delete){
+      this.delete.unsubscribe();
+    }
+    if(this.edit){
+      this.edit.unsubscribe();
+    }
   }
 
   routeForm = this.fb.group({
@@ -38,12 +44,12 @@ export class AddRouteComponent implements OnInit {
     salesExecutiveId : ['', Validators.required]
   });
 
-  displayedColumns : string[] = ['id','routeName', 'vehicleId', 'manage']
+  displayedColumns : string[] = ['id','routeName', 'vehicleId','vehicleDriverId','salesManId', 'salesExecutiveId','manage']
 
   ngOnInit(): void {
     this.getVehicle()
-    this.userSubscription = this.getDriver()
-    // this.routeSubscription = this.getRoute()
+    this.getDriver()
+    this.getRoute()
   }
 
   homeClick(){
@@ -67,23 +73,11 @@ export class AddRouteComponent implements OnInit {
   salesExecutive : User[] = [];
   userSubscription! : Subscription;
   getDriver(){
-    return this.authService.getUser().subscribe((res)=>{
-      this.driver = res.filter(x => x.role.roleName == 'Driver');
-      this.salesMan = res.filter(x => x.role.roleName == 'Salesman');
-      this.salesExecutive = res.filter(x=>x.role.roleName == 'SalesExecutive')
+    this.userSubscription = this.authService.getUser().subscribe((res)=>{
+      this.driver = res.filter(x => x.role.roleName.toLowerCase() == 'driver');
+      this.salesMan = res.filter(x => x.role.roleName.toLowerCase() == 'salesman');
+      this.salesExecutive = res.filter(x=>x.role.roleName.toLowerCase() == 'salesexecutive')
     })
-  }
-
-  private submitSubscription : Subscription = new Subscription();
-  onSubmit(){
-    this.submitSubscription = this.adminService.addRoute(this.routeForm.getRawValue()).subscribe((res)=>{
-      this._snackBar.open("Route added successfully...","" ,{duration:3000})
-      console.log("added successfully")
-      this.getRoute()
-      this.clearControls()
-    },(error=>{
-      alert(error)
-    }))
   }
 
   clearControls(){
@@ -96,25 +90,12 @@ export class AddRouteComponent implements OnInit {
   routes : Route[] = [];
   routeSubscription? : Subscription
   getRoute(){
-    return this.adminService.getRoute().subscribe((res)=>{
+    this.routeSubscription = this.adminService.getRoute().subscribe((res)=>{
       this.routes = res
-      this.filtered = this.routes
     })
-  } 
-  
-  filterValue: any;
-  filtered!: any[];
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.filterValue = filterValue;
-    this.filtered = this.routes.filter(element =>
-      element.routeName.toLowerCase().includes(filterValue) 
-      // && element.code.toLowerCase().includes(filterValue)
-      // && element.barCode.toLowerCase().includes(filterValue)
-    );
-  }
+  }  
 
-  private deleteSubscription : Subscription = new Subscription();
+  delete!: Subscription;
   deleteRoute(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
       data: {}
@@ -122,7 +103,7 @@ export class AddRouteComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.deleteSubscription = this.adminService.deleteRoute(id).subscribe((res)=>{
+        this.delete = this.adminService.deleteRoute(id).subscribe((res)=>{
           this.getRoute()
           this._snackBar.open("Route deleted successfully...","" ,{duration:3000})
         },(error=>{
@@ -156,7 +137,7 @@ export class AddRouteComponent implements OnInit {
     this.routeId = id;
   }
 
-  private updateSubscription : Subscription = new Subscription();
+  edit!: Subscription;
   editFunction(){
     this.isEdit = false;
 
@@ -168,7 +149,7 @@ export class AddRouteComponent implements OnInit {
       salesExecutiveId : this.routeForm.get('salesExecutiveId')?.value,
     }
     
-    this.updateSubscription = this.adminService.updateRoute(this.routeId, data).subscribe((res)=>{
+    this.edit = this.adminService.updateRoute(this.routeId, data).subscribe((res)=>{
       this._snackBar.open("Route updated successfully...","" ,{duration:3000})
       this.clearControls();
     },(error=>{
@@ -182,6 +163,80 @@ export class AddRouteComponent implements OnInit {
 
   addVehicle(){
     this.router.navigateByUrl('admin/settings/vehicle')
+  }
+
+  routeDaysForm = this.fb.group({
+    weekDays : ['', Validators.required],
+  });
+
+  weekDays =[
+    {name: 'Sunday', abbreviation: 'SUN', index: 0},
+    {name: 'Monday', abbreviation: 'MON', index: 1},
+    {name: 'Tuesday', abbreviation: 'TUE', index: 2},
+    {name: 'Wednesday', abbreviation: 'WED', index: 3},
+    {name: 'Thursday', abbreviation: 'THU', index: 4},
+    {name: 'Friday', abbreviation: 'FRI', index: 5},
+    {name: 'Saturday', abbreviation: 'SAT', index: 6},
+  ];
+  isDisabled = true;
+
+  tripDaysForm = this.fb.group({
+    weekDays : ['', Validators.required],
+  });
+
+  result : any
+  submitted = false;
+  submit!: Subscription;
+  onSubmit(){
+    let data ={
+      routeName: this.routeForm.get('routeName')?.value,
+      vehicleId :this.routeForm.get('vehicleId')?.value,
+      driverId : this.routeForm.get('driverId')?.value,
+      salesManId :this.routeForm.get('salesManId')?.value,
+      salesExecutiveId : this.routeForm.get('salesExecutiveId')?.value
+    }
+
+    this.adminService.addRoute(data).subscribe((res)=>{
+      this.result = res
+      this.submitted = true
+      this.clearControls()
+    })
+  }
+
+  addCollectionDays(){
+    if(this.result){
+      let len = this.routes.length;
+      let lenght = len + 1;
+      console.log(lenght)
+      this.router.navigateByUrl('/admin/settings/route/collectiondays/'+ lenght)
+    }
+    else{
+      this.router.navigateByUrl('/admin/settings/route/collectiondays')
+    }
+  }
+
+  addDeliveryDays(){
+    if(this.result){
+      let len = this.routes.length;
+      let lenght = len + 1;
+      console.log(lenght)
+      this.router.navigateByUrl('/admin/settings/trip/deliverydays/'+lenght)
+    }
+    else{
+      this.router.navigateByUrl('/admin/settings/trip/deliverydays')
+    }
+  }
+
+  addDetails(){
+    if(this.result){
+      let len = this.routes.length;
+      let lenght = len + 1;
+      console.log(lenght)
+      this.router.navigateByUrl('/admin/settings/route/routedetails/'+ lenght)
+    }
+    else{
+      this.router.navigateByUrl('/admin/settings/route/routedetails')
+    }
   }
 }
 

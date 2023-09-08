@@ -30,26 +30,12 @@
               </mat-error>
             </mat-form-field>
           </div>
-        </div>
-  
-        <div class="row">
+
           <div class="col">
             <mat-form-field class="full-width">
               <input matInput placeholder="Phone Number" formControlName="phoneNumber" >
               <mat-error *ngIf="userForm.controls['phoneNumber'].hasError('required')">
-               Email is <strong>required</strong>
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-  
-  
-        <div class="row">
-          <div class="col">
-            <mat-form-field class="full-width">
-              <input matInput type="password" placeholder="Password" formControlName="password">
-              <mat-error *ngIf="userForm.controls['password'].hasError('required')">
-               Password is <strong>required</strong>
+               Number is <strong>required</strong>
               </mat-error>
             </mat-form-field>
           </div>
@@ -69,16 +55,48 @@
                 </mat-option>
               </mat-select>
               <mat-error *ngIf="userForm.controls['roleId'].hasError('required')">
-                Unit <strong>required</strong>
+                Role <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col">
+
+            <mat-form-field class="full-width">
+              <mat-select placeholder="Branch" formControlName="branchId">
+                <span *ngIf="branches.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addRole()">playlist_add</span>
+                <mat-option *ngFor="let item of branches" [value]="item.id">
+                  {{item.branchName}}
+                </mat-option>
+                <mat-option *ngIf="branches.length === 0" [value]="'add'">
+                  <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addRole()">playlist_add</span>
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="userForm.controls['roleId'].hasError('required')">
+                Branch <strong>required</strong>
               </mat-error>
             </mat-form-field>
           </div>
         </div>
 
         
-      <div>
-        <mat-slide-toggle formControlName="status">Status</mat-slide-toggle>
-      </div>
+        
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput type="password" placeholder="Password" formControlName="password">
+              <mat-error *ngIf="userForm.controls['password'].hasError('required')">
+               Password is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div style="margin-top: 20px;">
+            <mat-slide-toggle formControlName="status">Status</mat-slide-toggle>
+          </div>
+        </div>
+
+      
       </mat-card-content>
       <mat-card-actions>
         <button mat-raised-button type="submit" *ngIf="isEdit == false" [disabled]="userForm.pristine || !userForm.valid">ADD</button>

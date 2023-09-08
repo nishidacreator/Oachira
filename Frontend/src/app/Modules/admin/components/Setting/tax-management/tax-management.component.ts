@@ -18,10 +18,18 @@ export class TaxManagementComponent implements OnInit,OnDestroy {
 
   ngOnDestroy() {
     this.taxSubcription?.unsubscribe()
+    if(this.submit){
+      this.submit.unsubscribe();
+    }
+    if(this.edit){
+      this.edit.unsubscribe();
+    }
+    if(this.delete){
+      this.delete.unsubscribe();
+    }
   }
 
   taxForm = this.fb.group({
-
     taxName: ['', Validators.required],
     igst: ['',[Validators.required, Validators.pattern("^()?[0-9]{1,2}$")]],
     cgst: ['',[Validators.pattern("^()?[0-9]{1,2}$")]],
@@ -31,7 +39,7 @@ export class TaxManagementComponent implements OnInit,OnDestroy {
   displayedColumns : string[] = ['id','taxName','igst','cgst','sgst','manage']
 
   ngOnInit(): void {
-    this.taxSubcription = this.getTax();
+    this.getTax();
   }
 
   sgst : any;
@@ -46,8 +54,9 @@ export class TaxManagementComponent implements OnInit,OnDestroy {
     this.taxForm.get('cgst')?.setValue(this.cgst)
   }
 
+  submit!: Subscription;
   onSubmit(){   
-    this.adminService.addTax(this.taxForm.getRawValue()).subscribe((res)=>{
+    this.submit = this.adminService.addTax(this.taxForm.getRawValue()).subscribe((res)=>{
       this._snackBar.open("Tax added successfully...","" ,{duration:3000})
       this.clearControls()
     },(error=>{
@@ -65,11 +74,12 @@ export class TaxManagementComponent implements OnInit,OnDestroy {
   tax: Tax[] = [];
   taxSubcription? : Subscription;
   getTax(){
-    return this.adminService.getTax().subscribe((res)=>{
+    this.taxSubcription = this.adminService.getTax().subscribe((res)=>{
       this.tax = res
     })
   }   
 
+  delete!: Subscription;
   deleteTax(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
       data: {}
@@ -77,7 +87,7 @@ export class TaxManagementComponent implements OnInit,OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.adminService.deleteTax(id).subscribe((res)=>{
+        this.delete = this.adminService.deleteTax(id).subscribe((res)=>{
           this.getTax()
           this._snackBar.open("Tax deleted successfully...","" ,{duration:3000})
         },(error=>{
@@ -109,6 +119,7 @@ export class TaxManagementComponent implements OnInit,OnDestroy {
     this.taxId = id;
   }
 
+  edit!: Subscription;
   editFunction(){
     this.isEdit = false;
 
@@ -119,7 +130,7 @@ export class TaxManagementComponent implements OnInit,OnDestroy {
       sgst : this.taxForm.get('sgst')?.value
     }
     
-    this.adminService.updateTax(this.taxId, data).subscribe((res)=>{
+    this.edit = this.adminService.updateTax(this.taxId, data).subscribe((res)=>{
       this._snackBar.open("Tax updated successfully...","" ,{duration:3000})
       this.clearControls();
     },(error=>{

@@ -31,6 +31,7 @@ import { environment } from 'src/environments/environment';
 import { VehicleType } from './models/vehicle/vehicle-type';
 import { BankAccount } from './models/settings/bankAccount';
 import { CustomerPhone } from './models/customer/customerPhone';
+import { Branch } from './models/settings/branch';
 // import * as puppeteer from 'puppeteer';
 
 @Injectable({
@@ -476,6 +477,22 @@ export class AdminService {
   // BRANCH
   addBranch(data: any){
     return this._http.post(this.url + '/branch', data);
+  }
+
+  getBranch(): Observable<Branch[]>{
+    return this._http.get<Branch[]>(this.url+'/branch');
+  }
+
+  getBranchById(id: number): Observable<Branch>{
+    return this._http.get<Branch>(this.url+'/branch/'+ id);
+  }
+  
+  deleteBranch(id:Number){
+    return this._http.delete(this.url+'/branch/'+id);
+  }
+
+  updateBranch(id:Number, data:any){
+    return this._http.patch<Branch>(this.url+'/branch/'+id, data);
   }
   
 }

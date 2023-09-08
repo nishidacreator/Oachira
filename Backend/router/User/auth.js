@@ -23,13 +23,13 @@ router.post('/', async(req, res)=> {
             return res.status(401).send({ message: 'incorrect password' });
         }
         
-        let userToken = {id:user.id, name:user.name, phoneNumber: user.phoneNumber, role: user.role, branch: user.branch};
+        let userToken = {id:user.id, name:user.name, phoneNumber: user.phoneNumber, role: user.roleId, branch: user.branchId};
 
         let token = jwtTokens(userToken);
 
         res.cookie('refreshtoken', token.refreshToken, {httpOnly : true})
 
-        return res.status(200).send({"token" : token, "role": user.roleId, "name" : user.name, "id" : user.id});
+        return res.status(200).send({"token" : token, "role": user.roleId, "name" : user.name, "id" : user.id, "branch": user.branchId});
 
     } catch (error) {
         res.send(error);

@@ -10,7 +10,11 @@ import { User } from '../../../../models/settings/user';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
 import { Router } from '@angular/router';
 import { RoleManagementComponent } from '../role-management/role-management.component';
+<<<<<<< HEAD
+import { Branch } from 'src/app/Modules/admin/models/settings/branch';
+=======
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+>>>>>>> 6c91dc2a4320e0dcc7b8da6906eae7dae3918b6b
 
 @Component({
   selector: 'app-add-user',
@@ -30,19 +34,31 @@ export class AddUserComponent implements OnInit, OnDestroy {
     phoneNumber: ['',[Validators.required, Validators.pattern("^[0-9 +]*$"),Validators.minLength(10),Validators.maxLength(14)]],
     password:['',Validators.required],
     roleId: ['', Validators.required],
-    status: [false, Validators.required]
+    status: [false, Validators.required],
+    branchId: ['', Validators.required]
   });
 
   ngOnDestroy(): void {
     this.userSubscriptions.unsubscribe()
+    this.branchSubscription?.unsubscribe()
+    this.roleSubscription?.unsubscribe()
+    if (this.submit) {
+      this.submit.unsubscribe();
+    }
+    if (this.delete) {
+      this.delete.unsubscribe();
+    }
+    if (this.edit) {
+      this.edit.unsubscribe();
+    }
   }
   
   addStatus!: string
   type!: string
   ngOnInit() {
     this.getRole()
-
-    this.userSubscriptions = this.getUsers()
+    this.getBranch()
+    this.getUsers()
 
     if (this.dialogRef) {
       this.addStatus = this.dialogData?.status;
@@ -57,16 +73,22 @@ export class AddUserComponent implements OnInit, OnDestroy {
           })
         }
       })
-
-     
     }
   }
 
   roles: Role[] = [];
   roleSubscription?: Subscription;
   getRole(){
-    return this.adminService.getRole().subscribe(role => {
+    this.roleSubscription = this.adminService.getRole().subscribe(role => {
       this.roles = role
+    })
+  }
+
+  branches: Branch[] = [];
+  branchSubscription!: Subscription;
+  getBranch(){
+    this.branchSubscription = this.adminService.getBranch().subscribe(b => {
+      this.branches = b
     })
   }
 
@@ -81,11 +103,11 @@ export class AddUserComponent implements OnInit, OnDestroy {
     })
   }
 
+  submit!: Subscription;
   onSubmit(){
-    this.adminService.addUser(this.userForm.getRawValue()).subscribe((res)=>{
-      this._snackBar.open("Role added successfully...","" ,{duration:3000});
+    this.submit = this.adminService.addUser(this.userForm.getRawValue()).subscribe((res)=>{
+      this._snackBar.open("User added successfully...","" ,{duration:3000});
       this.getUsers();
-      // this.getRoles()
       this.clearControls()
     },(error=>{
       alert(error)
@@ -104,7 +126,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   users : User[]=[];
   userSubscriptions! : Subscription;
   getUsers(){
-    return this.adminService.getUser().subscribe((res)=>{
+    this.userSubscriptions = this.adminService.getUser().subscribe((res)=>{
       this.users = res
       this.filtered = this.users.slice(0, this.pageSize);
     })
@@ -117,14 +139,21 @@ export class AddUserComponent implements OnInit, OnDestroy {
     this.filterValue = filterValue;
     if(this.filterValue){    this.filtered = this.users.filter(element =>
       element.name.toLowerCase().includes(filterValue) 
+<<<<<<< HEAD
+      || element.phoneNumber.includes(filterValue)
+      || element.id.toString().includes(filterValue)
+    );
+=======
       // && element.status.toLowerCase().includes(filterValue)
       // && element.barCode.toLowerCase().includes(filterValue)
     );}
     else{
       this.getUsers();
     }
+>>>>>>> 6c91dc2a4320e0dcc7b8da6906eae7dae3918b6b
   }
 
+  delete!: Subscription;
   deleteUser(id: number){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
       data: {}
@@ -132,7 +161,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.adminService.deleteUser(id).subscribe((res)=>{
+        this.delete = this.adminService.deleteUser(id).subscribe((res)=>{
           this.getUsers()
           this._snackBar.open("User deleted successfully...","" ,{duration:3000})
         },(error=>{
@@ -166,6 +195,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
     this.userId = id;
   }
 
+  edit!: Subscription;
   editFunction(){
     this.isEdit = false;
 
@@ -177,7 +207,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       status : this.userForm.get('status')?.value
     }
     
-    this.adminService.updateUser(this.userId, data).subscribe((res)=>{
+    this.edit = this.adminService.updateUser(this.userId, data).subscribe((res)=>{
       this._snackBar.open("User updated successfully...","" ,{duration:3000})
       this.getUsers();
       this.clearControls();

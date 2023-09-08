@@ -19,7 +19,7 @@ export class BranchManagementComponent {
   ngOnDestroy(){
     this.userSub.unsubscribe();
     this.accountSubscription.unsubscribe();
-    this.sub.unsubscribe();
+      
   }
 
   constructor(private fb: FormBuilder, private authService: AuthService, private adminService: AdminService,

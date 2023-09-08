@@ -10,7 +10,7 @@ import { Customer } from '../../../../../models/customer/customer';
 import { Route } from '../../../../../models/route/route';
 import { RouteDetails } from '../../../../../models/route/routeDetails';
 import { RouteManagementComponent } from '../../route-management/route-management.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-route-details',
@@ -19,8 +19,11 @@ import { Router } from '@angular/router';
 })
 export class AddRouteDetailsComponent implements OnInit {
 
+  id: number = 0;
   constructor(private fb: FormBuilder,public adminService: AdminService, private _snackBar: MatSnackBar,
-    public dialog: MatDialog, private authService: AuthService, private router: Router){}
+    public dialog: MatDialog, private authService: AuthService, private router: Router, private route: ActivatedRoute) {
+      this.id = route.snapshot.params['id'];
+    }
 
   ngOnDestroy(){
     this.customerSubscription?.unsubscribe()
@@ -39,6 +42,9 @@ export class AddRouteDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getRoute()
+    if(this.id != undefined){
+      this.getRouteById()
+    }
 
     this.customerSubscription = this.getCustomers()
     this.detailsSubscription = this.getDetails()
@@ -48,6 +54,17 @@ export class AddRouteDetailsComponent implements OnInit {
   getRoute(){
     this.route$ = this.adminService.getRoute()
   } 
+
+  getRouteById(){
+    this.adminService.getRouteById(this.id).subscribe(result => {
+      let routeName: any = result.id;
+
+      this.routeDetailsForm.patchValue({
+        routeId: routeName
+      })
+    })
+  }
+
 
   private submitSubscription : Subscription = new Subscription();
   onSubmit(){

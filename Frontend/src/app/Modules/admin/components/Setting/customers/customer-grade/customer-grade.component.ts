@@ -21,7 +21,15 @@ export class CustomerGradeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.gradeSubscription?.unsubscribe()
-    this.submitSubscription.unsubscribe()
+    if(this.submit){
+      this.submit.unsubscribe();
+    }
+    if(this.edit){
+      this.edit.unsubscribe();
+    }
+    if(this.delete){
+      this.delete.unsubscribe();
+    }
   }
 
   customerGradeForm = this.fb.group({
@@ -33,7 +41,7 @@ export class CustomerGradeComponent implements OnInit, OnDestroy {
 
   addStatus!: string
   ngOnInit(): void {
-    this.gradeSubscription = this.getGrade()
+    this.getGrade()
 
     if (this.dialogRef) {
       this.addStatus = this.dialogData?.status;
@@ -51,9 +59,9 @@ export class CustomerGradeComponent implements OnInit, OnDestroy {
     })
   }
 
-  private submitSubscription : Subscription = new Subscription();
+  submit!: Subscription
   onSubmit(){
-    this.adminService.addCustomerGrade(this.customerGradeForm.getRawValue()).subscribe((res)=>{
+    this.submit = this.adminService.addCustomerGrade(this.customerGradeForm.getRawValue()).subscribe((res)=>{
       this._snackBar.open("Customer Grade added successfully...","" ,{duration:3000})
       this.clearControls()
     },(error=>{
@@ -71,11 +79,12 @@ export class CustomerGradeComponent implements OnInit, OnDestroy {
   grades: CustomerGrade[] = [];
   gradeSubscription? : Subscription;
   getGrade(){
-    return this.adminService.getCustomerGrade().subscribe((res)=>{
+    this.gradeSubscription = this.adminService.getCustomerGrade().subscribe((res)=>{
       this.grades = res
     })
   }   
 
+  delete!: Subscription;
   deleteBrand(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
       data: {}
@@ -83,7 +92,7 @@ export class CustomerGradeComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.adminService.deleteCustomerGrade(id).subscribe((res)=>{
+        this.delete = this.adminService.deleteCustomerGrade(id).subscribe((res)=>{
           this.getGrade()
           this._snackBar.open("Grade deleted successfully...","" ,{duration:3000})
         },(error=>{
@@ -111,6 +120,7 @@ export class CustomerGradeComponent implements OnInit, OnDestroy {
     this.gradeId = id;
   }
 
+  edit!: Subscription;
   editFunction(){
     this.isEdit = false;
 
@@ -119,7 +129,7 @@ export class CustomerGradeComponent implements OnInit, OnDestroy {
       gradeRemarks : this.customerGradeForm.get('gradeRemarks')?.value
     }
     
-    this.adminService.updateCustomerGrade(this.gradeId, data).subscribe((res)=>{
+    this.edit = this.adminService.updateCustomerGrade(this.gradeId, data).subscribe((res)=>{
       this._snackBar.open("Grade updated successfully...","" ,{duration:3000})
       this.clearControls();
     },(error=>{

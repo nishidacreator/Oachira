@@ -19,6 +19,15 @@ export class VendorManagementComponent implements OnDestroy{
 
   ngOnDestroy(): void {
     this.vendorSubscriptions?.unsubscribe();
+    if(this.submit){
+      this.submit.unsubscribe();
+    }
+    if(this.delete){
+      this.delete.unsubscribe();
+    }
+    if(this.edit){
+      this.edit.unsubscribe();
+    }
   }
 
   vendorForm = this.fb.group({
@@ -27,7 +36,7 @@ export class VendorManagementComponent implements OnDestroy{
     address1: ['', Validators.required],
     address2: ['', Validators.required],
     state: ['', Validators.required],
-    vendorPhoneNumber: ['', Validators.required],
+    vendorPhoneNumber: ['',[ Validators.required, Validators.pattern("^[0-9 +]*$"),Validators.minLength(10),Validators.maxLength(14)]],
     gstNo: ['', Validators.required],
 
   });
@@ -35,11 +44,12 @@ export class VendorManagementComponent implements OnDestroy{
   displayedColumns : string[] = ['id','vendorName','address1','address2','state','vendorPhoneNumber','gstNo','manage']
 
   ngOnInit(): void {
-    this.vendorSubscriptions = this.getVendor();
+    this.getVendor();
   }
 
+  submit!: Subscription;
   onSubmit(){
-    this.adminService.addVendor(this.vendorForm.getRawValue()).subscribe((res)=>{
+    this.submit = this.adminService.addVendor(this.vendorForm.getRawValue()).subscribe((res)=>{
       this._snackBar.open("Vendor added successfully...","" ,{duration:3000})
       this.clearControls()
     },(error=>{
@@ -51,7 +61,7 @@ export class VendorManagementComponent implements OnDestroy{
   vendors : Vendor[] = [];
   vendorSubscriptions? : Subscription;
   getVendor(){
-    return this.adminService.getVendor().subscribe((res)=>{
+    this.vendorSubscriptions = this.adminService.getVendor().subscribe((res)=>{
       this.vendors = res;
       this.filtered = this.vendors
     })
@@ -64,11 +74,12 @@ export class VendorManagementComponent implements OnDestroy{
     this.filterValue = filterValue;
     this.filtered = this.vendors.filter(element =>
       element.vendorName.toLowerCase().includes(filterValue) 
-      // && element.code.toLowerCase().includes(filterValue)
-      // && element.barCode.toLowerCase().includes(filterValue)
+      || element.vendorPhoneNumber.toLowerCase().includes(filterValue)
+      || element.gstNo.toLowerCase().includes(filterValue)
     );
   }
 
+  delete!: Subscription;
   deleteVendor(id: number){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
       data: {}
@@ -76,7 +87,7 @@ export class VendorManagementComponent implements OnDestroy{
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.adminService.deleteVendor(id).subscribe((res)=>{
+        this.delete = this.adminService.deleteVendor(id).subscribe((res)=>{
           this.getVendor()
           this._snackBar.open("User deleted successfully...","" ,{duration:3000})
         },(error=>{
@@ -114,6 +125,7 @@ export class VendorManagementComponent implements OnDestroy{
     this.userId = id;
   }
 
+  edit!: Subscription;
   editFunction(){
     this.isEdit = false;
 
@@ -126,7 +138,7 @@ export class VendorManagementComponent implements OnDestroy{
       gstNo : this.vendorForm.get('gstNo')?.value
     }
     
-    this.adminService.updateVendor(this.userId, data).subscribe((res)=>{
+    this.edit = this.adminService.updateVendor(this.userId, data).subscribe((res)=>{
       this._snackBar.open("Vendor updated successfully...","" ,{duration:3000})
       this.getVendor();
       this.clearControls();
