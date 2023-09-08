@@ -1,13 +1,14 @@
 import { Brand } from '../../../../models/settings/brand';
 import { DeleteDialogueComponent } from '../../../../../shared-components/delete-dialogue/delete-dialogue.component';
 import { AdminService } from '../../../../admin.service';
-import { Component, Inject, OnDestroy, Optional } from '@angular/core';
+import { Component, Inject, OnDestroy, Optional, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { ProductManagementComponent } from '../product-management/product-management.component';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-brand-management',
@@ -65,7 +66,8 @@ export class BrandManagementComponent implements OnDestroy {
   getBrands(){
     return this.adminService.getBrand().subscribe((res)=>{
       this.brands = res
-      this.filteredBrands = this.brands
+      this.filteredBrands = this.brands;
+      this.filteredBrands = this.brands.slice(0, this.pageSize);
     })
   } 
   
@@ -74,9 +76,13 @@ export class BrandManagementComponent implements OnDestroy {
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.filterValue = filterValue;
+    if(this.filterValue){
     this.filteredBrands = this.brands.filter(element =>
       element.brandName.toLowerCase().includes(filterValue)
-    );
+    );}
+    else{
+      this.getBrands();
+    }
   }
 
   deleteBrand(id : any){
@@ -140,4 +146,16 @@ export class BrandManagementComponent implements OnDestroy {
   onCancelClick(): void {
     this.dialogRef.close();
   }
+
+  pageSize = 10;
+  pageIndex = 0;
+  paginatedData: any[] = [];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  onPageChange(event: PageEvent): void {
+    const startIndex = event.pageIndex * event.pageSize;
+    this.filteredBrands = this.brands.slice(startIndex, startIndex + event.pageSize);
+  }
+
 }

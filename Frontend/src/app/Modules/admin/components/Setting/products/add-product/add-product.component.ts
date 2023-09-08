@@ -123,7 +123,7 @@ export class AddProductComponent implements OnInit {
 
   onPageChange(event: PageEvent): void {
     const startIndex = event.pageIndex * event.pageSize;
-    this.filtered = this.filtered.slice(startIndex, startIndex + event.pageSize);
+    this.filtered = this.products.slice(startIndex, startIndex + event.pageSize);
   }
 
   filterValue: any;

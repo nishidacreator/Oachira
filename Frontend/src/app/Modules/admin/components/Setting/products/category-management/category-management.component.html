@@ -115,4 +115,5 @@
         </tr>
     </tbody>
   </table>
+  <mat-paginator [length]="category.length" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
   </mat-card>

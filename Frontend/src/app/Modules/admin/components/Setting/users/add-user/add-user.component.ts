@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject, Optional } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, Optional, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UserManagementComponent } from '../user-management/user-management.component';
@@ -10,6 +10,7 @@ import { User } from '../../../../models/settings/user';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
 import { Router } from '@angular/router';
 import { RoleManagementComponent } from '../role-management/role-management.component';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-add-user',
@@ -105,7 +106,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   getUsers(){
     return this.adminService.getUser().subscribe((res)=>{
       this.users = res
-      this.filtered = this.users
+      this.filtered = this.users.slice(0, this.pageSize);
     })
   }
 
@@ -114,11 +115,14 @@ export class AddUserComponent implements OnInit, OnDestroy {
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.filterValue = filterValue;
-    this.filtered = this.users.filter(element =>
+    if(this.filterValue){    this.filtered = this.users.filter(element =>
       element.name.toLowerCase().includes(filterValue) 
       // && element.status.toLowerCase().includes(filterValue)
       // && element.barCode.toLowerCase().includes(filterValue)
-    );
+    );}
+    else{
+      this.getUsers();
+    }
   }
 
   deleteUser(id: number){
@@ -195,4 +199,17 @@ export class AddUserComponent implements OnInit, OnDestroy {
   onCancelClick(): void {
     this.dialogRef.close();
   }
+
+
+  pageSize = 10;
+  pageIndex = 0;
+  paginatedData: any[] = [];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  onPageChange(event: PageEvent): void {
+    const startIndex = event.pageIndex * event.pageSize;
+    this.filtered = this.users.slice(startIndex, startIndex + event.pageSize);
+  }
+
 }
