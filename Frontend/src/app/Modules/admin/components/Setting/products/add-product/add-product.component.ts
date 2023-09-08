@@ -48,7 +48,7 @@ export class AddProductComponent implements OnInit {
     product_image: [null],
   });
 
-  displayedColumns : String[] = ['id','productName','code','barCode','primaryUnitId','categoryId','brandId','manage']
+  displayedColumns : String[] = ['id','productName','code','barCode','primaryUnitId','categoryId','brandId','image','manage']
 
   brandSubscription? : Subscription;
   productSubscription? : Subscription;
@@ -123,7 +123,7 @@ export class AddProductComponent implements OnInit {
 
   onPageChange(event: PageEvent): void {
     const startIndex = event.pageIndex * event.pageSize;
-    this.filtered = this.filtered.slice(startIndex, startIndex + event.pageSize);
+    this.filtered = this.products.slice(startIndex, startIndex + event.pageSize);
   }
 
   filterValue: any;
@@ -270,6 +270,17 @@ export class AddProductComponent implements OnInit {
       //   window.alert('Please select correct image format');
       // } 
     }
+  }
+
+
+  showImagePopup= false;
+
+  showPopup() {
+    this.showImagePopup = true;
+  }
+
+  hidePopup() {
+    this.showImagePopup = false;
   }
 
 }

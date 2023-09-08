@@ -74,8 +74,13 @@ export class BrandManagementComponent implements OnDestroy {
   getBrands(){
     this.brandSubscription = this.adminService.getBrand().subscribe((res)=>{
       this.brands = res
+<<<<<<< HEAD
       this.filteredBrands = this.brands.slice(0, this.pageSize);
       // this.filteredBrands = this.paginatedData
+=======
+      this.filteredBrands = this.brands;
+      this.filteredBrands = this.brands.slice(0, this.pageSize);
+>>>>>>> 6c91dc2a4320e0dcc7b8da6906eae7dae3918b6b
     })
   } 
 
@@ -95,9 +100,13 @@ export class BrandManagementComponent implements OnDestroy {
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.filterValue = filterValue;
+    if(this.filterValue){
     this.filteredBrands = this.brands.filter(element =>
       element.brandName.toLowerCase().includes(filterValue)
-    );
+    );}
+    else{
+      this.getBrands();
+    }
   }
 
   delete!: Subscription;
@@ -163,4 +172,16 @@ export class BrandManagementComponent implements OnDestroy {
   onCancelClick(): void {
     this.dialogRef.close();
   }
+
+  pageSize = 10;
+  pageIndex = 0;
+  paginatedData: any[] = [];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  onPageChange(event: PageEvent): void {
+    const startIndex = event.pageIndex * event.pageSize;
+    this.filteredBrands = this.brands.slice(startIndex, startIndex + event.pageSize);
+  }
+
 }

@@ -1,12 +1,13 @@
 import { Subscription } from 'rxjs';
 import { AdminService } from '../../../../admin.service';
-import { Component, Inject, OnDestroy, Optional } from '@angular/core';
+import { Component, Inject, OnDestroy, Optional, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Category } from '../../../../models/settings/category';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
 import { ProductManagementComponent } from '../product-management/product-management.component';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-category-management',
@@ -121,6 +122,7 @@ export class CategoryManagementComponent implements OnDestroy{
     return this.adminService.getCategory().subscribe((res)=>{
       this.category = res
       this.filtered = this.category
+      this.filtered = this.category.slice(0, this.pageSize);
     })
   }
 
@@ -129,9 +131,13 @@ export class CategoryManagementComponent implements OnDestroy{
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.filterValue = filterValue;
-    this.filtered = this.category.filter(element =>
-      element.categoryName.toLowerCase().includes(filterValue)
-    );
+    if (this.filterValue) {
+      this.filtered = this.category.filter((element) =>
+        element.categoryName.toLowerCase().includes(filterValue)
+      );
+    } else {
+      this.getCategory();
+    }
   }
 
   deleteCategory(id:any){
@@ -254,4 +260,16 @@ export class CategoryManagementComponent implements OnDestroy{
   onCancelClick(): void {
     this.dialogRef.close();
   }
+
+  pageSize = 10;
+  pageIndex = 0;
+  paginatedData: any[] = [];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  onPageChange(event: PageEvent): void {
+    const startIndex = event.pageIndex * event.pageSize;
+    this.filtered = this.category.slice(startIndex, startIndex + event.pageSize);
+  }
+
 }
