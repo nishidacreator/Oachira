@@ -49,7 +49,7 @@ router.get("/", authenticateToken, async (req, res) => {
       include: [PrimaryUnit, Category, Brand],
       order: ["id"],
       order: ["id"],
-      limit, // Use limit only when pageSize and page are provided
+      limit, 
       offset
     });
 
