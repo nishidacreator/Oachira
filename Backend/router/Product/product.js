@@ -21,17 +21,38 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/', authenticateToken, async (req, res) => {
+
+router.get("/", authenticateToken, async (req, res) => {
   try {
+    let whereClause = {};
+
+    if (req.query.search) {
+      whereClause = {
+        [Op.or]: [
+          { productName: { [Op.iLike]: `%${req.query.search}%` } },
+          { code: { [Op.iLike]: `%${req.query.search}%` } },
+          { barCode: { [Op.iLike]: `%${req.query.search}%` } },
+        ],
+      };
+    }
+
     const products = await Product.findAll({
+      where: whereClause,
       include: [PrimaryUnit, Category, Brand],
-      order: ['id'],
-      limit: req.query.pageSize || 10, // Use the requested page size or a default value
-      offset: (req.query.page - 1) * (req.query.pageSize || 10), // Calculate the offset based on the page number
+      order: ["id"],
+      limit: req.query.pageSize || 10,
+      offset: (req.query.page - 1) * (req.query.pageSize || 10),
     });
 
-    const totalCount = await Product.count(); // Get the total count of products
+    let totalCount;
 
+    if (req.query.search) {
+      totalCount = await Product.count({
+        where: whereClause,
+      });
+    } else {
+      totalCount = await Product.count();
+    }
     const response = {
       count: totalCount,
       items: products,

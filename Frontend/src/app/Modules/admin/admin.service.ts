@@ -117,8 +117,8 @@ export class AdminService {
     return this._http.post(this.url + '/product', data)
   }
 
-  getPaginatedProduct(page: number, pageSize: number): Observable<Product[]>{
-    return this._http.get<Product[]>(this.url + `/product?page=${page}&pageSize=${pageSize}`);
+  getPaginatedProduct( search:String, page: number, pageSize: number): Observable<Product[]>{
+    return this._http.get<Product[]>(this.url + `/product?search=${search}&page=${page}&pageSize=${pageSize}`);
   }
   getProduct(): Observable<Product[]>{
     return this._http.get<Product[]>(this.url + `/product`);
