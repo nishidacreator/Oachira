@@ -143,8 +143,12 @@
     
     <mat-form-field>
       <mat-label>Search</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+      <input matInput [(ngModel)]="filterValue"  (ngModelChange)="onInputChange($event)" placeholder="Ex. ium">
     </mat-form-field>
+    &nbsp;&nbsp;
+    <button mat-raised-button (click)="search()" >
+      Search
+    </button>
     <table class="styled-table">
       <thead>
           <tr>
