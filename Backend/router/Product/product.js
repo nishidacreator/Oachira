@@ -21,15 +21,27 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/', authenticateToken, async(req,res)=>{
+router.get('/', authenticateToken, async (req, res) => {
   try {
-      const product = await Product.findAll({include: [PrimaryUnit, Category, Brand], order:['id']});
-      res.send(product);
-      
+    const products = await Product.findAll({
+      include: [PrimaryUnit, Category, Brand],
+      order: ['id'],
+      limit: req.query.pageSize || 10, // Use the requested page size or a default value
+      offset: (req.query.page - 1) * (req.query.pageSize || 10), // Calculate the offset based on the page number
+    });
+
+    const totalCount = await Product.count(); // Get the total count of products
+
+    const response = {
+      count: totalCount,
+      items: products,
+    };
+
+    res.json(response);
   } catch (error) {
-      res.send(error.message);
-  }  
-})
+    res.status(500).json({ error: error.message });
+  }
+});
 
 router.get('/filter', async(req,res)=>{
     try {
