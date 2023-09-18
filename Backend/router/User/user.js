@@ -5,6 +5,48 @@ const router = express.Router();
 const authenticateToken = require('../../middleware/authorization');
 const Role = require('../../models/User/role')
 const Branch = require('../../models/branch')
+
+// /**
+//  * @swagger
+//  * /api/users:
+//  *   post:
+//  *     summary: Create a new user
+//  *     description: Creates a new user with the provided information.
+//  *     parameters:
+//  *       - in: body
+//  *         name: user
+//  *         description: The user object to be created.
+//  *         required: true
+//  *         schema:
+//  *           type: object
+//  *           properties:
+//  *             name:
+//  *               type: string
+//  *             phoneNumber:
+//  *               type: string
+//  *             password:
+//  *               type: string
+//  *             roleId:
+//  *               type: integer
+//  *             status:
+//  *               type: string
+//  *             branchId:
+//  *               type: integer
+//  *       - in: query
+//  *         name: isAdmin
+//  *         description: An optional query parameter to set the user as an admin.
+//  *         schema:
+//  *           type: boolean
+//  *     responses:
+//  *       201:
+//  *         description: User created successfully.
+//  *       400:
+//  *         description: Bad request. Invalid input.
+//  *       500:
+//  *         description: Internal server error.
+//  */
+
+
 router.post('/', async (req, res) => {
     try {
         const { name, phoneNumber, password, roleId, status, branchId } = req.body;
@@ -28,6 +70,18 @@ router.post('/', async (req, res) => {
     }   
 })
 
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Get a list of users
+ *     description: Returns a list of users
+ *     responses:
+ *       200:
+ *         description: A list of users
+ *       500:
+ *         description: Internal server error
+ */
 router.get('/', async(req,res)=>{
     try {
         const user = await User.findAll({include : [Role, Branch], order:['id']});
@@ -38,6 +92,18 @@ router.get('/', async(req,res)=>{
     }  
 })
 
+/**
+ * @swagger
+ * /api/users:
+ *   delete:
+ *     summary: Get a list of users
+ *     description: Returns a list of users
+ *     responses:
+ *       200:
+ *         description: A list of users
+ *       500:
+ *         description: Internal server error
+ */
 router.delete('/:id', async(req,res)=>{
     try {
 
@@ -60,6 +126,18 @@ router.delete('/:id', async(req,res)=>{
     
 })
 
+/**
+ * @swagger
+ * /api/users:
+ *   patch:
+ *     summary: Get a list of users
+ *     description: Returns a list of users
+ *     responses:
+ *       200:
+ *         description: A list of users
+ *       500:
+ *         description: Internal server error
+ */
 router.patch('/:id', async(req,res)=>{
   const pass = await bcrypt.hash(req.body.password, 10);
 

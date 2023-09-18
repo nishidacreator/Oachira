@@ -9,6 +9,20 @@
           <div class="button_align">Home</div>
         </mat-grid-tile>
 
+        <mat-grid-tile>
+          <button class="btn btn-4" mat-fab color="accent" aria-label="Example icon button with a bookmark icon"  (click)="addVehicle()">
+            <span class="material-icons" style="color: rgb(255, 255, 255); font-size: 45px;">garage</span>
+          </button>
+        <div class="button_align"> VehicleType</div>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button class="btn btn-4" mat-fab color="accent" aria-label="Example icon button with a bookmark icon"  (click)="manageVehicle()">
+            <span class="material-icons" style="color: rgb(255, 255, 255); font-size: 45px;">local_shipping</span>
+          </button>
+        <div class="button_align">Vehicle</div>
+        </mat-grid-tile>
+
         <mat-grid-tile class="container">
           <button class="btn btn-4" mat-fab aria-label="Example icon button with a bookmark icon" type="button" (click)="addRoute()">          
             <span class="material-icons" style="font-size: 45px; color: rgb(255, 255, 255);">add_road</span>
@@ -21,7 +35,14 @@
           <button class="btn btn-4" mat-fab aria-label="Example icon button with a bookmark icon" type="button" (click)="manageRouteDays()">
             <span class="material-icons" style="font-size: 45px; color: rgb(255, 255, 255);">event</span>
           </button>
-          <div class="button_align">Days</div>
+          <div class="button_align">Order</div>
+        </mat-grid-tile>
+
+        <mat-grid-tile class="container">
+          <button class="btn btn-4" mat-fab aria-label="Example icon button with a bookmark icon" type="button" (click)="manageTripDays()">          
+            <span class="material-icons" style="font-size: 45px; color: rgb(255, 255, 255);">today</span>
+          </button>
+          <div class="button_align">Delivery</div>
         </mat-grid-tile>
   
         <mat-grid-tile class="container">

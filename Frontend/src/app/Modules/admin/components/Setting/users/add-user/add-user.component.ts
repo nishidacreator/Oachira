@@ -141,8 +141,6 @@ export class AddUserComponent implements OnInit, OnDestroy {
       || element.phoneNumber.includes(filterValue)
       || element.id.toString().includes(filterValue)
     )}
-      // && element.status.toLowerCase().includes(filterValue)
-      // && element.barCode.toLowerCase().includes(filterValue)
     
     else{
       this.getUsers();

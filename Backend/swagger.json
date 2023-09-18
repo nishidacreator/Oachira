@@ -1,0 +1,104 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Your API Title",
+    "version": "1.0.0",
+    "description": "Your API Description"
+  },
+  "paths": {
+    "/api/users": {
+      "post": {
+        "summary": "Create a new user",
+        "description": "Creates a new user with the provided information.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "description": "The user object to be created.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "phoneNumber": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "roleId": {
+                  "type": "integer"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "branchId": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          {
+            "in": "query",
+            "name": "isAdmin",
+            "description": "An optional query parameter to set the user as an admin.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created successfully."
+          },
+          "400": {
+            "description": "Bad request. Invalid input."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      },
+      "get": {
+        "summary": "Get a list of users",
+        "description": "Returns a list of users",
+        "responses": {
+          "200": {
+            "description": "A list of users"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Get a list of users",
+        "description": "Returns a list of users",
+        "responses": {
+          "200": {
+            "description": "A list of users"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Get a list of users",
+        "description": "Returns a list of users",
+        "responses": {
+          "200": {
+            "description": "A list of users"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {},
+  "tags": []
+}
