@@ -108,24 +108,24 @@ export class AddProductComponent implements OnInit {
   products : Product[]=[];
   dataSource! : MatTableDataSource<any>
   getProducts(){
-    return this.adminService.getProduct().subscribe((res)=>{
-      this.products = res
-      this.filtered = this.products.slice(0, this.pageSize);
-      // this.paginatedData = this.filtered.slice(0, this.pageSize);
+    return this.adminService.getPaginatedProduct(this.currentPage, this.pageSize).subscribe((res:any)=>{
+      this.products = res.items;
+      this.totalItems = res.count; 
     })
   }
-
   pageSize = 10;
-  pageIndex = 0;
+  currentPage = 1; 
+  totalItems = 0;
   paginatedData: any[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   onPageChange(event: PageEvent): void {
-    const startIndex = event.pageIndex * event.pageSize;
-    this.filtered = this.products.slice(startIndex, startIndex + event.pageSize);
+    this.currentPage = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.getProducts();
   }
-
+  
   filterValue: any;
   filtered!: any[];
   applyFilter(event: Event): void {

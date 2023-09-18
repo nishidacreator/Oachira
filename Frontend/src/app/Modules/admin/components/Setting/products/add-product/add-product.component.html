@@ -160,7 +160,7 @@
           </tr>
       </thead>
       <tbody>
-          <tr *ngFor="let element of filtered">
+          <tr *ngFor="let element of products">
               <td>{{element.id}}</td>
               <td>{{element.productName}}</td>
               <td>{{element.code}}</td>
@@ -188,5 +188,7 @@
           </tr>
       </tbody>
     </table>
-    <mat-paginator [length]="products.length" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+    <mat-paginator [length]="totalItems" [pageSize]="pageSize" [pageIndex]="currentPage - 1"
+    (page)="onPageChange($event)" [pageSizeOptions]="[10, 20,30,40,50,100]">
+</mat-paginator>
   </mat-card>
