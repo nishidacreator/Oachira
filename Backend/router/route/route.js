@@ -41,7 +41,7 @@ router.post('/', authenticateToken, async (req, res) => {
             //   await result.save()
             // }
 
-            res.status(200).send(result)
+            res.status(200).send(route)
 
     } catch (error) {
         res.send(error);

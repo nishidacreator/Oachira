@@ -117,10 +117,12 @@ export class AdminService {
     return this._http.post(this.url + '/product', data)
   }
 
-  getProduct(): Observable<Product[]>{
-    return this._http.get<Product[]>(this.url + '/product');
+  getPaginatedProduct( search:String, page: number, pageSize: number): Observable<Product[]>{
+    return this._http.get<Product[]>(this.url + `/product?search=${search}&page=${page}&pageSize=${pageSize}`);
   }
-
+  getProduct(): Observable<Product[]>{
+    return this._http.get<Product[]>(this.url + `/product`);
+  }
   updateProduct(id:Number, data:any){
     return this._http.patch<Product>(this.url+'/product/'+id, data);
   }

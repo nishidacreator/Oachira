@@ -21,15 +21,48 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/', authenticateToken, async(req,res)=>{
+
+router.get("/", authenticateToken, async (req, res) => {
   try {
-      const product = await Product.findAll({include: [PrimaryUnit, Category, Brand], order:['id']});
-      res.send(product);
-      
+    let whereClause = {};
+
+    if (req.query.search) {
+      whereClause = {
+        [Op.or]: [
+          { productName: { [Op.iLike]: `%${req.query.search}%` } },
+          { code: { [Op.iLike]: `%${req.query.search}%` } },
+          { barCode: { [Op.iLike]: `%${req.query.search}%` } },
+        ],
+      };
+    }
+
+    const products = await Product.findAll({
+      where: whereClause,
+      include: [PrimaryUnit, Category, Brand],
+      order: ["id"],
+      limit: req.query.pageSize || 10,
+      offset: (req.query.page - 1) * (req.query.pageSize || 10),
+    });
+
+    let totalCount;
+
+    if (req.query.search) {
+      totalCount = await Product.count({
+        where: whereClause,
+      });
+    } else {
+      totalCount = await Product.count();
+    }
+    const response = {
+      count: totalCount,
+      items: products,
+    };
+
+    res.json(response);
   } catch (error) {
-      res.send(error.message);
-  }  
-})
+    res.status(500).json({ error: error.message });
+  }
+});
 
 router.get('/filter', async(req,res)=>{
     try {
