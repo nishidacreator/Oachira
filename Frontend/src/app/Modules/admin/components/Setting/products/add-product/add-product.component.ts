@@ -108,7 +108,8 @@ export class AddProductComponent implements OnInit {
   products : Product[]=[];
   dataSource! : MatTableDataSource<any>
   getProducts(){
-    return this.adminService.getPaginatedProduct(this.currentPage, this.pageSize).subscribe((res:any)=>{
+
+    return this.adminService.getPaginatedProduct(this.filterValue,this.currentPage, this.pageSize).subscribe((res:any)=>{
       this.products = res.items;
       this.totalItems = res.count; 
     })
@@ -126,21 +127,10 @@ export class AddProductComponent implements OnInit {
     this.getProducts();
   }
   
-  filterValue: any;
-  filtered!: any[];
+  filterValue = '';
   applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.filterValue = filterValue;
-    if(this.filterValue){
-      this.filtered = this.products.filter(element =>
-        element.productName.toLowerCase().includes(filterValue) 
-        // && element.code.toLowerCase().includes(filterValue)
-        // && element.barCode.toLowerCase().includes(filterValue)
-      );
-    }
-    else{
-      this.getProducts()
-    } 
+    this.filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.getProducts()
   }
 
 
