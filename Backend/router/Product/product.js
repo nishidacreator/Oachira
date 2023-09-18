@@ -48,7 +48,6 @@ router.get("/", authenticateToken, async (req, res) => {
       where: whereClause,
       include: [PrimaryUnit, Category, Brand],
       order: ["id"],
-      order: ["id"],
       limit, 
       offset
     });
