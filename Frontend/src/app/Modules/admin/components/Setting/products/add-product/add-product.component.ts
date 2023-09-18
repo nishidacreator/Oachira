@@ -18,104 +18,125 @@ import { CategoryManagementComponent } from '../category-management/category-man
 import { BrandManagementComponent } from '../brand-management/brand-management.component';
 
 @Component({
-  selector: 'app-add-product',
-  templateUrl: './add-product.component.html',
-  styleUrls: ['./add-product.component.scss']
+  selector: "app-add-product",
+  templateUrl: "./add-product.component.html",
+  styleUrls: ["./add-product.component.scss"],
 })
 export class AddProductComponent implements OnInit {
+  constructor(
+    private fb: FormBuilder,
+    public adminService: AdminService,
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog,
+    private router: Router
+  ) {}
 
-  constructor(private fb: FormBuilder,public adminService: AdminService, private _snackBar: MatSnackBar,
-    public dialog: MatDialog, private router: Router){}
-
-      
-  ngOnDestroy(){
-    this.brandSubscription?.unsubscribe()
-    this.productSubscription?.unsubscribe()
-    this.submitSubscription.unsubscribe()
-    this.unitSub.unsubscribe()
-    this.catSub.unsubscribe()
+  ngOnDestroy() {
+    this.brandSubscription?.unsubscribe();
+    this.productSubscription?.unsubscribe();
+    this.submitSubscription.unsubscribe();
+    this.unitSub.unsubscribe();
+    this.catSub.unsubscribe();
   }
 
   productForm = this.fb.group({
-    productName: ['', Validators.required],
-    code: [''],
-    barCode: [''],
-    primaryUnitId: ['', Validators.required],
-    categoryId: ['', Validators.required],
-    brandId: ['', Validators.required],
+    productName: ["", Validators.required],
+    code: [""],
+    barCode: [""],
+    primaryUnitId: ["", Validators.required],
+    categoryId: ["", Validators.required],
+    brandId: ["", Validators.required],
     reorderQuantity: [],
     loyaltyPoint: [],
     product_image: [null],
   });
 
-  displayedColumns : String[] = ['id','productName','code','barCode','primaryUnitId','categoryId','brandId','image','manage']
+  displayedColumns: String[] = [
+    "id",
+    "productName",
+    "code",
+    "barCode",
+    "primaryUnitId",
+    "categoryId",
+    "brandId",
+    "image",
+    "manage",
+  ];
 
-  brandSubscription? : Subscription;
-  productSubscription? : Subscription;
+  brandSubscription?: Subscription;
+  productSubscription?: Subscription;
   ngOnInit(): void {
     this.getUnits();
     this.getCategories();
-    
-    this.brandSubscription = this.getBrands()
-    this.productSubscription = this.getProducts()  
+
+    this.brandSubscription = this.getBrands();
+    this.productSubscription = this.getProducts();
   }
 
   units: PrimaryUnit[] = [];
-  unitSub!: Subscription
-  getUnits(){
-    this.unitSub = this.adminService.getPrimaryUnit().subscribe((res)=>{
-      this.units = res
-    })
+  unitSub!: Subscription;
+  getUnits() {
+    this.unitSub = this.adminService.getPrimaryUnit().subscribe((res) => {
+      this.units = res;
+    });
   }
 
   categories: Category[] = [];
-  catSub!: Subscription
-  getCategories(){
-    this.catSub = this.adminService.getCategory().subscribe((res)=>{
-    this.categories = res
-    })
+  catSub!: Subscription;
+  getCategories() {
+    this.catSub = this.adminService.getCategory().subscribe((res) => {
+      this.categories = res;
+    });
   }
 
   brands: any;
-  getBrands(){
-    return this.adminService.getBrand().subscribe((res)=>{
-      this.brands = res ;
-    })
+  getBrands() {
+    return this.adminService.getBrand().subscribe((res) => {
+      this.brands = res;
+    });
   }
 
-  private submitSubscription : Subscription = new Subscription();
-  onSubmit(){
+  private submitSubscription: Subscription = new Subscription();
+  onSubmit() {
     const formData = new FormData();
-    formData.append("product_image", this.file as Blob, this.file?.name)
-    this._snackBar.open("Image Uploaded","" ,{duration:3000})
-    console.log(this.productForm.getRawValue())
-    this.submitSubscription = this.adminService.addProduct(this.productForm.getRawValue()).subscribe((res)=>{
-      console.log(res)
-      this._snackBar.open("Product added successfully...","" ,{duration:3000})
-      this.clearControls()
-    },(error=>{
-      alert(error)
-    }))
+    formData.append("product_image", this.file as Blob, this.file?.name);
+    this._snackBar.open("Image Uploaded", "", { duration: 3000 });
+    this.submitSubscription = this.adminService
+      .addProduct(this.productForm.getRawValue())
+      .subscribe(
+        (res) => {
+          this._snackBar.open("Product added successfully...", "", {
+            duration: 3000,
+          });
+          this.clearControls();
+        },
+        (error) => {
+          alert(error);
+        }
+      );
   }
 
-  clearControls(){
-    this.getProducts()
-    this.productForm.reset()
-    this.productForm.setErrors(null)
-    Object.keys(this.productForm.controls).forEach(key=>{this.productForm.get(key)?.setErrors(null)})
+  clearControls() {
+    this.getProducts();
+    this.productForm.reset();
+    this.productForm.setErrors(null);
+    Object.keys(this.productForm.controls).forEach((key) => {
+      this.productForm.get(key)?.setErrors(null);
+    });
   }
 
-  products : Product[]=[];
-  dataSource! : MatTableDataSource<any>
-  getProducts(){
-
-    return this.adminService.getPaginatedProduct(this.filterValue,this.currentPage, this.pageSize).subscribe((res:any)=>{
-      this.products = res.items;
-      this.totalItems = res.count; 
-    })
+  products: Product[] = [];
+  dataSource!: MatTableDataSource<any>;
+  getProducts() {
+    return this.adminService
+      .getPaginatedProduct(this.filterValue, this.currentPage, this.pageSize)
+      .subscribe((res: any) => {
+        this.products = res.items;
+        this.totalItems = res.count;
+      });
   }
   pageSize = 10;
-  currentPage = 1; 
+  currentPage = 1;
   totalItems = 0;
   paginatedData: any[] = [];
 
@@ -126,144 +147,155 @@ export class AddProductComponent implements OnInit {
     this.pageSize = event.pageSize;
     this.getProducts();
   }
-  
-  filterValue = '';
-  applyFilter(event: Event): void {
-    this.filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.getProducts()
+
+  filterValue = "";
+  search() {
+    if (this.filterValue) {
+      this.getProducts();
+    }
+  }
+ 
+  onInputChange(value: any) {
+    this.filterValue = value;
+    if (!this.filterValue) {
+      this.getProducts();
+    }
   }
 
-
-  deleteProduct(id:any){
+  deleteProduct(id: any) {
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
-      data: {}
+      data: {},
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
-        this.adminService.deleteProduct(id).subscribe((res)=>{
-          this.getProducts()
-          this._snackBar.open("Product deleted successfully...","" ,{duration:3000})
-        },(error=>{
-          this._snackBar.open(error.error.message,"" ,{duration:3000})
-        }))
+        this.adminService.deleteProduct(id).subscribe(
+          (res) => {
+            this.getProducts();
+            this._snackBar.open("Product deleted successfully...", "", {
+              duration: 3000,
+            });
+          },
+          (error) => {
+            this._snackBar.open(error.error.message, "", { duration: 3000 });
+          }
+        );
       }
-    })
-
+    });
   }
 
-  isEdit = false
-  productId :any;
-  
-  editProduct(id:any){
-    this.isEdit=true;
-    
-    let product : any = this.products.find(x=>x.id==id);
+  isEdit = false;
+  productId: any;
 
-      let productName = product.productName.toString()
-      let code = product.code.toString()
-      let barCode = product.barCode.toString()
-      let primaryUnitId = product.primaryUnitId
-      let categoryId = product.categoryId
-      let brandId = product.brandId
-      let reorderQuantity = product.reorderQuantity
-      let loyaltyPoint = product.loyaltyPoint
-    
+  editProduct(id: any) {
+    this.isEdit = true;
+
+    let product: any = this.products.find((x) => x.id == id);
+
+    let productName = product.productName.toString();
+    let code = product.code.toString();
+    let barCode = product.barCode.toString();
+    let primaryUnitId = product.primaryUnitId;
+    let categoryId = product.categoryId;
+    let brandId = product.brandId;
+    let reorderQuantity = product.reorderQuantity;
+    let loyaltyPoint = product.loyaltyPoint;
+
     this.productForm.patchValue({
-      productName:productName,
-      code:code,
-      barCode:barCode,
-      primaryUnitId:primaryUnitId,
-      categoryId:categoryId,
-      brandId:brandId,
-      reorderQuantity:reorderQuantity,
-      loyaltyPoint:loyaltyPoint
-    })
+      productName: productName,
+      code: code,
+      barCode: barCode,
+      primaryUnitId: primaryUnitId,
+      categoryId: categoryId,
+      brandId: brandId,
+      reorderQuantity: reorderQuantity,
+      loyaltyPoint: loyaltyPoint,
+    });
     this.productId = id;
   }
 
-  editFunction(){
+  editFunction() {
     let data = {
-      productName  : this.productForm.get('productName')?.value,
-      code : this.productForm.get('code')?.value,
-      barCode : this.productForm.get('barCode')?.value,
-      primaryUnitId : this.productForm.get('primaryUnitId')?.value,
-      categoryId : this.productForm.get('categoryId')?.value,
-      brandId : this.productForm.get('brandId')?.value,
-    }
-    this.adminService.updateProduct(this.productId,data).subscribe((res)=>{
-      this.clearControls();
-    },(error=>{
-          alert(error.message)
-        }))
+      productName: this.productForm.get("productName")?.value,
+      code: this.productForm.get("code")?.value,
+      barCode: this.productForm.get("barCode")?.value,
+      primaryUnitId: this.productForm.get("primaryUnitId")?.value,
+      categoryId: this.productForm.get("categoryId")?.value,
+      brandId: this.productForm.get("brandId")?.value,
+    };
+    this.adminService.updateProduct(this.productId, data).subscribe(
+      (res) => {
+        this.clearControls();
+      },
+      (error) => {
+        alert(error.message);
+      }
+    );
   }
 
-  addCatrgory(){
+  addCatrgory() {
     const dialogRef = this.dialog.open(CategoryManagementComponent, {
-      data: {status : 'true'}
+      data: { status: "true" },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.getCategories()
-    })
+    dialogRef.afterClosed().subscribe((result) => {
+      this.getCategories();
+    });
   }
 
-  addBrand(){
+  addBrand() {
     const dialogRef = this.dialog.open(BrandManagementComponent, {
-      data: {status : 'true'}
+      data: { status: "true" },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.getBrands()
-    })
+    dialogRef.afterClosed().subscribe((result) => {
+      this.getBrands();
+    });
   }
 
-  addUnit(){
+  addUnit() {
     const dialogRef = this.dialog.open(UnitManagementComponent, {
-      data: {status : 'true'}
+      data: { status: "true" },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.getUnits()
-    }) 
+    dialogRef.afterClosed().subscribe((result) => {
+      this.getUnits();
+    });
   }
 
-  homeClick(){
+  homeClick() {
     const dialogRef = this.dialog.open(ProductManagementComponent, {
-      height: '200px',
-      width: '800px',
+      height: "200px",
+      width: "800px",
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    })
+    dialogRef.afterClosed().subscribe((result) => {
+    });
   }
 
-  file:File | null = null;
+  file: File | null = null;
   url!: any;
-  onFileSelected(event: any){
-    if(event.target.files.length > 0){
+  onFileSelected(event: any) {
+    if (event.target.files.length > 0) {
       this.file = event.target.files[0] as File;
-      console.log(this.file)
 
-      let fileType = this.file? this.file.type : '';
+      let fileType = this.file ? this.file.type : "";
       // this.productCategoryForm.get('category_image')?.setValue(this.file)
-  
+
       // if(fileType.match(/image\/*/)){
       //   let reader = new FileReader();
       //   // reader.readAsDataURL(this.file)
       //   reader.onload = (event: any) =>{
       //     this.url = event.target.result;
-      //   }   
+      //   }
       // }
       // else {
       //   window.alert('Please select correct image format');
-      // } 
+      // }
     }
   }
 
-
-  showImagePopup= false;
+  showImagePopup = false;
 
   showPopup() {
     this.showImagePopup = true;
@@ -272,5 +304,4 @@ export class AddProductComponent implements OnInit {
   hidePopup() {
     this.showImagePopup = false;
   }
-
 }
