@@ -39,13 +39,29 @@ export class RouteManagementComponent {
     this.dialogRef.close();
   }
 
-  manageTripDays(){
-    this.router.navigateByUrl('admin/settings/route/deliverydays')
-    this.dialogRef.close();
-  }
+  // manageTripDays(){
+  //   this.router.navigateByUrl('admin/settings/route/deliverydays')
+  //   this.dialogRef.close();
+  // }
 
   manageTrip(){
     this.router.navigateByUrl('admin/settings/route/addtrip')
     this.dialogRef.close();
   }
+
+  manageVehicle(){
+    this.router.navigateByUrl('admin/settings/trip/vehicle');
+    this.dialogRef.close();
+  }
+
+  addVehicle(){
+    this.router.navigateByUrl('admin/settings/trip/addVehicle');
+    this.dialogRef.close();
+  }
+
+  manageTripDays(){
+    this.router.navigateByUrl('admin/settings/trip/deliverydays')
+    this.dialogRef.close();
+  }
+
 }

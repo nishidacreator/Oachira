@@ -1,9 +1,10 @@
-const User = require('../models/User/user')
 const cors = require('cors');
 const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config();
-
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('../swagger');
+const swaggerDocument = require('../swagger.json');
 
 const auth = require('../router/User/auth');
 const user = require('../router/User/user');
@@ -43,18 +44,16 @@ const deliveryDays = require('../router/route/deliveryDays');
 // STOCK
 const purchaseTransaction = require('../router/Stock/purchaseTransaction');
 const stock = require('../router/Stock/stock');
-const salesTransaction = require('../router/Stock/salesTransaction');
 
 const syncModel = require('../utils/association');
-
-const sequelize = require('../utils/db');
-
 
 const app = express();
 
 app.use(cors({orgin:'*'}))
 
 app.use(express.json());
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //static Images Folder
 app.use('/images', express.static('../images'));

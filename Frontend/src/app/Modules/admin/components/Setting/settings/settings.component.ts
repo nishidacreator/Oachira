@@ -101,7 +101,7 @@ export class SettingsComponent {
 
   manageRoute(){
     const dialogRef = this.dialog.open(RouteManagementComponent, {
-      height: '200px',
+      height: '400px',
       width: '800px',
     });
 
@@ -111,14 +111,8 @@ export class SettingsComponent {
   }
 
   manageTrip(){
-    const dialogRef = this.dialog.open(TripManagementComponent, {
-      height: '200px',
-      width: '800px',
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    })
+    this.router.navigateByUrl('admin/settings/trip/addtrip')
+    // this.dialogRef.close();
   }
 
 }

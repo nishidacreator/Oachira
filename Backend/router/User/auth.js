@@ -8,7 +8,7 @@ const jwtTokens = require('../../utils/jsonWebToken');
 
 router.post('/', async(req, res)=> {
     try {
-        console.log(req.headers['authorization']);
+        console.log(req.body+"hhiiiiiii");
 
         const { phoneNumber, password } = req.body;
 

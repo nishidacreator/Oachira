@@ -25,10 +25,18 @@ export class AddRouteDaysComponent implements OnInit {
 
   ngOnDestroy(){
     this.daysSubscription?.unsubscribe()
-    this.homeSubscription.unsubscribe()
-    this.submitSubscription.unsubscribe()
-    this.updateSubscription.unsubscribe()
-    this.deleteSubscription.unsubscribe()
+    if(this.routeSub){
+      this.routeSub.unsubscribe()
+    }
+    if(this.delete){
+      this.delete.unsubscribe()
+    }
+    if(this.edit){
+      this.edit.unsubscribe()
+    }
+    if(this.submit){
+      this.submit.unsubscribe()
+    }
   }
 
   routeDaysForm = this.fb.group({
@@ -43,8 +51,7 @@ export class AddRouteDaysComponent implements OnInit {
       this.getRouteById()
     }
     this.getRoute()
-
-    this.daysSubscription = this.getRouteDays()
+    this.getRouteDays()
   }
 
   route$! : Observable<Route[]> ;
@@ -62,20 +69,20 @@ export class AddRouteDaysComponent implements OnInit {
     {name: 'Saturday', abbreviation: 'SAT', index: 6},
   ];
 
-  private homeSubscription : Subscription = new Subscription();
   homeClick(){
     const dialogRef = this.dialog.open(RouteManagementComponent, {
       height: '200px',
       width: '800px',
     });
 
-    this.homeSubscription = dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     })
   }
 
+  routeSub!: Subscription;
   getRouteById(){
-    this.adminService.getRouteById(this.id).subscribe(result => {
+    this.routeSub = this.adminService.getRouteById(this.id).subscribe(result => {
       let routeName: any = result.id;
 
       this.routeDaysForm.patchValue({
@@ -84,9 +91,9 @@ export class AddRouteDaysComponent implements OnInit {
     })
   }
 
-  private submitSubscription : Subscription = new Subscription();
+  submit!: Subscription;
   onSubmit(){
-    this.submitSubscription = this.adminService.addCollectionDays(this.routeDaysForm.getRawValue()).subscribe((res)=>{
+    this.submit = this.adminService.addCollectionDays(this.routeDaysForm.getRawValue()).subscribe((res)=>{
       this._snackBar.open("added successfully...","" ,{duration:3000})
       this.clearControls()
     },(error=>{
@@ -102,14 +109,14 @@ export class AddRouteDaysComponent implements OnInit {
   }
 
   days : CollectionDays[] = [];
-  daysSubscription? : Subscription
+  daysSubscription!: Subscription
   getRouteDays(){
-    return this.adminService.getCollectionDays().subscribe((res)=>{
+    this.daysSubscription = this.adminService.getCollectionDays().subscribe((res)=>{
       this.days = res
     })
   }  
 
-  private deleteSubscription : Subscription = new Subscription();
+  delete!: Subscription;
   deleteDays(id : any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
       data: {}
@@ -117,7 +124,7 @@ export class AddRouteDaysComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.deleteSubscription = this.adminService.deleteCollectionDays(id).subscribe((res)=>{
+        this.delete = this.adminService.deleteCollectionDays(id).subscribe((res)=>{
           this.getRouteDays()
           this._snackBar.open("Route Days deleted successfully...","" ,{duration:3000})
         },(error=>{
@@ -130,7 +137,6 @@ export class AddRouteDaysComponent implements OnInit {
   isEdit = false;
   dayId : any;
   isDisabled = true;
-  private updateSubscription : Subscription = new Subscription();
   editDays(id : any){
     this.isEdit = true;
     //Get the product based on the ID
@@ -147,6 +153,7 @@ export class AddRouteDaysComponent implements OnInit {
     this.dayId = id;
   }
 
+  edit!: Subscription
   editFunction(){
     this.isEdit = false;
 
@@ -155,7 +162,7 @@ export class AddRouteDaysComponent implements OnInit {
       weekDays : this.routeDaysForm.get('weekDays')?.value,
     }
     
-    this.updateSubscription = this.adminService.updateCollectionDays(this.dayId, data).subscribe((res)=>{
+    this.edit = this.adminService.updateCollectionDays(this.dayId, data).subscribe((res)=>{
       this._snackBar.open("Route Days updated successfully...","" ,{duration:3000})
       this.clearControls();
     },(error=>{
