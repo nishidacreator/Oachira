@@ -36,12 +36,21 @@ router.get("/", authenticateToken, async (req, res) => {
       };
     }
 
+    let limit;
+    let offset;
+
+    if (req.query.pageSize && req.query.page) {
+      limit = req.query.pageSize;
+      offset = (req.query.page - 1) * req.query.pageSize;
+    }
+
     const products = await Product.findAll({
       where: whereClause,
       include: [PrimaryUnit, Category, Brand],
       order: ["id"],
-      limit: req.query.pageSize || 10,
-      offset: (req.query.page - 1) * (req.query.pageSize || 10),
+      order: ["id"],
+      limit, 
+      offset
     });
 
     let totalCount;
