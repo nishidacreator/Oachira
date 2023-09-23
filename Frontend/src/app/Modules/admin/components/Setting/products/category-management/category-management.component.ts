@@ -119,26 +119,31 @@ export class CategoryManagementComponent implements OnDestroy{
   category: Category [] = [];
   categorySubscription? : Subscription
   getCategory(){
-    return this.adminService.getCategory().subscribe((res)=>{
-      this.category = res
-      this.filtered = this.category
-      this.filtered = this.category.slice(0, this.pageSize);
+    return this.adminService.getPaginatedCategory(this.filterValue, this.currentPage, this.pageSize).subscribe((res:any)=>{
+      this.category = res.items;
+        this.totalItems = res.count;
     })
-  }
+  } 
 
-  filterValue: any;
-  filtered!: any[];
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.filterValue = filterValue;
+
+  pageSize = 10;
+  currentPage = 1;
+  totalItems = 0;
+  
+  filterValue = "";
+  search() {
     if (this.filterValue) {
-      this.filtered = this.category.filter((element) =>
-        element.categoryName.toLowerCase().includes(filterValue)
-      );
-    } else {
       this.getCategory();
     }
   }
+ 
+  onInputChange(value: any) {
+    this.filterValue = value;
+    if (!this.filterValue) {
+      this.getCategory();
+    }
+  }
+
 
   deleteCategory(id:any){
     const dialogRef = this.dialog.open(DeleteDialogueComponent, {
@@ -261,15 +266,12 @@ export class CategoryManagementComponent implements OnDestroy{
     this.dialogRef.close();
   }
 
-  pageSize = 10;
-  pageIndex = 0;
-  paginatedData: any[] = [];
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+ @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   onPageChange(event: PageEvent): void {
-    const startIndex = event.pageIndex * event.pageSize;
-    this.filtered = this.category.slice(startIndex, startIndex + event.pageSize);
+    this.currentPage = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.getCategory();
   }
 
 }

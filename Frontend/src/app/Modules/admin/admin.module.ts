@@ -69,6 +69,8 @@
   import { EditPurchaseEntryDetailsComponent } from './components/Purchases/edit-purchase-entry-details/edit-purchase-entry-details.component';
   import { AddVehicleComponent } from './components/Setting/trip/add-vehicle/add-vehicle.component';
 import { ViewContactsComponent } from './components/Setting/customers/view-contacts/view-contacts.component';
+import { GridModule, PagerModule } from '@syncfusion/ej2-angular-grids';
+
 
 @NgModule({
   declarations: [
@@ -134,7 +136,8 @@ import { ViewContactsComponent } from './components/Setting/customers/view-conta
     LayoutModule,
     MaterialModule,
     BoldReportViewerModule,
-    BoldReportDesignerModule
+    BoldReportDesignerModule,
+    GridModule, PagerModule
   ]
 })
 export class AdminModule { }

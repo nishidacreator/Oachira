@@ -53,7 +53,10 @@ export class AdminService {
   getBrand(): Observable<Brand[]>{
     return this._http.get<Brand[]>(this.url+'/brand');
   }
-  
+  getPaginatedBrand( search:String, page: number, pageSize: number): Observable<Brand[]>{
+    return this._http.get<Brand[]>(this.url+`/brand?search=${search}&page=${page}&pageSize=${pageSize}`);
+  }
+
   deleteBrand(id:Number){
     return this._http.delete(this.url+'/brand/'+id);
   }
@@ -102,6 +105,10 @@ export class AdminService {
 
   getCategory(): Observable<Category[]>{
     return this._http.get<Category[]>(this.url+'/category');
+  }
+
+  getPaginatedCategory( search:String, page: number, pageSize: number): Observable<Category[]>{
+    return this._http.get<Category[]>(this.url + `/category?search=${search}&page=${page}&pageSize=${pageSize}`);
   }
   
   updateCategory(id:Number, data:any){
