@@ -61,12 +61,17 @@ router.get("/", authenticateToken, async (req, res) => {
     } else {
       totalCount = await Product.count();
     }
-    const response = {
-      count: totalCount,
-      items: products,
-    };
 
-    res.json(response);
+    if (req.query.page && req.query.pageSize) {
+      const response = {
+        count: totalCount,
+        items: products,
+      };
+
+      res.json(response);
+    } else {
+      res.send(products);
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

@@ -72,23 +72,26 @@ export class BrandManagementComponent implements OnDestroy {
   brandSubscription? : Subscription
   dataSource! : MatTableDataSource<Brand>
   getBrands(){
-    this.brandSubscription = this.adminService.getBrand().subscribe((res)=>{
-      this.brands = res
-      this.filteredBrands = this.brands;
-      this.filteredBrands = this.brands.slice(0, this.pageSize);
+    this.brandSubscription = this.adminService.getPaginatedBrand(this.filterValue, this.currentPage, this.pageSize).subscribe((res:any)=>{
+      this.brands = res.items;
+        this.totalItems = res.count;
     })
   } 
+
+  pageSize = 10;
+  currentPage = 1;
+  totalItems = 0;
   
-  filterValue: any;
-  filteredBrands!: any[];
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.filterValue = filterValue;
-    if(this.filterValue){
-    this.filteredBrands = this.brands.filter(element =>
-      element.brandName.toLowerCase().includes(filterValue)
-    );}
-    else{
+  filterValue = "";
+  search() {
+    if (this.filterValue) {
+      this.getBrands();
+    }
+  }
+ 
+  onInputChange(value: any) {
+    this.filterValue = value;
+    if (!this.filterValue) {
       this.getBrands();
     }
   }
@@ -157,15 +160,13 @@ export class BrandManagementComponent implements OnDestroy {
     this.dialogRef.close();
   }
 
-  pageSize = 10;
-  pageIndex = 0;
-  paginatedData: any[] = [];
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   onPageChange(event: PageEvent): void {
-    const startIndex = event.pageIndex * event.pageSize;
-    this.filteredBrands = this.brands.slice(startIndex, startIndex + event.pageSize);
+    this.currentPage = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.getBrands();
   }
+
 
 }

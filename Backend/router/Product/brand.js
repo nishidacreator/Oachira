@@ -2,6 +2,7 @@ const express = require('express');
 const Brand = require('../../models/Products/brand');
 const router = express.Router();
 const authenticateToken = require('../../middleware/authorization');
+const {Op} = require('sequelize');
 
 router.post('/', authenticateToken, async (req, res) => {
     try {
@@ -18,17 +19,52 @@ router.post('/', authenticateToken, async (req, res) => {
     }
 })
 
-router.get('/', authenticateToken, authenticateToken,async(req,res)=>{
+router.get("/", authenticateToken, async (req, res) => {
+  try {
+    let whereClause = {};
+    if (req.query.search) {
+      whereClause = {
+        [Op.or]: [{ brandName: { [Op.iLike]: `%${req.query.search}%` } }],
+      };
+    }
 
-    try {
-        const brand = await Brand.findAll({order:['id']});
-        res.send(brand);
-        
-    } catch (error) {
-        res.send(error.message);
-    }  
-})
+    let limit;
+    let offset;
+    if (req.query.pageSize && req.query.page) {
+      limit = req.query.pageSize;
+      offset = (req.query.page - 1) * req.query.pageSize;
+    }
+    const brand = await Brand.findAll({
+      where: whereClause,
+      order: ["id"],
+      limit,
+      offset,
+    });
 
+    let totalCount;
+
+    if (req.query.search) {
+      totalCount = await Brand.count({
+        where: whereClause,
+      });
+    } else {
+      totalCount = await Brand.count();
+    }
+
+    if (req.query.page && req.query.pageSize) {
+      const response = {
+        count: totalCount,
+        items: brand,
+      };
+
+      res.json(response);
+    } else {
+      res.send(brand);
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 router.delete('/:id', authenticateToken, async(req,res)=>{
     try {

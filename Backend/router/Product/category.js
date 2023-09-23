@@ -3,6 +3,7 @@ const Category = require('../../models/Products/category');
 const router = express.Router();
 const multer = require('../../utils/multer')
 const authenticateToken = require('../../middleware/authorization');
+const {Op} = require('sequelize');
 
 router.post('/', multer.single('category_image'), async (req, res) => {
     try {
@@ -20,9 +21,34 @@ router.post('/', multer.single('category_image'), async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/",authenticateToken, async (req, res) => {
   try {
-    const categories = await Category.findAll({ order: ["id"] });
+    let whereClause = {};
+
+    if (req.query.search) {
+      whereClause = {
+        [Op.or]: [
+          { categoryName: { [Op.iLike]: `%${req.query.search}%` } }
+        ],
+      };
+    }
+
+    let limit;
+    let offset;
+
+    if (req.query.pageSize && req.query.page) {
+      limit = req.query.pageSize;
+      offset = (req.query.page - 1) * req.query.pageSize;
+    }
+
+
+    const categories = await Category.findAll({
+      where: whereClause,
+      order: ["id"],
+      limit, 
+      offset
+    });
+    
 
     // Add the image URL to each category
     const categoriesWithImageURLs = categories.map((category) => {
@@ -43,22 +69,32 @@ router.get("/", async (req, res) => {
       }
     });
 
-    res.json(categoriesWithImageURLs);
+
+
+    let totalCount;
+
+    if (req.query.search) {
+      totalCount = await Category.count({
+        where: whereClause,
+      });
+    } else {
+      totalCount = await Category.count();
+    }
+
+    if (req.query.page && req.query.pageSize) {
+      const response = {
+        count: totalCount,
+        items: categoriesWithImageURLs,
+      };
+
+      res.json(response);
+    } else {
+      res.send(categoriesWithImageURLs);
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
-
-
-router.get('/', async(req,res)=>{
-    try {
-        const category = await Category.findAll({order:['id']});
-        res.send(category);
-        
-    } catch (error) {
-        res.send(error.message);
-    }  
-})
 
 router.delete('/:id', authenticateToken, async(req,res)=>{
     try {
