@@ -9,7 +9,7 @@ const CustomerCategory = require('../../models/Customer/customerCategory');
 const CustomerGrade = require('../../models/Customer/customerGrade');
 const CustomerPhone = require('../../models/Customer/customerPhone');
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
         const data = req.body;
 
