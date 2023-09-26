@@ -138,8 +138,7 @@ export class AddProductComponent implements OnInit {
   pageSize = 10;
   currentPage = 1;
   totalItems = 0;
-  paginatedData: any[] = [];
-
+ 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   onPageChange(event: PageEvent): void {
