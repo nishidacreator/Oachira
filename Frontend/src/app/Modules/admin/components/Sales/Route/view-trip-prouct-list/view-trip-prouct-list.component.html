@@ -5,14 +5,16 @@
 
     <div class="control-section">
         <div *ngIf="combinedArray.length != 0">
-            <ejs-grid #grid id="AdvancedExport" [dataSource]="combinedArray" [toolbar]="toolbar"
-                (toolbarClick)="toolbarClick($event)" [pageSettings]="pageSettings" [allowPaging]="true"
-                [allowPdfExport]="true">
+            <button ej-button id='print' (click)='print()'>Print</button>
+            <ejs-grid #grid id="AdvancedExport"  [dataSource]='combinedArray' height='280px'>
+            <!-- <ejs-grid #grid [dataSource]="combinedArray" [toolbar]="toolbar"
+                (toolbarClick)="toolbarClick($event)" [allowPaging]="true"
+                [allowPdfExport]="true" (customizeExport)="onPdfExport($event)" height='272px'> -->
                 <e-columns>
                     <e-column field='productId' headerText='PRODUCT ID' width='150'></e-column>
                     <e-column field='ProductName' headerText='PRODUCT NAME' width='150'></e-column>
                     <e-column field='count' headerText='COUNT' width='150'></e-column>
-                    <e-column *ngIf="pdfprint" headerText='MANAGE' width='150'>
+                    <e-column *ngIf="pdfprint" headerText='MANAGE' width='150' [visible]= 'false'>
                         <ng-template #template let-data>
                             <button mat-raised-button style="background-color: green; margin-left: 8px;"
                                 class="main-button" (click)="viewDetails(data.productId)" type="button">View</button>
