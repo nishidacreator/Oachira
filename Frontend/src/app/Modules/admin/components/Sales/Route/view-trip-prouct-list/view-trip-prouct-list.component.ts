@@ -140,7 +140,9 @@ onPdfExport(args: any): void {
   args.item.width = 148; // Set the page size to 148 mm x 210 mm
 }
 
-
+print() {
+  (this.grid as GridComponent).print();
+}
 
 private getPdfExportProperties(): any {
     return {
