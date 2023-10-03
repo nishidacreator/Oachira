@@ -45,6 +45,8 @@ const deliveryDays = require('../router/route/deliveryDays');
 const purchaseTransaction = require('../router/Stock/purchaseTransaction');
 const stock = require('../router/Stock/stock');
 
+const poInvoice = require('../reports/poInvoice');
+
 const syncModel = require('../utils/association');
 
 const app = express();
@@ -95,6 +97,7 @@ app.use('/trip', trip);
 app.use('/tripdetails', tripDetails);
 app.use('/tripdays', deliveryDays);
 app.use('/stock', stock);
+app.use('/download', poInvoice)
 app.use('/purchasetransaction', purchaseTransaction)
 const port = process.env.PORT || 5000;
 
