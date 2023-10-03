@@ -200,7 +200,7 @@ async function syncModel(){
     PurchaseEntry.hasMany(PurchaseTransaction,{foreignKey: 'purchaseEntryId', onDelete : 'CASCADE'})
     PurchaseTransaction.belongsTo(PurchaseEntry)
 
-    await sequelize.sync({alter: true})
+    await sequelize.sync({force: true})
 
     const role = await Role.findAll({})
     if(role.length === 0){
