@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -81,7 +81,7 @@ export class AddRouteComponent implements OnInit {
   }
 
   clearControls(){
-    this.getRoute()
+    this.getRoute();
     this.routeForm.reset()
     this.routeForm.setErrors(null)
     Object.keys(this.routeForm.controls).forEach(key=>{this.routeForm.get(key)?.setErrors(null)})
@@ -186,6 +186,7 @@ export class AddRouteComponent implements OnInit {
 
   result : any
   submitted = false;
+  resultId = null;
   submit!: Subscription;
   onSubmit(){
     let data ={
@@ -198,17 +199,20 @@ export class AddRouteComponent implements OnInit {
 
     this.adminService.addRoute(data).subscribe((res)=>{
       this.result = res
+      this.resultId=this.result.id;
+      console.log(this.resultId)
       this.submitted = true
       this.clearControls()
     })
   }
 
   addCollectionDays(){
+    console.log(this.resultId)
     if(this.result){
       let len = this.routes.length;
       let lenght = len + 1;
       console.log(lenght)
-      this.router.navigateByUrl('/admin/settings/route/collectiondays/'+ lenght)
+      this.router.navigateByUrl('/admin/settings/route/collectiondays/'+ this.resultId)
     }
     else{
       this.router.navigateByUrl('/admin/settings/route/collectiondays')
@@ -216,11 +220,12 @@ export class AddRouteComponent implements OnInit {
   }
 
   addDeliveryDays(){
+    console.log(this.resultId)
     if(this.result){
       let len = this.routes.length;
       let lenght = len + 1;
       console.log(lenght)
-      this.router.navigateByUrl('/admin/settings/trip/deliverydays/'+lenght)
+      this.router.navigateByUrl('/admin/settings/trip/deliverydays/'+this.resultId)
     }
     else{
       this.router.navigateByUrl('/admin/settings/trip/deliverydays')
@@ -228,16 +233,39 @@ export class AddRouteComponent implements OnInit {
   }
 
   addDetails(){
+    console.log(this.resultId)
     if(this.result){
       let len = this.routes.length;
       let lenght = len + 1;
       console.log(lenght)
-      this.router.navigateByUrl('/admin/settings/route/routedetails/'+ lenght)
+      this.router.navigateByUrl('/admin/settings/route/routedetails/'+ this.resultId)
     }
     else{
       this.router.navigateByUrl('/admin/settings/route/routedetails')
     }
   }
+
+  ngAfterViewInit() {
+    this.closePopup();
+  }
+  @ViewChild('popupTemplate') popupTemplate: ElementRef | undefined;
+  selectedOption: string | undefined;
+  showPopup: boolean = false;
+  openPopup() {
+    console.log("hello")
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+
+  }
+  chooseOption(option: string) {
+    this.selectedOption = option;
+    // Handle the selected option ("New" or "Existing") as needed.
+    this.closePopup();
+  }
+
 }
 
 
