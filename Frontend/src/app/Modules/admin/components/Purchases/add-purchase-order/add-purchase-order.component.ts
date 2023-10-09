@@ -61,8 +61,9 @@ export class AddPurchaseOrderComponent implements OnInit {
   }
 
   myControl = new FormControl<string | Product>("");
-  filteredOptions: Product[] = [];
+  filteredOptions: any
   filterOptions(event: Event) {
+
     let value = (event.target as HTMLInputElement).value;
     this.filteredOptions = this.product.filter((option) => {
       if (
@@ -138,8 +139,9 @@ export class AddPurchaseOrderComponent implements OnInit {
   filteredProduct$!: Observable<Product[]>;
   productSubscription!: Subscription;
   getProducts() {
-    return this.adminService.getProduct().subscribe((res) => {
-      this.product = res;
+    return this.adminService.getProduct().subscribe((res:any) => {
+      // debugger;
+      this.product = res.items;
       this.filteredOptions = this.product;
     });
   }
