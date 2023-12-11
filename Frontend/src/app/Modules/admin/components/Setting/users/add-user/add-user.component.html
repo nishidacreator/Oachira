@@ -64,15 +64,15 @@
 
             <mat-form-field class="full-width">
               <mat-select placeholder="Branch" formControlName="branchId">
-                <span *ngIf="branches.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addRole()">playlist_add</span>
+                <span *ngIf="branches.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addBranch()">playlist_add</span>
                 <mat-option *ngFor="let item of branches" [value]="item.id">
                   {{item.branchName}}
                 </mat-option>
                 <mat-option *ngIf="branches.length === 0" [value]="'add'">
-                  <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addRole()">playlist_add</span>
+                  <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addBranch()">playlist_add</span>
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="userForm.controls['roleId'].hasError('required')">
+              <mat-error *ngIf="userForm.controls['branchId'].hasError('required')">
                 Branch <strong>required</strong>
               </mat-error>
             </mat-form-field>
@@ -99,9 +99,15 @@
       
       </mat-card-content>
       <mat-card-actions>
-        <button mat-raised-button type="submit" *ngIf="isEdit == false" [disabled]="userForm.pristine || !userForm.valid">ADD</button>
-        <button  mat-raised-button (click)="editFunction()" *ngIf="isEdit == true" [disabled]="!userForm.valid">UPDATE</button>&nbsp;&nbsp;
-        <button *ngIf="addStatus === 'true'" type="button" class="cancel-button" (click)="onCancelClick()">Cancel</button>
+        <button mat-raised-button type="submit" *ngIf="isEdit == false" [disabled]="userForm.pristine || !userForm.valid">
+          <span class="material-icons" style="font-size: 25px;">save</span>
+        </button>&nbsp;&nbsp;
+        <button *ngIf="isEdit == true" mat-raised-button  type="button" [disabled]="!userForm.valid" (click)="editFunction()">
+          <span class="material-icons" style="font-size: 30px;">edit_note</span>
+        </button>&nbsp;&nbsp;
+        <button *ngIf="addStatus === 'true'" type="button" class="cancel-button" (click)="onCancelClick()">
+          <span class="material-icons" style="font-size: 10px;">close</span>
+        </button>
 
       </mat-card-actions>
     </mat-card>  

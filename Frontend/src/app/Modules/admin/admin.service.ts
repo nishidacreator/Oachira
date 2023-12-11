@@ -7,7 +7,7 @@ import { Brand } from './models/settings/brand';
 import { PrimaryUnit } from './models/settings/primaryUnit';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Product } from './models/settings/product';
 import { Customer } from './models/customer/customer';
 import { Vendor } from './models/settings/vendor';
@@ -32,6 +32,7 @@ import { VehicleType } from './models/vehicle/vehicle-type';
 import { BankAccount } from './models/settings/bankAccount';
 import { CustomerPhone } from './models/customer/customerPhone';
 import { Branch } from './models/settings/branch';
+import { BranchAccount } from './models/settings/branchAccount';
 // import * as puppeteer from 'puppeteer';
 
 @Injectable({
@@ -101,6 +102,17 @@ export class AdminService {
   //CATEGORY
   addCategory(data : any): Observable<any>{
     return this._http.post(this.url + '/category', data)
+  }
+
+  uploadCategoryImage(file: Blob): Observable<any> {
+    if (file instanceof File) {
+      const formData = new FormData();
+      formData.append("file", file, file.name);
+      return this._http.post(this.url + '/category/fileupload', formData);
+    } else {
+      // Handle the case where 'file' is not a File object
+      return throwError("Invalid file type");
+    }
   }
 
   getCategory(): Observable<Category[]>{
@@ -502,6 +514,11 @@ export class AdminService {
 
   updateBranch(id:Number, data:any){
     return this._http.patch<Branch>(this.url+'/branch/'+id, data);
+  }
+
+  //BRANCH ACCOUNT
+  getBranchAccountByBranchId(id:Number): Observable<BranchAccount[]>{
+    return this._http.get<BranchAccount[]>(this.url+'/branchaccount/branchid/'+ id);
   }
   
 }

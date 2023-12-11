@@ -6,29 +6,22 @@ const Vehicle = require('../../models/route/vehicle');
 const User = require('../../models/User/user');
 const CollectionDays = require('../../models/route/collectionDays');
 const DeliveryDays = require('../../models/route/deliveryDays');
+const Branch = require('../../models/branch');
 
 router.post('/', authenticateToken, async (req, res) => {
     try {
-            const {routeName, vehicleId, driverId, salesManId, salesExecutiveId, deliveryDays, collectionDays} = req.body;
+            const {routeName, vehicleId, driverId, salesManId, salesExecutiveId, branchId, deliveryDays, collectionDays} = req.body;
 
-            const route = new Route({routeName, vehicleId, driverId, salesManId, salesExecutiveId});
+            const route = new Route({routeName, vehicleId, driverId, salesManId, salesExecutiveId, branchId});
 
             await route.save();
 
-            // const routeId = route.id
+            const routeId = route.id
+            for(let i = 0; i < collectionDays.length; i++) {           
+                  collectionDays[i].routeId = routeId;
+            }
 
-            // const copy = collectionDays.weekDays.slice();
-            // console.log(copy.length)
-
-            // for(let i = 0; i < copy.length; i++) {           
-                                 
-            //   const weekDay = collectionDays.weekDays.pop()
-
-            //   const result = new CollectionDays({routeId, weekDay})
-
-            //   await result.save()  
-              
-            // }
+            const collDays = await CollectionDays.bulkCreate({collectionDays})
 
             // const delivery = deliveryDays.weekDays.slice();
 
@@ -51,7 +44,7 @@ router.post('/', authenticateToken, async (req, res) => {
 router.get('/', authenticateToken,async(req,res)=>{
 
     try {
-        const route = await Route.findAll({include: ['driver', 'salesman', 'salesexecutive' , Vehicle ], order:['id']});
+        const route = await Route.findAll({include: ['driver', 'salesman', 'salesexecutive' , Vehicle, Branch], order:['id']});
         res.send(route);
         
     } catch (error) {
@@ -64,7 +57,7 @@ router.get('/:id', authenticateToken,async(req,res)=>{
   try {
       const route = await Route.findOne({
         where: {id: req.params.id},
-        include: ['driver', 'salesman', 'salesexecutive' , Vehicle ]});
+        include: ['driver', 'salesman', 'salesexecutive' , Vehicle, Branch ]});
       res.send(route);
       
   } catch (error) {

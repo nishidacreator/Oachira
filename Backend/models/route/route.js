@@ -6,7 +6,8 @@ const Route = sequelize.define('route',{
     vehicleId  : {type : DataTypes.INTEGER, allowNull : false},
     driverId : {type : DataTypes.INTEGER, allowNull : false},
     salesManId : {type : DataTypes.INTEGER, allowNull : false},
-    salesExecutiveId : {type : DataTypes.INTEGER, allowNull : false}
+    salesExecutiveId : {type : DataTypes.INTEGER, allowNull : false},
+    branchId : {type : DataTypes.INTEGER, allowNull :false}
 },
 {
     freezeTableName: true,

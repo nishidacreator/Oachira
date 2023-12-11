@@ -23,7 +23,7 @@ export class CategoryManagementComponent implements OnDestroy{
     public dialog: MatDialog,
     @Optional() public dialogRef: MatDialogRef<CategoryManagementComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: any
-    ){}
+  ){}
 
   ngOnDestroy(){
     this.categorySubscription?.unsubscribe()
@@ -31,10 +31,11 @@ export class CategoryManagementComponent implements OnDestroy{
   }
     
   productCategoryForm = this.fb.group({
-    category_image: [''],
+    url: [''],
     categoryName: ['', Validators.required],
     taxable: [false],
-
+    cloudinary_id : [''],
+    file_url : [''] 
   });
 
   addStatus!: string
@@ -57,15 +58,24 @@ export class CategoryManagementComponent implements OnDestroy{
 
   displayedColumns : string[] = ['categoryImage','categoryName', 'taxable', 'manage']
 
-  file:File | null = null;
+  file!: any;
   url!: any;
+  uploadStatus = false
+  imageUrl!: string;
   onFileSelected(event: any){
     if(event.target.files.length > 0){
-      this.file = event.target.files[0] as File;
-      console.log(this.file)
-
+      this.uploadStatus= true
+      this.file = event.target.files[0]
       let fileType = this.file? this.file.type : '';
-      // this.productCategoryForm.get('category_image')?.setValue(this.file)
+      
+      if (this.file) {
+        // You can read the selected file and display it as an image.
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.imageUrl = reader.result as string;
+        };
+        reader.readAsDataURL(this.file);
+      }
   
       // if(fileType.match(/image\/*/)){
       //   let reader = new FileReader();
@@ -80,33 +90,35 @@ export class CategoryManagementComponent implements OnDestroy{
     }
   }
 
-  // formData = new FormData();
-  // onUpload(){  
-  //   if(!this.file){
-  //     this._snackBar.open("Please choose an image first","" ,{duration:3000})
-  //   }
-
-  //   else{
-  //     this.formData.append("category_image", this.file, this.file.name)
-  //     this._snackBar.open("Image Uploaded","" ,{duration:3000})
-  //   } 
-  // }
+  onUpload(){
+    this.uploadStatus = false
+    this.adminService.uploadCategoryImage(this.file).subscribe(res=>{
+      console.log('uploadresponse'+res)
+      this.productCategoryForm.patchValue({
+        cloudinary_id : res.public_id,
+        file_url: res.url
+      })
+      console.log(this.productCategoryForm.getRawValue())
+    })
+  }
 
   private submitSubscription : Subscription = new Subscription();
   onSubmit(){
-    const formData = new FormData();
-    formData.append("category_image", this.file as Blob, this.file?.name)
-    this._snackBar.open("Image Uploaded","" ,{duration:3000})
-    formData.append('categoryName', this.productCategoryForm.get(['categoryName'])?.value)
-    formData.append('taxable', this.productCategoryForm.get(['taxable'])?.value);
-    console.log(formData)
-
-    this.submitSubscription = this.adminService.addCategory(formData).subscribe((res)=>{
-      this._snackBar.open("Category added successfully...","" ,{duration:3000})
-      this.clearControls()
-    },(error=>{
-      alert(error)
-    }))
+    this.uploadStatus = false
+    this.adminService.uploadCategoryImage(this.file).subscribe(res=>{
+      console.log('uploadresponse'+res)
+      this.productCategoryForm.patchValue({
+        cloudinary_id : res.public_id,
+        file_url: res.url
+      })
+      console.log(this.productCategoryForm.getRawValue())
+      this.submitSubscription = this.adminService.addCategory(this.productCategoryForm.getRawValue()).subscribe((res)=>{
+        this._snackBar.open("Category added successfully...","" ,{duration:3000})
+        this.clearControls()
+      },(error=>{
+        alert(error)
+      }))
+    })   
   }
 
   clearControls(){
@@ -121,10 +133,10 @@ export class CategoryManagementComponent implements OnDestroy{
   getCategory(){
     return this.adminService.getPaginatedCategory(this.filterValue, this.currentPage, this.pageSize).subscribe((res:any)=>{
       this.category = res.items;
-        this.totalItems = res.count;
+      console.log(this.category)
+      this.totalItems = res.count;
     })
   } 
-
 
   pageSize = 10;
   currentPage = 1;
@@ -181,14 +193,14 @@ export class CategoryManagementComponent implements OnDestroy{
     //     reader.onload = (event: any) =>{
     //       this.url = event.target.result;
     //     }   
-    console.log(category_image)
+    // console.log(category_image)
     
     this.productCategoryForm.patchValue({
       categoryName : categoryName,
       taxable : taxable
     })
     this.categoryId = id;
-    this.productCategoryForm.get('category_image')?.setValue(category_image);
+    // this.productCategoryForm.get('category_image')?.setValue(category_image);
   }
   
   editFunction(){

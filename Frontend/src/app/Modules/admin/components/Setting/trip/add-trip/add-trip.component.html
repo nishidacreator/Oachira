@@ -39,6 +39,24 @@
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
             </div> 
+
+            <div class="col">
+
+              <mat-form-field class="full-width">
+                <mat-select placeholder="Branch" formControlName="branchId">
+                  <span *ngIf="branches.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addBranch()">playlist_add</span>
+                  <mat-option *ngFor="let item of branches" [value]="item.id">
+                    {{item.branchName}}
+                  </mat-option>
+                  <mat-option *ngIf="branches.length === 0" [value]="'add'">
+                    <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addBranch()">playlist_add</span>
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="tripForm.controls['branchId'].hasError('required')">
+                  Branch <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
           </div>
 
           <div class="row">
@@ -130,7 +148,50 @@
   </mat-card-actions>
 </mat-card>
 
-<br><mat-card>
+
+<br><mat-card *ngIf="addStatus != 'true'">
+  <mat-card-header>
+    <mat-card-title style="color: green;"> TRIPS</mat-card-title>
+  </mat-card-header>
+
+  <mat-form-field>
+    <mat-label>Search</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+  </mat-form-field>
+  <table class="styled-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Route</th>
+            <th>Date</th>
+            <th>Driver</th>
+            <th>Salesman</th>
+            <th>Branch</th>
+            <th>Status</th>
+            <th>Manage</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let element of filtered">
+            <td>{{element.id}}</td>
+            <td>{{element.route.routeName}}</td>
+            <td>{{element.date}}</td>
+            <td>{{element.driver}}</td>
+            <td>{{element.salesMan}}</td>
+            <td>{{element.branch.branchName}}</td>
+            <td>{{element.status}}</td>
+            <td>
+              <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+              <i  (click)="editTrip(element.id)"  class="fa fa-edit" style="font-size: 20px; color:green"></i>
+              &nbsp;&nbsp;
+              <i  (click)="deleteTrip(element.id)" class="fa fa-trash" style="font-size: 20px; color:red"></i>
+              </td> 
+        </tr>
+    </tbody>
+  </table>
+
+</mat-card>
+<!-- <br><mat-card>
   <mat-card-header>
     <mat-card-title style="color: green;"> TRIPS</mat-card-title>
   </mat-card-header>
@@ -177,4 +238,4 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-</mat-card>
+</mat-card> -->

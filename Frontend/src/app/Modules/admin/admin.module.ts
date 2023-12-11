@@ -7,7 +7,7 @@
   import { LayoutModule } from '@angular/cdk/layout';
   import { HomeComponent } from './components/home/home.component';
   import { SettingsComponent } from './components/Setting/settings/settings.component';
-  import { BranchManagementComponent } from './components/Setting/branch-management/branch-management.component';
+  import { BranchManagementComponent } from './components/Setting/branch/branch-management/branch-management.component';
   import { BrandManagementComponent } from './components/Setting/products/brand-management/brand-management.component';
   import { CategoryManagementComponent } from './components/Setting/products/category-management/category-management.component';
   import { CurrencyManagementComponent } from './components/Setting/currency-management/currency-management.component';
@@ -68,8 +68,9 @@
   import { StockDetailsComponent } from './components/Stock/stock-details/stock-details.component';
   import { EditPurchaseEntryDetailsComponent } from './components/Purchases/edit-purchase-entry-details/edit-purchase-entry-details.component';
   import { AddVehicleComponent } from './components/Setting/trip/add-vehicle/add-vehicle.component';
-import { ViewContactsComponent } from './components/Setting/customers/view-contacts/view-contacts.component';
-import { GridModule, PagerModule } from '@syncfusion/ej2-angular-grids';
+  import { ViewContactsComponent } from './components/Setting/customers/view-contacts/view-contacts.component';
+  import { GridModule, PagerModule } from '@syncfusion/ej2-angular-grids';
+import { BranchAccountComponent } from './components/Setting/branch/branch-account/branch-account.component';
 
 
 @NgModule({
@@ -128,7 +129,9 @@ import { GridModule, PagerModule } from '@syncfusion/ej2-angular-grids';
     StockComponent,
     StockDetailsComponent,
     EditPurchaseEntryDetailsComponent,
-    AddVehicleComponent
+    AddVehicleComponent,
+    ViewContactsComponent,
+    BranchAccountComponent
   ],
   imports: [
     CommonModule,

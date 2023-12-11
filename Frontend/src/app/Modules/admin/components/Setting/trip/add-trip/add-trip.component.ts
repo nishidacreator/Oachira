@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Trip } from './../../../../models/route/trip';
+import { Component, Inject, OnDestroy, OnInit, Optional } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from '../../../../admin.service';
 import { MatSelectChange } from '@angular/material/select';
@@ -6,9 +7,11 @@ import { Observable, startWith, map, Subscription } from 'rxjs';
 import { Route } from '../../../../models/route/route';
 import { User } from 'src/app/Modules/auth/models/user';
 import { Customer } from '../../../../models/customer/customer';
-import { Trip } from '../../../../models/route/trip';
 import { Router } from '@angular/router';
 import { DeliveryDays } from 'src/app/Modules/admin/models/route/deliveryDays';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { Branch } from 'src/app/Modules/admin/models/settings/branch';
+import { BranchManagementComponent } from '../../branch/branch-management/branch-management.component';
 
 @Component({
   selector: 'app-add-trip',
@@ -17,28 +20,45 @@ import { DeliveryDays } from 'src/app/Modules/admin/models/route/deliveryDays';
 })
 export class AddTripComponent implements OnInit, OnDestroy {
 
-  constructor(private fb: FormBuilder, private adminService: AdminService, private router: Router) { }
+  branchId!: number;
+  constructor(private fb: FormBuilder, private adminService: AdminService, private router: Router,
+    @Optional() public dialogRef: MatDialogRef<AddTripComponent>,private dialog: MatDialog,
+    @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: any) {
+      const token: any = localStorage.getItem('token')
+      let user = JSON.parse(token)
+      console.log(user)
+
+      this.branchId = user.branch
+    }
  
   ngOnDestroy(): void {
     this.routeSubscription.unsubscribe()
     this.userSubscription.unsubscribe()
-    // this.customerSubscription.unsubscribe()
     this.tripSubscription.unsubscribe()
-    // this.daysSubscription?.unsubscribe()
+    this.branchSubscription.unsubscribe()
   }
 
   tripForm = this.fb.group({
     routeId : ['', Validators.required],
     date: ['', Validators.required],
     driver: ['', Validators.required],
-    salesMan: ['', Validators.required]
+    salesMan: ['', Validators.required],
+    branchId: [0]
   })
 
+  addStatus!: string;
   ngOnInit(): void {
+    this.tripForm.get('branchId')?.setValue(this.branchId)
+
+    if (this.dialogRef) {
+      this.addStatus = this.dialogData?.status;
+    } 
+
     this.routeSubscription = this.getRoute()
     this.userSubscription = this.getUser()
     // this.customerSubscription = this.getCustomer()
     this.tripSubscription = this.getTrips()
+    this.getBranch()
   }
 
   days : DeliveryDays[] = [];
@@ -82,6 +102,13 @@ export class AddTripComponent implements OnInit, OnDestroy {
     return this.weekDay.includes(weekdayName);
   };
   
+  branches: Branch[] = [];
+  branchSubscription!: Subscription;
+  getBranch(){
+    this.branchSubscription = this.adminService.getBranch().subscribe(b => {
+      this.branches = b
+    })
+  }
 
   filteredOptions!: Observable<Route[]>;
   searchControl = new FormControl();
@@ -234,7 +261,8 @@ export class AddTripComponent implements OnInit, OnDestroy {
       driver : this.tripForm.get('driver')?.value,
       salesMan : this.tripForm.get('salesMan')?.value,
       status : 'Created',
-      tripDetails : this.tripDetailsForm.getRawValue().customers
+      tripDetails : this.tripDetailsForm.getRawValue().customers,
+      branchId : this.tripForm.get('branchId')?.value
     }
     this.adminService.addTrip(data).subscribe((res)=>{
     })
@@ -258,11 +286,38 @@ export class AddTripComponent implements OnInit, OnDestroy {
   getTrips(){
     return this.adminService.getTrip().subscribe((res)=>{
       this.trips = res
+      console.log(this.trips)
+      this.filtered = this.trips
     })
+  }
+
+  filterValue: any;
+  filtered!: any[];
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.filterValue = filterValue;
+    this.filtered = this.trips.filter(element =>
+      element.route.routeName.toLowerCase().includes(filterValue) 
+      // || element.id.toString().includes(filterValue)
+      // || element.status.toString().includes(filterValue)
+    );
   }
 
   viewTripDetails(id : number){
     this.router.navigateByUrl('/admin/settings/route/addtrip/tripdetails/')
   }
 
+  editTrip(id: number){}
+
+  deleteTrip(id: number){}
+
+  addBranch(){
+    const dialogRef = this.dialog.open(BranchManagementComponent, {
+      data: {status : 'true'}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getBranch()
+    })
+  }
 }

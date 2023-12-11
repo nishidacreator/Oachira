@@ -1,3 +1,4 @@
+import { Branch } from "../settings/branch";
 import { User } from "../settings/user";
 import { Vehicle } from "../vehicle/vehicle";
 
@@ -12,4 +13,6 @@ export interface Route{
     salesman : User
     salesExecutiveId : number
     salesexecutive : User
+    branchId : number
+    branch : Branch
 }

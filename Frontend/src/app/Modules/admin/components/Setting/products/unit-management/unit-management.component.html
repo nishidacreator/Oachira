@@ -123,7 +123,9 @@
       </form> -->
     <!-- </mat-card-content> -->
 
-    <button *ngIf="addStatus === 'true'" class="cancel-button" (click)="onCancelClick()">Cancel</button>
+    <button *ngIf="addStatus === 'true'" class="cancel-button" (click)="onCancelClick()">
+      <span class="material-icons" style="font-size: 25px;">cancel_presentation</span>
+    </button>
   </mat-card>
 </form>
 

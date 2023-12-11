@@ -3,4 +3,5 @@ export interface Category{
     category_image : string
     categoryName : string
     taxable : boolean
+    file_url : string
 }

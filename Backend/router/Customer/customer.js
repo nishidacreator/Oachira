@@ -8,14 +8,15 @@ const Customer = require('../../models/Customer/customer');
 const CustomerCategory = require('../../models/Customer/customerCategory');
 const CustomerGrade = require('../../models/Customer/customerGrade');
 const CustomerPhone = require('../../models/Customer/customerPhone');
+const Branch = require('../../models/branch');
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
         const data = req.body;
 
-        const { customerName, customerCategoryId, address, location, gstNo, email, remarks, customerGradeId, subledgerCode, numbers } = data;
+        const { customerName, customerCategoryId, address, location, gstNo, email, remarks, customerGradeId, subledgerCode, numbers, branchId } = data;
 
-        const newCustomer = await Customer.create( {customerName, customerCategoryId, address, location, gstNo, email, remarks, customerGradeId, subledgerCode} );
+        const newCustomer = await Customer.create( {customerName, customerCategoryId, address, location, gstNo, email, remarks, customerGradeId, subledgerCode, branchId} );
 
         const custId = newCustomer.id
 
@@ -33,7 +34,7 @@ router.post('/', async (req, res) => {
 
 router.get('/', authenticateToken, async(req,res)=>{
     try {
-        const customer = await Customer.findAll({include : [CustomerCategory, CustomerGrade], order: ['id']});
+        const customer = await Customer.findAll({include : [CustomerCategory, CustomerGrade, CustomerPhone, Branch], order: ['id']});
         res.send(customer);
         
     } catch (error) {
@@ -45,7 +46,7 @@ router.get('/:id', authenticateToken, async(req,res)=>{
   try {
       const customer = await Customer.findOne({
         where : {id: req.params.id},
-        include : [CustomerCategory, CustomerGrade]
+        include : [CustomerCategory, CustomerGrade, CustomerPhone, Branch]
         });
       res.send(customer);
       
@@ -92,6 +93,21 @@ router.patch('/:id', authenticateToken, async(req,res)=>{
                 });
               }
             })
+
+            const custId = req.params.id;
+
+            const result = await CustomerPhone.destroy({
+              where: { customerId: custId},
+              force: true,
+          });
+
+            let numbers = req.body.numbers;
+            for(let i = 0; i < numbers.length; i++){
+              numbers[i].customerId = custId;
+            }
+
+            let custPhone = await CustomerPhone.bulkCreate(numbers)
+            
       } catch (error) {
         res.status(500).json({
           status: "error",

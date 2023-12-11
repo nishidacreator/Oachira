@@ -1,7 +1,7 @@
 const {Sequelize} = require('sequelize')
 
 
-const sequelize = new Sequelize('oachira1', 'oachira', 'oachira', {
+const sequelize = new Sequelize('oac_warehouse', 'oachira', 'oachira', {
     host: 'localhost',
     dialect: 'postgres' 
 });

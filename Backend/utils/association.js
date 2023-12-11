@@ -75,8 +75,21 @@ async function syncModel(){
     Role.hasMany(User,{foreignKey : 'roleId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     User.belongsTo(Role)
   
+    // BRANCH
     Branch.hasMany(User,{foreignKey : 'branchId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     User.belongsTo(Branch)
+
+    Branch.hasMany(Customer,{foreignKey : 'branchId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    Customer.belongsTo(Branch)
+
+    Branch.hasMany(Vehicle,{foreignKey : 'branchId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    Vehicle.belongsTo(Branch)
+
+    Branch.hasMany(Route,{foreignKey : 'branchId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    Route.belongsTo(Branch)
+
+    Branch.hasMany(Trip,{foreignKey : 'branchId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
+    Trip.belongsTo(Branch)
 
     VehicleType.hasMany(Vehicle, {foreignKey : 'vehicleTypeId', onDelete : 'CASCADE', onUpdate : 'CASCADE'})
     Vehicle.belongsTo(VehicleType)

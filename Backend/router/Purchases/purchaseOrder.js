@@ -9,9 +9,9 @@ const authenticateToken = require('../../middleware/authorization');
 
 router.post('/', authenticateToken, async (req, res) => {
     try {
-            const {purchaseOrderNo, vendorId, userId,  purchaseOrderDetails, requestedPurchaseDate, branchId} = req.body;
+            const {purchaseOrderNo, vendorId, userId,  purchaseOrderDetails, requestedPurchaseDate} = req.body;
 
-            const purchaseOrder = new PurchaseOrder({purchaseOrderNo, vendorId,  userId,  requestedPurchaseDate, branchId});
+            const purchaseOrder = new PurchaseOrder({purchaseOrderNo, vendorId,  userId,  requestedPurchaseDate});
 
             await purchaseOrder.save();
 

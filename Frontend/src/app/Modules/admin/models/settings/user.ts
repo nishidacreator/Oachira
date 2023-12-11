@@ -9,5 +9,5 @@ export interface User{
   role: Role
   status: boolean
   token : string
-
+  branchId : number
 }

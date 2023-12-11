@@ -1,3 +1,4 @@
+import { Branch } from "../settings/branch"
 import { VehicleType } from "./vehicle-type"
 
 export interface Vehicle{
@@ -8,7 +9,9 @@ export interface Vehicle{
     taxExpiry : Date,
     insuranceExpiry : Date,
     polutionExpiry : Date,
-    capacity : Date
+    capacity : string
     fitnessExpiry : Date
     permitExpiry : Date
+    branchId: number
+    branch: Branch
 }

@@ -10,7 +10,7 @@ const cloudinary = require('../../utils/cloudinary');
 const authenticateToken = require('../../middleware/authorization');
 
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
             const { productName, code, barCode, primaryUnitId, categoryId, brandId, reorderQuantity, loyaltyPoint} = req.body;
 
@@ -34,6 +34,7 @@ router.get("/", authenticateToken, async (req, res) => {
           { barCode: { [Op.iLike]: `%${req.query.search}%` } },
         ],
       };
+      console.log(whereClause)
     }
 
     let limit;

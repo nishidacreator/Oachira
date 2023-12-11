@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { RoleManagementComponent } from '../role-management/role-management.component';
 import { Branch } from 'src/app/Modules/admin/models/settings/branch';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { BranchManagementComponent } from '../../branch/branch-management/branch-management.component';
 
 
 @Component({
@@ -21,11 +22,18 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 })
 export class AddUserComponent implements OnInit, OnDestroy {
 
+  branchId!: number;
   constructor(private fb: FormBuilder,public dialog: MatDialog, private adminService: AdminService,
     private _snackBar: MatSnackBar, private router: Router,
     @Optional() public dialogRef: MatDialogRef<AddUserComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: any
-    ){}
+    ){
+      const token: any = localStorage.getItem('token')
+      let user = JSON.parse(token)
+      console.log(user)
+
+      this.branchId = user.branch
+    }
 
   userForm = this.fb.group({
     name: ['', Validators.required],
@@ -33,7 +41,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
     password:['',Validators.required],
     roleId: ['', Validators.required],
     status: [false, Validators.required],
-    branchId: ['', Validators.required]
+    branchId: [0]
   });
 
   ngOnDestroy(): void {
@@ -54,6 +62,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
   addStatus!: string
   type!: string
   ngOnInit() {
+    this.userForm.get('branchId')?.setValue(this.branchId)
+
     this.getRole()
     this.getBranch()
     this.getUsers()
@@ -72,6 +82,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
         }
       })
     }
+    
   }
 
   roles: Role[] = [];
@@ -217,6 +228,16 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       this.getRole()
+    })
+  }
+
+  addBranch(){
+    const dialogRef = this.dialog.open(BranchManagementComponent, {
+      data: {status : 'true'}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getBranch()
     })
   }
 
