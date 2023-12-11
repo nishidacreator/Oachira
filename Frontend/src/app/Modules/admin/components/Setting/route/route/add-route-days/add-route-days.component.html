@@ -6,7 +6,7 @@
             <mat-card-title>COLLECTION DAYS</mat-card-title>
           </mat-card-header>
         </div>
-        <div class="col">
+        <div class="col" *ngIf="!addStatus">
           <mat-card-header>
             <button mat-mini-fab color="primary" type="button" style="margin-left: auto;" aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" (click)="homeClick()">
               <mat-icon>home</mat-icon>
@@ -19,7 +19,7 @@
       </div>
       <mat-card-content >
   
-        <div class="row">
+        <div class="row" *ngIf="!addStatus">
             <div class="col">
             <mat-form-field class="full-width">
                 <mat-select placeholder="Route Name" formControlName="routeId">
@@ -69,19 +69,25 @@
       </mat-card-content>
   
       <mat-card-actions>
-        <button *ngIf="isEdit == false" mat-raised-button  type="submit" [disabled]="!routeDaysForm.valid">
+        <button *ngIf="isEdit == false && !addStatus" mat-raised-button  type="submit" [disabled]="!routeDaysForm.valid">
           <span class="material-icons" style="font-size: 25px;">save</span>
         </button>&nbsp;&nbsp;
         <button *ngIf="isEdit == true" mat-raised-button  type="button" [disabled]="!routeDaysForm.valid" (click)="editFunction()">
           <span class="material-icons" style="font-size: 30px;">edit_note</span>
         </button>&nbsp;&nbsp;
+        <button *ngIf="addStatus" type="button" class="cancel-button" (click)="addArray()">
+          <span class="material-icons" style="font-size: 10px;">playlist_add</span>
+        </button>&nbsp;&nbsp;
+        <button *ngIf="addStatus" type="button" class="cancel-button" (click)="onCancelClick()">
+          <span class="material-icons" style="font-size: 10px;">close</span>
+        </button>
       </mat-card-actions>
     </mat-card>
 </form>
 
 
 
-<br><mat-card>
+<br><mat-card *ngIf="!addStatus">
   <mat-card-header>
     <mat-card-title style="color: green;">ROUTE DAYS</mat-card-title>
   </mat-card-header>

@@ -171,6 +171,7 @@ export class PickListComponent implements OnInit,OnDestroy {
   customer: Customer[] = []
   getCustomer(id : any){
     this.adminService.getRouteDetailsByRouteId(id).subscribe((res)=>{
+      console.log(res)
       this.customer = res.map(x=> x.customer)
     })
   }

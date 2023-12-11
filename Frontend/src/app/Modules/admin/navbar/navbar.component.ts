@@ -29,10 +29,12 @@ export class NavbarComponent {
     let user = JSON.parse(token)
     console.log(user)
     this.userName = user.name
-
     let branchId = user.branch
+    
     adminService.getBranchById(branchId).subscribe(data => {
+      console.log(data)
       this.branchName = data.branchName
+      console.log(data)
     })
     
   }

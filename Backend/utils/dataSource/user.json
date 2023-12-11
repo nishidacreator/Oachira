@@ -74,7 +74,8 @@
     "phoneNumber": "8921361637",
     "password": "123456",
     "roleId": 3,
-    "status": true
+    "status": true,
+    "branchId": 1
     },
     {"name": "Sujith",
     "phoneNumber": "9946924669",

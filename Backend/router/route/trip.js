@@ -5,12 +5,13 @@ const authenticateToken = require('../../middleware/authorization');
 const Route = require('../../models/route/route');
 const TripDetails = require('../../models/route/tripDetails');
 const User = require('../../models/User/user');  
+const Branch = require('../../models/branch');
 
 router.post('/', authenticateToken, async (req, res) => {
     try {
-            const {routeId, date, driver, salesMan, status, tripDetails} = req.body;
+            const {routeId, date, driver, salesMan, status, tripDetails, branchId} = req.body;
 
-            const result = new Trip({routeId, date, driver, salesMan, status});
+            const result = new Trip({routeId, date, driver, salesMan, status, branchId});
 
             await result.save();
 
@@ -31,7 +32,7 @@ router.post('/', authenticateToken, async (req, res) => {
 
 router.get('/', authenticateToken,async(req,res)=>{
     try {
-        const route = await Trip.findAll({include: Route});
+        const route = await Trip.findAll({include: [Route, Branch]});
         res.send(route);
         
     } catch (error) {
@@ -43,16 +44,13 @@ router.get('/:id', authenticateToken,async(req,res)=>{
   try {
       const result = await Trip.findOne(
         {where: {id: req.params.id},
-        include: Route});
+        include: [Route, Branch]});
       res.send(result);
       
   } catch (error) {
       res.send(error.message);
   }  
 })
-
-
-
 
 router.delete('/:id', authenticateToken, async(req,res)=>{
     try {

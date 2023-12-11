@@ -92,27 +92,27 @@ router.get('/view/:id', authenticateToken, async(req,res)=>{
 })
 
 
-// router.delete('/:id', authenticateToken, async(req,res)=>{
-//     try {
+router.delete('/:id', authenticateToken, async(req,res)=>{
+    try {
 
-//         const result = await PurchaseEntry.destroy({
-//             where: { id: req.params.id },
-//             force: true,
-//         });
+        const result = await PurchaseEntry.destroy({
+            where: { id: req.params.id },
+            force: true,
+        });
 
-//         if (result === 0) {
-//             return res.status(404).json({
-//               status: "fail",
-//               message: "Purchase Entry with that ID not found",
-//             });
-//           }
+        if (result === 0) {
+            return res.status(404).json({
+              status: "fail",
+              message: "Purchase Entry with that ID not found",
+            });
+          }
       
-//           res.status(204).json();
-//         }  catch (error) {
-//         res.send({error: error.message})
-//     }
+          res.status(204).json();
+        }  catch (error) {
+        res.send({error: error.message})
+    }
     
-// })
+})
 
 router.patch('/:id', authenticateToken, async(req,res)=>{
     try {

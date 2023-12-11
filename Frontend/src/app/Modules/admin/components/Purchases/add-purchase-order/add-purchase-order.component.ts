@@ -140,8 +140,8 @@ export class AddPurchaseOrderComponent implements OnInit {
   productSubscription!: Subscription;
   getProducts() {
     return this.adminService.getProduct().subscribe((res:any) => {
-      // debugger;
-      this.product = res.items;
+      this.product = res;
+      console.log(this.product)
       this.filteredOptions = this.product;
     });
   }

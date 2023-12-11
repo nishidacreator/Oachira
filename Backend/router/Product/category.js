@@ -4,16 +4,19 @@ const router = express.Router();
 const multer = require('../../utils/multer')
 const authenticateToken = require('../../middleware/authorization');
 const {Op} = require('sequelize');
+const cloudinary = require('../../utils/cloudinary');
 
-router.post('/', multer.single('category_image'), async (req, res) => {
+router.post('/', async (req, res) => {
     try {
             let category = {
-              category_image : req.file?.path,
               categoryName : req.body.categoryName,
-              taxable : req.body.taxable
+              taxable : req.body.taxable,
+              file_url : req.body.file_url,
+              cloudinary_id : req.body.cloudinary_id
             }
 
       const result = await Category.create(category);
+
       res.send(result);
   } catch (error) {
       console.error(error); // Log the error for debugging purposes
@@ -21,7 +24,17 @@ router.post('/', multer.single('category_image'), async (req, res) => {
   }
 });
 
-router.get("/",authenticateToken, async (req, res) => {
+router.post('/fileupload', multer.single('file'), async (req, res) => {
+  try {
+      console.log(req.file.path);
+      const result = await cloudinary.uploader.upload(req.file.path);
+      res.send(result);
+  } catch (error) {
+      res.send(error);
+  }
+});
+
+router.get("/", authenticateToken, async (req, res) => {
   try {
     let whereClause = {};
 
@@ -48,28 +61,6 @@ router.get("/",authenticateToken, async (req, res) => {
       limit, 
       offset
     });
-    
-
-    // Add the image URL to each category
-    const categoriesWithImageURLs = categories.map((category) => {
-      if (category.category_image) {
-        return {
-          id: category.id,
-          categoryName: category.categoryName,
-          taxable: category.taxable,
-          category_image: `${category.category_image}`,
-        };
-      } else {
-        return {
-          id: category.id,
-          categoryName: category.categoryName,
-          taxable: category.taxable,
-          category_image: "",
-        };
-      }
-    });
-
-
 
     let totalCount;
 
@@ -84,12 +75,12 @@ router.get("/",authenticateToken, async (req, res) => {
     if (req.query.page && req.query.pageSize) {
       const response = {
         count: totalCount,
-        items: categoriesWithImageURLs,
+        items: categories,
       };
 
       res.json(response);
     } else {
-      res.send(categoriesWithImageURLs);
+      res.send(categories);
     }
   } catch (error) {
     res.status(500).json({ error: error.message });

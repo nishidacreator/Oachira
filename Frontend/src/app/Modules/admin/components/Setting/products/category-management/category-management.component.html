@@ -34,10 +34,12 @@
           </mat-form-field>
         </div>
 
-        <div class="row">
+        <div class="col">
           <div class="container" appearance="fill">
-            <img [src]="url" title="Image" height="150px" width="150px"/>
-            <input type="file" accept="image/*" (change)="onFileSelected($event)" formControlName="category_image"> 
+            <!-- <label for="fileInput" class="image-upload"> -->
+              <img [src]="imageUrl" title="Image" height="150" width="150" style="margin-left: 150px; margin-top: 50px;"/>
+              <input type="file" id="fileInput" (change)="onFileSelected($event)" style="margin-left: 150px;" />
+            <!-- </label> -->
             <br>
           </div>
         </div>
@@ -56,14 +58,16 @@
 
 
     <mat-card-actions>
-      <button *ngIf="isEdit == false" mat-raised-button  type="submit" [disabled]="!productCategoryForm.valid">
+      <button *ngIf="isEdit == false" mat-raised-button  type="submit" [disabled]="productCategoryForm.pristine || !productCategoryForm.valid ">
         <span class="material-icons" style="font-size: 25px;">save</span>
       </button>&nbsp;&nbsp;
       <button *ngIf="isEdit == true" mat-raised-button  type="button" [disabled]="!productCategoryForm.valid" (click)="editFunction()">
         <span class="material-icons" style="font-size: 30px;">edit_note</span>
       </button>&nbsp;&nbsp;
 
-      <button *ngIf="addStatus === 'true'" type="button" class="cancel-button" (click)="onCancelClick()">Cancel</button>
+      <button *ngIf="addStatus === 'true'" type="button" class="cancel-button" (click)="onCancelClick()">
+        <span class="material-icons" style="font-size: 25px;">cancel_presentation</span>
+      </button>
     </mat-card-actions>
 
   </mat-card>
@@ -97,17 +101,31 @@
     <tbody>
         <tr *ngFor="let element of category">
             <td>{{element.id}}</td>
-            <td *ngIf="element.category_image; else noImage">
+
+            <!-- <td *ngIf="element.category_image; else noImage">
               <div class="image-container">
                 <div class="popup" *ngIf="showImagePopup">
                   <img [src]="element.category_image" alt="Category Image">
                 </div>
                 <img class="imageView" [src]="element.category_image" alt="Category Image" (mouseenter)="showPopup()" (mouseleave)="hidePopup()">
               </div>
+            </td> -->
+            <td >
+              <!-- <ng-container>
+                <img alt="../../../../../../assets/img/partsbase.png" src="{{ element.file_url }}" style="width: 50px; height: 50px;" />
+              </ng-container> -->
+              <ng-container *ngIf="element.file_url; else alternativeImage">
+                <img  src="{{ element.file_url }}" style="width: 50px; height: 50px;" />
+              </ng-container>
+              
+              <ng-template #alternativeImage>
+                <img src="../../../../../../assets/img/no_image_part.png" alt="Alternative Image" style="width: 50px; height: 50px;" />
+              </ng-template>
             </td>
-            <ng-template #noImage>
+
+            <!-- <ng-template #noImage>
               <td><span class="material-icons iconColor">image_not_supported</span></td>
-            </ng-template>
+            </ng-template> -->
             <td>{{element.categoryName}}</td>
             <td>{{element.taxable == true? "Yes" : "No"}}</td>
             <td>

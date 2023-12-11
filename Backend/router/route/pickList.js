@@ -54,6 +54,18 @@ router.get('/routeid/:id', authenticateToken, async(req,res)=>{
   }  
 })
 
+router.get('/userid/:id', authenticateToken, async(req,res)=>{
+  try {
+      const result = await PickList.findAll({
+        where: {salesExecutiveId: req.params.id, status: "pending"},
+        include: [Route, Customer, 'salesexecutive']});
+      res.send(result);
+      
+  } catch (error) {
+      res.send(error.message);
+  }  
+})
+
 router.get('/:id', authenticateToken,async(req,res)=>{
 
   try {

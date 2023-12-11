@@ -22,6 +22,7 @@ const tax = require('../router/Product/tax');
 const vendor = require('../router/vendor');
 const bankAccount = require('../router/bankAccount');
 const branch = require('../router/branch');
+const branchAccount = require('../router/branchAccount');
 
 //purchases
 const purchaseEntry = require('../router/Purchases/purchaseEntry');
@@ -78,6 +79,7 @@ app.use('/tax', tax);
 app.use('/vendor', vendor);
 app.use('/bankaccount', bankAccount);
 app.use('/branch', branch);
+app.use('/branchaccount', branchAccount);
 
 app.use('/purchaseentry', purchaseEntry);
 app.use('/purchaseentrydetails', purchaseEntryDetails);

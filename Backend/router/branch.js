@@ -6,9 +6,9 @@ const BranchAccount = require('../models/branchAccount');
 
 router.post('/', authenticateToken, async (req, res) => {
     try {
-            const {branchName, address, branchManagerId, branchAccounts} = req.body;
+            const {branchName, address, branchManagerId, email, phone, branchAccounts} = req.body;
 
-            const branch = new Branch({branchName, address, branchManagerId});
+            const branch = new Branch({branchName, address, branchManagerId, email, phone,});
            
             await branch.save();
             console.log(branch)
@@ -33,7 +33,7 @@ router.post('/', authenticateToken, async (req, res) => {
 router.get('/', authenticateToken, async(req,res)=>{
 
     try {
-        const branch = await Branch.findAll({order:['id']});
+        const branch = await Branch.findAll({order:['id'], include: [BranchAccount]});
         res.send(branch);
         
     } catch (error) {
@@ -46,7 +46,8 @@ router.get('/:id', authenticateToken, async(req,res)=>{
   try {
       const branch = await Branch.findOne({
         where: {id: req.params.id},
-        order:['id']
+        order:['id'],
+        include: [BranchAccount]
       });
       res.send(branch);
       
@@ -94,6 +95,19 @@ router.patch('/:id', authenticateToken, async(req,res)=>{
                 });
               }
             })
+            const branchId = req.params.id;
+
+            const result = await BranchAccount.destroy({
+              where: { branchId: branchId},
+              force: true,
+          });
+
+            let accounts = req.body.accounts;
+            for(let i = 0; i < accounts.length; i++){
+              accounts[i].branchId = branchId;
+            }
+
+            let final = await BranchAccount.bulkCreate(accounts)
       } catch (error) {
         res.status(500).json({
           status: "error",

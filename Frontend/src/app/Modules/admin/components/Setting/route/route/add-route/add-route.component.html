@@ -29,19 +29,39 @@
                 </mat-error>
               </mat-form-field>
             </div>
+
+            <div class="col">
+              <mat-form-field class="full-width">
+                <mat-select placeholder="Branch" formControlName="branchId" #id (selectionChange)="byBranch(id.value)">
+                  <span *ngIf="branches.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addBranch()">playlist_add</span>
+                  <mat-option *ngFor="let item of branches" [value]="item.id">
+                    {{item.branchName}}
+                  </mat-option>
+                  <mat-option *ngIf="branches.length === 0" [value]="'add'">
+                    <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addBranch()">playlist_add</span>
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="routeForm.controls['branchId'].hasError('required')">
+                  field <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
   
             <div class="col">
-            <mat-form-field class="full-width">
+              <mat-form-field class="full-width">
                 <mat-select placeholder="Vehicle" formControlName="vehicleId">
-                  <mat-option *ngFor="let item of  vehicle$ | async" [value]="item.id">
-                      {{item.registrationNumber}}
+                  <span *ngIf="vehicles.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addVehicle()">playlist_add</span>
+                  <mat-option *ngFor="let item of vehicles" [value]="item.id">
+                    {{item.registrationNumber}}
                   </mat-option>
-                  &nbsp;&nbsp; &nbsp;&nbsp;<span class="material-icons" style="font-size: 30px; color: rgb(0, 128, 55);" (click)="addVehicle()">playlist_add</span>
+                  <mat-option *ngIf="vehicles.length === 0" [value]="'add'">
+                    <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addVehicle()">playlist_add</span>
+                  </mat-option>
                 </mat-select>
                 <mat-error *ngIf="routeForm.controls['vehicleId'].hasError('required')">
-                  field is <strong>required</strong>
+                  field <strong>required</strong>
                 </mat-error>
-            </mat-form-field>
+              </mat-form-field>
           </div>
         </div>
     
@@ -49,13 +69,16 @@
           <div class="col">
             <mat-form-field class="full-width">
               <mat-select placeholder="Vehicle Driver" formControlName="driverId">
+                <span *ngIf="driver.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addUser()">playlist_add</span>
                 <mat-option *ngFor="let item of driver" [value]="item.id">
                   {{item.name}}
                 </mat-option>
-                &nbsp;&nbsp; &nbsp;&nbsp;<span class="material-icons" style="font-size: 30px; color: rgb(0, 128, 55);" (click)="addUser()">playlist_add</span>
+                <mat-option *ngIf="driver.length === 0" [value]="'add'">
+                  <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addUser()">playlist_add</span>
+                </mat-option>
               </mat-select>
               <mat-error *ngIf="routeForm.controls['driverId'].hasError('required')">
-                field is <strong>required</strong>
+                field <strong>required</strong>
               </mat-error>
             </mat-form-field>
           </div>
@@ -63,13 +86,16 @@
           <div class="col">
             <mat-form-field class="full-width">
               <mat-select placeholder="Sales Man" formControlName="salesManId">
+                <span *ngIf="salesMan.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addUser()">playlist_add</span>
                 <mat-option *ngFor="let item of salesMan" [value]="item.id">
                   {{item.name}}
                 </mat-option>
-                &nbsp;&nbsp; &nbsp;&nbsp;<span class="material-icons" style="font-size: 30px; color: rgb(0, 128, 55);" (click)="addUser()">playlist_add</span>
+                <mat-option *ngIf="salesMan.length === 0" [value]="'add'">
+                  <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addUser()">playlist_add</span>
+                </mat-option>
               </mat-select>
               <mat-error *ngIf="routeForm.controls['salesManId'].hasError('required')">
-                field is <strong>required</strong>
+                field <strong>required</strong>
               </mat-error>
             </mat-form-field>
           </div>
@@ -77,30 +103,23 @@
           <div class="col">
             <mat-form-field class="full-width">
               <mat-select placeholder="Sales Executive" formControlName="salesExecutiveId">
+                <span *ngIf="salesExecutive.length != 0" class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addUser()">playlist_add</span>
                 <mat-option *ngFor="let item of salesExecutive" [value]="item.id">
                   {{item.name}}
                 </mat-option>
-                &nbsp;&nbsp; &nbsp;&nbsp;<span class="material-icons" style="font-size: 30px; color: rgb(0, 128, 55);" (click)="addUser()">playlist_add</span>
+                <mat-option *ngIf="salesExecutive.length === 0" [value]="'add'">
+                  <span class="material-icons" style="font-size: 25px; color: rgb(0, 128, 55);" (click)="addUser()">playlist_add</span>
+                </mat-option>
               </mat-select>
               <mat-error *ngIf="routeForm.controls['salesExecutiveId'].hasError('required')">
-                field is <strong>required</strong>
+                field <strong>required</strong>
               </mat-error>
             </mat-form-field>
           </div>
-        </div>
-    
-          
+        </div>   
         </mat-card-content>
-  
-        <mat-card-actions>
-          <button mat-raised-button type="button" class="btn btn-success" (click)="onSubmit()" [disabled]="!routeForm.valid || routeForm.pristine">
-            <span class="material-icons" style="font-size: 25px;">save</span>
-          </button>  
-        </mat-card-actions>
-  
-      </mat-card>
-  </form>
-  
+
+          
   <br><mat-grid-list cols="3" rowHeight="4:1">
     <mat-grid-tile>
       <button mat-raised-button aria-label="Example icon button with a bookmark icon" (click)="addCollectionDays()">
@@ -121,12 +140,65 @@
     </mat-grid-tile>
   </mat-grid-list>
   
+        <mat-card-actions>
+          <button *ngIf="!isEdit" mat-raised-button type="button" class="btn btn-success" (click)="onSubmit()" [disabled]="!routeForm.valid || routeForm.pristine">
+            <span class="material-icons" style="font-size: 25px;">save</span>
+          </button>&nbsp;&nbsp;
+          <button *ngIf="isEdit" mat-raised-button  type="button" [disabled]="!routeForm.valid" (click)="editFunction()">
+            <span class="material-icons" style="font-size: 30px;">edit_note</span>
+          </button>&nbsp;&nbsp;  
+        </mat-card-actions>
+  
+      </mat-card>
+    </form>
+  
   
   </mat-card>
   
+  <br><mat-card *ngIf="addStatus != 'true'">
+    <mat-card-header>
+      <mat-card-title style="color: green;"> ROUTE</mat-card-title>
+    </mat-card-header>
   
+    <mat-form-field>
+      <mat-label>Search</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+    </mat-form-field>
+    <table class="styled-table">
+      <thead>
+          <tr>
+              <th>id</th>
+              <th>Route Name</th>
+              <th>Vehicle</th>
+              <th>Driver</th>
+              <th>Sales Man</th>
+              <th>Sales Executive</th>
+              <th>Branch</th>
+              <th>Manage</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let element of filtered">
+              <td>{{element.id}}</td>
+              <td>{{element.routeName}}</td>
+              <td>{{element.vehicle.registrationNumber}}</td>
+              <td>{{element.driver.name}}</td>
+              <td>{{element.salesman.name}}</td>
+              <td>{{element.salesexecutive.name}}</td>
+              <td>{{element.branch.branchName}}</td>
+              <td>
+                <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+                <i  (click)="editRoute(element.id)"  class="fa fa-edit" style="font-size: 20px; color:green"></i>
+                &nbsp;&nbsp;
+                <i  (click)="deleteRoute(element.id)" class="fa fa-trash" style="font-size: 20px; color:red"></i>
+                </td> 
+          </tr>
+      </tbody>
+    </table>
   
-  <br><mat-card>
+  </mat-card>
+  
+  <!-- <br><mat-card>
     <mat-card-header>
       <mat-card-title style="color: green;">ROUTES</mat-card-title>
     </mat-card-header>
@@ -176,4 +248,4 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-  </mat-card>
+  </mat-card> -->

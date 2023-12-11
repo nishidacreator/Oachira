@@ -10,7 +10,8 @@ const Customer = sequelize.define('customer',{
     gstNo : {type: DataTypes.STRING},
     email : {type: DataTypes.STRING, unique : true},
     remarks : {type: DataTypes.STRING},
-    subledgerCode : {type: DataTypes.STRING}
+    subledgerCode : {type: DataTypes.STRING},
+    branchId: {type: DataTypes.INTEGER, allowNull : true},
 },
 {
     freezeTableName: true,

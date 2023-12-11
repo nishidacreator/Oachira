@@ -1,0 +1,15 @@
+<button type="button" class="cancel-button" (click)="onCancelClick()">
+    <span class="material-icons" style="font-size: 10px;">close</span>
+  </button>
+  
+  <h3 *ngIf="account.length">Bank Account Details : </h3>
+  <div *ngIf="account.length">
+    <ul *ngFor="let element of account" class="list-group">
+      <li class="list-group-item"> Account Number:{{ element.bankAccount.accountNo }}</li>
+      <li class="list-group-item"> IFSC Code:{{ element.bankAccount.ifscCode }}</li>
+      <li class="list-group-item"> Bank:{{ element.bankAccount.bankName }}</li>
+      <li class="list-group-item"> Branch:{{ element.bankAccount.branchName }}</li>
+      <li class="list-group-item"> Opening Balance:{{ element.bankAccount.openingBalance }}</li>
+    </ul>
+  </div>
+  <h3 *ngIf="!account.length">No Account is added </h3>

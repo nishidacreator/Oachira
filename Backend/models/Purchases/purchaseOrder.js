@@ -6,7 +6,7 @@ const PurchaseOrder = sequelize.define('purchaseOrder',{
     vendorId : {type : DataTypes.INTEGER, allowNull : false},
     userId : {type : DataTypes.INTEGER, allowNull : false},
     requestedPurchaseDate : {type : DataTypes.DATEONLY, defaultValue: new Date()},
-    branchId : {type : DataTypes.INTEGER, allowNull : false},
+    // branchId : {type : DataTypes.INTEGER, allowNull : false},
 },
 {
     freezeTableName: true,

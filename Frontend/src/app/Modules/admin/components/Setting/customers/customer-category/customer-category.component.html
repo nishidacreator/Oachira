@@ -44,7 +44,9 @@
           <span class="material-icons" style="font-size: 30px;">edit_note</span>
         </button>&nbsp;&nbsp;
 
-        <button *ngIf="addStatus === 'true'" type="button" class="cancel-button" (click)="onCancelClick()">Cancel</button>
+        <button *ngIf="addStatus === 'true'" type="button" class="cancel-button" (click)="onCancelClick()">
+          <span class="material-icons" style="font-size: 25px;">cancel_presentation</span>
+        </button>
       </mat-card-actions>
     </mat-card>
   </form>

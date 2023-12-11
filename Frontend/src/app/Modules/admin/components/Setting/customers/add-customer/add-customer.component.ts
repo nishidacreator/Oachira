@@ -1,5 +1,4 @@
 import { CustomerCategoryComponent } from './../customer-category/customer-category.component';
-import { Role } from '../../../../models/settings/role';
 import { CustomerGrade } from '../../../../models/customer/customerGrade';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -9,12 +8,13 @@ import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delet
 import { AdminService } from '../../../../admin.service';
 import { CustomerCategory } from '../../../../models/customer/customerCategory';
 import { Customer } from '../../../../models/customer/customer';
-import { Observable, Subscription, map } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CustomerManagementComponent } from '../customer-management/customer-management.component';
 import { Router } from '@angular/router';
-import { CategoryManagementComponent } from '../../products/category-management/category-management.component';
 import { CustomerGradeComponent } from '../customer-grade/customer-grade.component';
 import { ViewContactsComponent } from '../view-contacts/view-contacts.component';
+import { Branch } from 'src/app/Modules/admin/models/settings/branch';
+import { BranchManagementComponent } from '../../branch/branch-management/branch-management.component';
 
 @Component({
   selector: 'app-add-customer',
@@ -23,8 +23,15 @@ import { ViewContactsComponent } from '../view-contacts/view-contacts.component'
 })
 export class AddCustomerComponent implements OnInit, OnDestroy {
 
+  branchId: number;
   constructor(private fb: FormBuilder,public adminService: AdminService, private _snackBar: MatSnackBar,
-    public dialog: MatDialog, public router: Router){}
+    public dialog: MatDialog, public router: Router){
+      const token: any = localStorage.getItem('token')
+      let user = JSON.parse(token)
+      console.log(user)
+
+      this.branchId = user.branch
+    }
 
   ngOnDestroy(){
     this.customerSubscription?.unsubscribe()
@@ -63,7 +70,8 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
     gstNo : [''],
     email : ['', Validators.email],
     remarks : [''],
-    subledgerCode : ['']
+    subledgerCode : [''],
+    branchId : [0]
   });
 
   phoneForm = this.fb.group({
@@ -93,10 +101,13 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
   displayedColumns : string[] = ['id','customerName', 'customerCategoryId','customerGradeId','phoneNumber','address','location','gstNo','email','remarks', 'manage']
 
   ngOnInit(): void {
+    this.customerForm.get('branchId')?.setValue(this.branchId)
+
     this.getCategory()
     this.getGrade()
     this.getCustomers()
     this.salesExecutive()
+    this.getBranch()
   }
 
   category: CustomerCategory[] = [];
@@ -115,6 +126,24 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
     })
   }
 
+  branches: Branch[] = [];
+  branchSubscription!: Subscription;
+  getBranch(){
+    this.branchSubscription = this.adminService.getBranch().subscribe(b => {
+      this.branches = b
+    })
+  }
+
+  addBranch(){
+    const dialogRef = this.dialog.open(BranchManagementComponent, {
+      data: {status : 'true'}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getBranch()
+    })
+  }
+
   submit!: Subscription;
   onSubmit(){
     let data = {
@@ -127,8 +156,10 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
       email : this.customerForm.getRawValue().email,
       remarks : this.customerForm.getRawValue().remarks,
       numbers : this.phoneForm.getRawValue().numbers,
-      subledgerCode : this.customerForm.getRawValue().subledgerCode
+      subledgerCode : this.customerForm.getRawValue().subledgerCode,
+      branchId : this.customerForm.getRawValue().branchId
     }
+
     this.submit = this.adminService.addCustomer(data).subscribe((res)=>{
       this._snackBar.open("Customer added successfully...","" ,{duration:3000})
       this.clearControls()
@@ -198,50 +229,50 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
     })
   }
 
-  getPhoneNumber(){
-    
-  }
-
   isEdit = false;
   customerId : any;
   phoneNumbers!: any
-  editBrand(id : any){
+  editCustomer(id: number) {
     this.isEdit = true;
-    this.phoneNumbers = [];
-    //Get the product based on the ID
     let customer: any = this.customers.find(x =>x.id == id)
+    this.customerId = customer.id;
 
-    this.adminService.getCustomerPhoneByCustomerId(id).subscribe(res=>{
-      let number = res
-      for(let i=0; i<number.length; i++){
-        this.phoneNumbers.push(number[i].phoneNumber)
+    let customerName = customer.customerName.toString();
+    let customerCategoryId = customer.customerCategoryId;
+    let customerGradeId = customer.customerGradeId;
+    let address = customer.address.toString();
+    let location = customer.location.toString();
+    let gstNo = customer.gstNo.toString();
+    let email = customer.email.toString();
+    let remarks = customer.remarks.toString();
+    let subledgerCode = customer.subledgerCode.toString();
+    let branchId = customer.branchId;
 
-        this.numbers().push(number[i].phoneNumber)
-      }
-
-       //Populate the object by the ID
-      let customerName = customer.customerName.toString();
-      let customerCategoryId = customer.customerCategoryId;
-      let customerGradeId = customer.customerGradeId;
-      let address = customer.address.toString();
-      let location = customer.location.toString();
-      let gstNo = customer.gstNo.toString();
-      let email = customer.email.toString();
-      let remarks = customer.remarks.toString()
-
-
-      this.customerForm.patchValue({
-        customerName : customerName,
-        customerCategoryId : customerCategoryId,
-        customerGradeId : customerGradeId,
-        address : address,
-        location : location,
-        gstNo : gstNo,
-        email : email,
-        remarks : remarks
-      })
+    this.customerForm.patchValue({
+      customerName : customerName,
+      customerCategoryId : customerCategoryId,
+      customerGradeId : customerGradeId,
+      address : address,
+      location : location,
+      gstNo : gstNo,
+      email : email,
+      remarks : remarks,
+      subledgerCode : subledgerCode,
+      branchId : branchId,
     })
-    this.customerId = id;
+
+    const numbers = this.phoneForm.get("numbers") as FormArray;
+    numbers.clear(); // Clear any existing items in the FormArray
+
+    if (customer.customerPhones && customer.customerPhones.length > 0) {
+        customer.customerPhones.forEach((detail: any) => {
+        const phoneForm = this.fb.group({
+          phoneNumber:detail.phoneNumber,
+        });
+
+        numbers.push(phoneForm);
+      });
+    }
   }
 
   edit!: Subscription;
@@ -252,15 +283,19 @@ export class AddCustomerComponent implements OnInit, OnDestroy {
       customerName : this.customerForm.get('customerName')?.value,
       customerCategoryId : this.customerForm.get('customerCategoryId')?.value,
       customerGradeId : this.customerForm.get('customerGradeId')?.value,
-      phoneNumber : this.customerForm.get('phoneNumber')?.value,
+      subledgerCode : this.customerForm.get('subledgerCode')?.value,
       address : this.customerForm.get('address')?.value,
       location : this.customerForm.get('location')?.value,
       gstNo : this.customerForm.get('gstNo')?.value,
       email : this.customerForm.get('email')?.value,
-      remarks : this.customerForm.get('remarks')?.value
+      remarks : this.customerForm.get('remarks')?.value,
+      numbers : this.phoneForm.getRawValue().numbers,
+      branchId : this.customerForm.get('branchId')?.value
     }
+    console.log(data);
     
     this.edit = this.adminService.updateCustomer(this.customerId, data).subscribe((res)=>{
+      console.log(res)
       this._snackBar.open("Customer updated successfully...","" ,{duration:3000})
       this.clearControls();
     },(error=>{

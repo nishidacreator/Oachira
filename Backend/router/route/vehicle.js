@@ -5,6 +5,7 @@ const authenticateToken = require('../../middleware/authorization');
 const VehicleType = require('../../models/route/vehicleType');
 const multer = require('../../utils/multer');
 const cloudinary = require('../../utils/cloudinary');    
+const Branch = require('../../models/branch');
 
 router.post("/", multer.single("category_image"), authenticateToken, async (req, res) => {
   try {
@@ -17,6 +18,7 @@ router.post("/", multer.single("category_image"), authenticateToken, async (req,
       capacity: req.body.capacity,
       permitExpiry: req.body.permitExpiry,
       fitnessExpiry: req.body.fitnessExpiry,
+      branchId: req.body.branchId,
       vehicle_image: req.file?.path,
     };
     if (req.file) {
@@ -35,7 +37,7 @@ router.post("/", multer.single("category_image"), authenticateToken, async (req,
 router.get('/', authenticateToken, async(req,res)=>{
 
     try {
-        const vehicle = await Vehicle.findAll({include: [VehicleType]});
+        const vehicle = await Vehicle.findAll({include: [VehicleType, Branch], order:['id']});
         res.send(vehicle);
     } catch (error) {
         res.send(error.message);

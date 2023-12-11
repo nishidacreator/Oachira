@@ -47,7 +47,9 @@
       <button *ngIf="isEdit == true" mat-raised-button  type="button" [disabled]="!roleForm.valid" (click)="editFunction()">
         <span class="material-icons" style="font-size: 30px;">edit_note</span>
       </button>&nbsp;&nbsp;
-      <button *ngIf="addStatus === 'true'" type="button" class="cancel-button" (click)="onCancelClick()">Cancel</button>
+      <button *ngIf="addStatus === 'true'" type="button" class="cancel-button" (click)="onCancelClick()">
+        <span class="material-icons" style="font-size: 10px;">close</span>
+      </button>
     </mat-card-actions>
   </mat-card>
 </form>

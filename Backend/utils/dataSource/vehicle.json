@@ -7,7 +7,8 @@
         "polutionExpiry": "2023-09-21",
         "fitnessExpiry": "2023-10-07",
         "permitExpiry": "2025-05-14",
-        "branchId": 1
+        "branchId": 1,
+        "capacity": ""
     },
     {
         "registrationNumber": "KL 21 G 3214",
@@ -17,7 +18,8 @@
         "polutionExpiry": "2023-09-21",
         "fitnessExpiry": "2024-07-18",
         "permitExpiry": "2028-03-27",
-        "branchId": 1
+        "branchId": 1,
+        "capacity": ""
     },
     {
         "registrationNumber": "KL 21 Q 9592",
@@ -27,7 +29,8 @@
         "polutionExpiry": "2024-06-29",
         "fitnessExpiry": "2024-06-23",
         "permitExpiry": "2028-05-04",
-        "branchId": 1
+        "branchId": 1,
+        "capacity": ""
     },
     {
         "registrationNumber": "KL 21 V 5126",
@@ -37,7 +40,8 @@
         "polutionExpiry": "2024-01-16",
         "fitnessExpiry": "2025-01-22",
         "permitExpiry": "2026-03-03",
-        "branchId": 1
+        "branchId": 1,
+        "capacity": ""
     },
     {
         "registrationNumber": "KL 21 C 0222",
@@ -47,7 +51,8 @@
         "polutionExpiry": "2023-10-25",
         "fitnessExpiry": "2023-12-11",
         "permitExpiry": "2025-11-16",
-        "branchId": 1
+        "branchId": 1,
+        "capacity": ""
     },
     {
         "registrationNumber": "KL 21 P 5036",
@@ -57,7 +62,8 @@
         "polutionExpiry": "2023-09-26",
         "fitnessExpiry": "2023-09-19",
         "permitExpiry": "2027-09-28",
-        "branchId": 1
+        "branchId": 1,
+        "capacity": ""
     },
     {
         "registrationNumber": "KL 16 A 9898",
@@ -67,7 +73,8 @@
         "polutionExpiry": "2023-10-04",
         "fitnessExpiry": "2024-02-13",
         "permitExpiry": "2025-06-07",
-        "branchId": 1
+        "branchId": 1,
+        "capacity": ""
     },
     {
         "registrationNumber": "KL 21 Y 5611",
@@ -77,7 +84,8 @@
         "polutionExpiry": "2024-08-13",
         "fitnessExpiry": "2025-08-13",
         "permitExpiry": "2028-08-15",
-        "branchId": 1
+        "branchId": 1,
+        "capacity": ""
     },
     {
         "registrationNumber": "KL 21 V 5189",
@@ -87,7 +95,8 @@
         "polutionExpiry": "2024-01-23",
         "fitnessExpiry": "2025-01-23",
         "permitExpiry": "2028-01-01",
-        "branchId": 1
+        "branchId": 1,
+        "capacity": ""
     },
     {
         "registrationNumber": "KL 21 U 0942",
@@ -97,6 +106,7 @@
         "polutionExpiry": "2023-11-04",
         "fitnessExpiry": "2023-10-27",
         "permitExpiry": "2028-08-15",
-        "branchId": 1
+        "branchId": 1,
+        "capacity": ""
     }
 ]

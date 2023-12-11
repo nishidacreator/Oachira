@@ -95,11 +95,9 @@ export class InvoiceNumberComponent implements OnInit {
       this.invoiceNumber = `${this.ivForm.value.prefix}${ nextNumber }`;
       this.ivForm.get('purchaseInvoice')?.setValue(this.invoiceNumber)
 
-    console.log(this.ivForm.value)
-
-    let data ={
-      invoiceNum : this.invoiceNumber
-    }
+      let data ={
+        invoiceNum : this.invoiceNumber
+      }
 
       this.dataSubmitted.emit(data);
       this.dialogRef.close(data);

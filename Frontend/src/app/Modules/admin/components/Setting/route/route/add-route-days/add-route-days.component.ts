@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Optional, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subscription } from 'rxjs';
 import { DeleteDialogueComponent } from 'src/app/Modules/shared-components/delete-dialogue/delete-dialogue.component';
@@ -19,9 +19,13 @@ export class AddRouteDaysComponent implements OnInit {
 
   id: number = 0;
   constructor(private fb: FormBuilder,public adminService: AdminService, private _snackBar: MatSnackBar,
-    public dialog: MatDialog, private router: Router, private route: ActivatedRoute){
-      this.id = route.snapshot.params['id'];
-    }
+    public dialog: MatDialog, private router: Router, private route: ActivatedRoute,
+    @Optional() public dialogRef: MatDialogRef<AddRouteDaysComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: any){
+
+  }
+
+  @Output() dataSubmitted: EventEmitter<any> = new EventEmitter<any>();
 
   ngOnDestroy(){
     this.daysSubscription?.unsubscribe()
@@ -46,12 +50,14 @@ export class AddRouteDaysComponent implements OnInit {
 
   displayedColumns : string[] = ['id','routeId', 'weekDay','manage']
 
+  addStatus!: string;
   ngOnInit(): void {
-    if(this.id != undefined){
-      this.getRouteById()
-    }
     this.getRoute()
     this.getRouteDays()
+
+    if (this.dialogRef) {
+      this.addStatus = this.dialogData?.status;
+    } 
   }
 
   route$! : Observable<Route[]> ;
@@ -172,6 +178,20 @@ export class AddRouteDaysComponent implements OnInit {
 
   addRoute(){
     this.router.navigateByUrl('admin/settings/route/addroute')
+  }
+
+  addArray(){
+    let data ={
+      days : this.routeDaysForm.getRawValue().weekDays,
+      collectStatus : 'true'
+    }
+    
+    this.dataSubmitted.emit(data);
+    this.dialogRef.close(data);
+  }
+
+  onCancelClick(): void {
+    this.dialogRef.close();
   }
 }
 

@@ -384,11 +384,7 @@ export class AddPurchaseEntryComponent implements OnInit {
   }
 
   getPurchaseOrder() {
-    this.adminService
-      .getPurchaseOrderById(this.purchaseOrderId)
-      .subscribe((res) => {
-        console.log(res);
-
+    this.adminService.getPurchaseOrderById(this.purchaseOrderId).subscribe((res) => {
         let vendor: any = res.vendor.id;
         let date: any = res.requestedPurchaseDate;
 

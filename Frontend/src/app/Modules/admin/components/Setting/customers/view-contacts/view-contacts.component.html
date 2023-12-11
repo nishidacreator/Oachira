@@ -1,9 +1,18 @@
+
+<button type="button" class="cancel-button" (click)="onCancelClick()">
+  <span class="material-icons" style="font-size: 10px;">close</span>
+</button>
+
 <h3>PhoneNumber : </h3>
-<ul class="list-group">
-  <li *ngFor="let option of contact" class="list-group-item">
-      {{option.phoneNumber}}
-  </li>
-</ul>
+<div *ngIf="contact">
+  <ul *ngFor="let element of contact" class="list-group">
+    <li class="list-group-item">
+      {{ element.phoneNumber }}
+    </li>
+  </ul>
+</div>
+
+
 
 <h3>Email : </h3>
 <ul class="list-group">
